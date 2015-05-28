@@ -1,0 +1,144 @@
+\section{Electromagnetic Calorimeter}
+
+%\clearpage
+\begin{figure}[htb]
+\centerline{\psfig{figure=figures/ShowerBoth.eps,width=14cm,,angle=0,clip=}}
+\caption[Schematic layout of pion rejectors in HRS-L and shower counters in HRS-R]
+{\footnotesize{Schematic layout of Pion Rejectors in HRS-L and Shower counters in HRS-R.}
+\label{shower}}
+\end{figure}
+
+ When a high energy particle goes through electromagnetic calorimeters, which are mainly composed of lead glass blocks with component of $PbO$ and $SiO_{2}$, it creates cascades of photons and positron-electron pairs. Photomultipliers attached on the blocks are used to detect the photons created by particles with different energy. There are respectively two layer of electromagnetic calorimeters in both HRS, to provide better performance of particles separation. In HRS-L, the calorimeter is called pion rejectors, because traditionally HRS-L is used to detect electrons and hence the calorimeter is mainly for $e^- \pi^-$ separation. Each layer of pion rejectors consists of two columns of 17 lead glass blocks with same amount of photomultipliers. In HRS-R, much thicker lead glass blocks are used to form a total absorber, which can contain the entire electromagnetic shower produced by the incident particles. First layer, also named as preshower, is form by two column of 24 bocks and photomultipliers, while the second layer, called shower, includes two columns of 16 blocks each. Fig~\ref{shower} gives the layout of pion rejectors and shower counters.
+
+
+\subsection{Shower and PreShower}
+ The purpose of shower and preshower calibration is to find a set of coefficients which transform the ADC values of each block into energy which particles deposit into the block. Base on the true that shower and preshower are total absorber counters, the sum of energy a particle depositing in cluster where certain number of blocks are fired, should be equal to its energy before it pass through the counters. A Chi-Square can be defined and minimized base on this idea \cite{shower_ak}:
+\begin{equation}
+ \chi^{2} = \sum_{i=1}^{N}[\sum_{j\in M_{ps}^{i}}C_{j}\cdot (ADC_{j}^{i}-Ped_{j})+\sum_{k\in M_{sh}^{i}}C_{k}\cdot (ADC_{k}^{i}-Ped_{k})-P_{kin}^{i}]^{2}
+\end{equation}
+
+where \emph{i} is the \emph{i-th} number of total N selected calibration events; \emph{j} is the \emph{j-th} preshower block while \emph{k} is the \emph{k-th} shower block;$M_{ps}^{i}$ and $M_{sh}^{i}$ are sets of preshower and shower included in the reconstructed cluster in the \emph{i-th} event; $ADC_{j/k}^{i}$ and $Ped_{j/k}$ respectively represent the ADC channel and mean pedestal value of a preshower or shower block in a certain event \emph{i}; $C_{j/k}$ is a coefficient of a block needed to be fitted; and $P_{kin}^{i}$ is the particle momentum in the \emph{i-th} event.
+
+ To obtain the best result of calibration, we need to use data with kinematics setting beyond Quasi-Elastic region hence scattered electrons more uniformly distributing along calorimeter planes. In the calibration, we used \emph{run 3907} and \emph{run 3908}, which are carbon data at 3N-SRC region (\emph{Kin3.2}). Besides, pure electron events are simpled out for the calibration, with the following cuts:
+%\begin{align} 
+
+  $\bullet$ Only one track events:
+
+    $\rightarrow$ \emph{R.tr.n==1,}
+
+    $\rightarrow$ \emph{R.vdc.u1.nclust, R.vdc.u2.nclust==1,}
+
+    $\rightarrow$ \emph{R.vdc.v1.nclust,R.vdc.v2.nclust==1;}
+
+  $\bullet$  Cuts on Cerenkov Sum to remove most of Pions: 
+
+    $\rightarrow$ \emph{R.cer.asum$\_$c$<$1000.;}
+
+  $\bullet$  Loose cuts on acceptance of HRS:  
+
+    $\rightarrow$ \emph{abs(R.gold.th)$<$0.5,abs(R.gold.ph)$<$0.5,abs(R.gold.dp)$<$1.;}
+
+  $\bullet$  Fixing coefficients of shower blocks on the edge to be one: 
+
+    $\rightarrow$ \emph{R.sh.nblk$\neq$1$\sim$17,18,31,32,47,48,63$\sim$80.}
+%\end{align}
+
+  After event selection,a Fumili minimization package writted by H. Lu \cite{shower_luhj} is called to minimize the Chi-Square we define above and a new set for coefficients, 48 of which are for preshower blocks and 80 of which for shower blocks, will put into \emph{db$\_$R.ps.dat} and \emph{db$\_$R.sh.dat} respectively to calculate corrected ADC values of calorimeter blocks.
+
+  There are several aspects to check the quality of calibration. Firstly, the correlation of ADC sum of preshower blocks and ADC sum of shower blocks give the distribution of electrons signals as well as pions and other background signals.. Comparing Fig~\ref{psvssh_before} and Fig~\ref{psvssh_after}, we see that after calibration, electrons are better separated from backgrounds. Secondly, we can check the mean value and resolution of E/P, where E is the sum of corrected ADC sum of preshower and shower and P is the momentum of scattered electrons. Fig ~\ref{ep_mean} demonstrates that the E/P is well centered at one and the resolution, $\sigma~0.045$, is as good as results from previous experiments. Last but not lease, we need to check whether the calibration consist in different data. We sampled out same runs with different kinematics setting and targets, and get the mean values and resolution of E/P for different runs. From Fig~\ref{ep_stability} and Fig~\ref{ep_resol}, we can see that E/P distribution is very consistent.
+
+%\clearpage
+\begin{figure}[htb]
+\centerline{\psfig{figure=figures/R_Sh_Ps_Before.eps,width=12cm,scale=0.5,angle=0,clip=}}
+\caption[R.ps.e vs R.sh.e before calibration]{\footnotesize{R.ps.e vs R.sh.e before calibration}
+\label{psvssh_before}}
+\end{figure}
+
+%\clearpage
+\begin{figure}[htb]
+\centerline{\psfig{figure=figures/R_Sh_Ps_After.eps,width=12cm,scale=0.5,angle=0,clip=}}
+\caption[R.ps.e vs R.sh.e after calibration]{\footnotesize{R.ps.e vs R.sh.e after calibration}
+\label{psvssh_after}}
+\end{figure}
+
+%\clearpage
+\begin{figure}[htb]
+\centerline{\psfig{figure=figures/R_Calo_EP.eps,width=12cm,scale=0.5,angle=0,clip=}}
+\caption[After calibration]{\footnotesize{After calibration}
+\label{ep_mean}}
+\end{figure}
+
+%\clearpage
+\begin{figure}[htb]
+\centerline{\psfig{figure=figures/R_Calo_Stability.eps,width=12cm,scale=0.45,angle=0,clip=}}
+\caption[Calibrated E/P for different run numbers]{\footnotesize{Calibrated E/P for different run numbers}
+\label{ep_stability}}
+\end{figure}
+
+%\clearpage
+\begin{figure}[htb]
+\centerline{\psfig{figure=figures/R_Calo_Resol.eps,width=12cm,scale=0.45,angle=0,clip=}}
+\caption[Calibrated E/P for different run numbers]{\footnotesize{Calibrated E/P for different run numbers}
+\label{ep_resol}}
+\end{figure}
+
+\clearpage
+
+\subsection{Pion Rejectors}
+Since the pion rejectors on the HRS-L are not total absorbers, a different method of calibration were used to calibrate the detectors. When we calibrated the Cerenkov detector, we aligned the peaks of single photon electrons of different counters to a commom ADC channel value. We can apply the same idea to pion rejectors but now we look at the cosmic ray data and align the muon peaks of different blocks to a commom ADC channel value, since different type of PMT tubes are used in the blocks and the single photon electrons peaks are not obvious in the ADC spectra. The advantage of using cosmic ray data to do calibration is that the events uniformly distribut along the detector planes and the energy of muon every lead glass block detects should be identical. Basically, what we did is to locate the peak positions of pedestal and moun in a ADC spectrum of a lead glass block, and align the distance between the two peaks to be 100, by applying a coeficient:
+\begin{equation}
+ C_{i} = \frac{100.0}{ADC_{i}^{muon}-ADC_{i}^{pedestal}}
+\end{equation}
+
+%\clearpage
+\begin{figure}[htb]
+\centerline{\psfig{figure=figures/L_prl1_adj2_0.eps,width=12cm,scale=0.8,angle=0,clip=}}
+\caption[Align muon peaks in pion rejectors ADC spectra]{\footnotesize{Align muon peaks in pion rejectors ADC spectra}
+\label{prl1_align}}
+\end{figure}
+
+ Fig ~\ref{prl1_align} gives an example of muon peaks alignment.After aligning all ADCs of lead glass blocks, we apply the coefficients to calculate E/P and do a final correction to make the peak locate at one:
+\begin{equation}
+ C_{i}^{real} = C_{i} \times \frac{1}{M_{E/P}} = C_{i} \times \frac{1000.0 \times L.gold.p}{L.prl1.e+L.prl2.e}
+\end{equation}
+
+where $M_{E/P}$ represents the mean value of E/P peaks. Similarly with calorimeter on HRS-R, we can check the quality of the pion rejectors calibration by ploting the correlation of ADC sum of two planes before and after calibration. Fig ~\ref{prl_before} and Fig ~\ref{prl_after} show the improvement of electrons separation. The distribution of E/P for pion rejectors are showed in Fig ~\ref{prlep_mean}, where the tail on the left and side of the peak means that electrons do not lose all their energy after passing through blocks. The resolution of the peak is about 0.055, which is a little poor than the one of calorimeter on HRS-R. Fig ~\ref{prlep_stability} and Fig ~\ref{prlp_resol} give the stability of calibration for different run conditions.
+
+%\clearpage
+\begin{figure}[htb]
+\centerline{\psfig{figure=figures/L_PRL_Before.eps,width=12cm,scale=0.5,angle=0,clip=}}
+\caption[L.prl2.e vs L.prl1.e before calibration]{\footnotesize{L.prl2.e vs L.prl1.e before calibration}
+\label{prl_before}}
+\end{figure}
+
+%\clearpage
+\begin{figure}[htb]
+\centerline{\psfig{figure=figures/L_PRL_After.eps,width=12cm,scale=0.5,angle=0,clip=}}
+\caption[L.prl2.e vs L.prl1.e after calibration]{\footnotesize{L.prl2.e vs L.prl1.e after calibration}
+\label{prl_after}}
+\end{figure}
+
+%\clearpage
+\begin{figure}[htb]
+\centerline{\psfig{figure=figures/L_Calo_EP.eps,width=12cm,scale=0.5,angle=0,clip=}}
+\caption[After calibration]{\footnotesize{After calibration}
+\label{prlep_mean}}
+\end{figure}
+
+%\clearpage
+\begin{figure}[htb]
+\centerline{\psfig{figure=figures/L_Calo_Stability.eps,width=12cm,scale=0.5,angle=0,clip=}}
+\caption[Calibrated E/P for different run numbers]{\footnotesize{Calibrated E/P for different run numbers}
+\label{prlep_stability}}
+\end{figure}
+
+%\clearpage
+\begin{figure}[htb]
+\centerline{\psfig{figure=figures/L_Calo_Resol.eps,width=12cm,scale=0.5,angle=0,clip=}}
+\caption[Calibrated E/P for different run numbers]{\footnotesize{Calibrated E/P for different run numbers}
+\label{prlp_resol}}
+\end{figure}
+
+
+
+\clearpage

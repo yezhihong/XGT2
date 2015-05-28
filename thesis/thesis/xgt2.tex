@@ -1,0 +1,106 @@
+\makeindex
+%\documentclass[12 pt, oneside]{amsart}
+%\documentclass[12 pt,oneside]{amsbook}
+\documentclass[12 pt,oneside]{report}
+%\documentclass[12 pt,oneside]{uvathesis}
+\usepackage{epsfig}
+\usepackage{amsmath}
+\usepackage{rotating}
+\usepackage{caption}
+\usepackage{subfig}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{epstopdf}
+\usepackage{listings}
+\usepackage{cite}
+\usepackage{upquote}
+\usepackage{xcolor}
+\usepackage{pdfpages}
+\usepackage[section]{placeins}
+
+%This should be the last one
+\usepackage{hyperref}
+\usepackage{url} 
+\usepackage{breakurl} 
+%\documentclass[12 pt, oneside]{report}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+\lstset{frame=tb,
+  language=Java,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+%  columns=flexible,
+  basicstyle={\footnotesize\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true
+  tabsize=1
+}
+
+\newcommand*{\TitleFont}{%
+      \usefont{\encodingdefault}{\rmdefault}{b}{n}%
+      \fontsize{16}{20}%
+      \selectfont}
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+%page shape
+%%%%%%%%%%%%%%%%%%%%%%%%
+\include{pageshape}
+
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+% contents
+%%%%%%%%%%%%%%%%%%%%%%%%
+\input title.tex
+\input abstract.tex
+\input acknowledgement.tex
+
+\tableofcontents
+\listoffigures
+\listoftables
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%introduction, prelim. %%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\setcounter{chapter}{1}
+\input intro/intro.tex
+
+%\setcounter{chapter}{2}
+\input intro/src.tex
+
+%\setcounter{chapter}{3}
+\input setup/setup.tex
+
+%\setcounter{chapter}{4}
+\input analysis/analysis.tex
+
+%\setcounter{chapter}{5}
+\input cross_section/cross_section.tex
+
+%\setcounter{chapter}{6}
+\input cross_section/results.tex
+
+%%%%%%%%%%%%% APPENDIX %%%%%%%%%%%%%%%%%%%%%%%%%%
+\appendix
+\input{append/append_trigger.tex}
+\input{append/append_xemc.tex}
+\input{append/append_deltap.tex}
+\input{append/append_target.tex}
+\input{append/append_xs.tex}
+
+%%%%%%%%%%%%% BIBLIOGRAPHY %%%%%%%%%%%%%%%%%%%%%%%%%%
+\renewcommand{\baselinestretch}{1}\normalsize
+\bibliographystyle{h-physrev3.bst}
+%\bibliographystyle{nature}
+\bibliography{xgt2}
+
+
+\end{document}

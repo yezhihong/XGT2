@@ -1,0 +1,167 @@
+%\documentclass[a4paper,10.5pt]{report}
+\documentclass[a4paper,10.5pt]{article}
+\makeindex
+\usepackage{epsfig}
+\usepackage{amsmath}
+\usepackage{rotating}
+\usepackage{caption}
+\usepackage{subfig}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{epstopdf}
+\usepackage{url} 
+\usepackage{listings}
+\usepackage{cite}
+\usepackage{upquote}
+\usepackage{xcolor}
+\usepackage{pdfpages}
+\usepackage[section]{placeins}
+
+%This should be the last one
+\usepackage{hyperref}
+%\documentclass[12 pt, oneside]{report}
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+\lstset{frame=tb,
+  language=Java,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+%  columns=flexible,
+  basicstyle={\footnotesize\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true
+  tabsize=1
+}
+% Title Page
+\textwidth 15 true cm
+\textheight 25 true cm
+%\headheight  14pt
+%\headsep    16pt
+%\footskip   27pt
+%\marginparsep 10pt
+%\marginparwidth  100pt
+\def\marginset#1#2{
+\setlength{\oddsidemargin}{#1}
+\iffalse
+\reversemarginpar
+\addtolength{\oddsidemargin}{\marginparsep}
+\addtolength{\oddsidemargin}{\marginparwidth}
+\fi
+
+  \setlength{\evensidemargin}{0mm}
+\iffalse
+\addtolength{\evensidemargin}{\marginparsep}
+\addtolength{\evensidemargin}{\marginparwidth}
+\fi
+
+  % \paperwidth = h + \oddsidemargin+\textwidth+\evensidemargin + h
+\setlength{\hoffset}{\paperwidth}
+\addtolength{\hoffset}{-\oddsidemargin}
+\addtolength{\hoffset}{-\textwidth}
+\addtolength{\hoffset}{-\evensidemargin}
+\setlength{\hoffset}{0.5\hoffset}
+\addtolength{\hoffset}{-1in}           % h = \hoffset + 1in
+
+  \setlength{\voffset}{-1in}             % 0 = \voffset + 1in
+\setlength{\topmargin}{\paperheight}
+\addtolength{\topmargin}{-\headheight}
+\addtolength{\topmargin}{-\headsep}
+\addtolength{\topmargin}{-\textheight}
+\addtolength{\topmargin}{-\footskip}
+\addtolength{\topmargin}{#2}
+\setlength{\topmargin}{0.5\topmargin}
+}
+
+\marginset{10mm}{12mm}
+\title{E08014 Cross Section Extraction}
+%\subtitle{A note of $x>2$ cross section extraction package}
+\author{Zhihong Ye\\ University of Virginia}
+
+\begin{document}
+\maketitle
+\tableofcontents
+\listoffigures
+%\listoftables
+
+\section{Overview}
+ Assuming the data is binned in the energy of scattered electrons, $E'$, the experimental raw cross section can be written as:
+\begin{equation}
+  \frac{d\sigma^{raw}_{EX}}{dE'd\Omega} (E_{0},E'_{i}, \theta_{0}) = \frac{N^{i}_{EX}\cdot \epsilon_{e-\pi}}{N_{e} \cdot \eta_{tg} \cdot \epsilon_{eff}\cdot (\Delta E'_{EX}\Delta\Omega_{EX})},
+  \label{eqxs_org}
+\end{equation}
+where the superscript $i$ denotes the $ith$ bin. $E_{0}$ is the incident energy set at 3.356 GeV in the E08-014, $E'_{i}$ is the scattered energy at the center of the bin, and $\theta_{0}$ is the central scattering angle. $\Delta E'$ and $\Delta\Omega=\Delta\theta_{tg}\cdot \Delta\phi_{tg}$ are the momentum acceptance and the solid angle acceptance of the spectrometer; $N^{i}_{EX}$ is the number of scattered electron events in this bin; $\eta_{tg}$ is the areal density of scattering centers; $N_{e}$ is the total number of electrons in the beam; and $\epsilon_{eff}$ is the total efficiency of all detectors combined, including the detection efficiency and the cut efficiency. $\epsilon_{e-\pi}$ corrects for the pion-contamination in the electrons after the PID cuts. In the rest of this chapter, the differential form of the cross section, $\frac{d\sigma}{dE'd\Omega}(E_{0},E'_{i}, \theta_{0})$, is abbreviated to $\sigma(E'_{i}, \theta_{0})$.
+
+\begin{figure}[!ht]
+ \begin{center}
+  \includegraphics[angle=90, type=pdf, ext=.pdf,read=.pdf,width=1.\textwidth]{./figures/E08014_XS_FlowChart}
+  \caption[Flow-chart illustrating cross section extraction]{Flow-chart illustrating cross section extraction}
+  \label{xs_flow_chart}
+ \end{center}
+\end{figure}
+The raw cross section in Eq.~\eqref{eqxs_org} requires additional corrections to remove the effects from the spectrometer acceptance. Also, $E_{0}$ and $E'_{i}$ are altered when the electron loses its energy as it passes through the target due to the radiative effects before and after the scattering (see Appendix B.5). The experimental cross section, usually called the radiated cross section, has to be further corrected for radiative effects. The final cross section is the Born cross section, which can be directly compared with theoretical calculations. 
+
+ The basic procedure of extracting cross sections from experimental data is demonstrated in Fig.~\ref{xs_flow_chart}. First of all, the signals from detectors and electronics were stored in the raw data in the form of TDC channels, ADC channels and scaler counts. These signals have to be properly calibrated and converted into applicable quantities. The calibrated HRS optics matrix reconstructs the scattered electron's momentum, scattering angle and reaction point at the target plane. The full set of raw data was replayed with updated parameters in the data base. The calibration of detectors and the HRS optics matrices have been introduced in the previous chapter. 
+ 
+ Secondly, the results of the beam charge monitor (BCM) calibration convert the BCM scaler counts into electron beam charge. The dead-time associated with the DAQ system needs to be evaluated to recover the events lost during the data acquisition. $\eta_{tg}$ is determined by the target thickness after the boiling study. Good electrons are identified by applying cuts on calibrated detector signals, and the efficiencies of the event selection can be individually determined. By binning the data with the kinematic variable, e.g. $E'$, in its proper acceptance range, one can extract the experiment yield in each bin. A description of all the procedures will be given in this chapter.
+ 
+ In addition, the single arm Monte Carlo simulation (SAMC) generates simulation events with the same kinematic settings but with a wider acceptance range to correct the acceptance effect of the HRSs. After weighting the simulation events with the cross sections calculated from model (e.g. XEMC in this experiment), the simulation yields were extracted with the same acceptance cuts and binning method. The Monte Carlo simulation and cross section models will also be discussed in this chapter.
+
+ Finally, the yield ratio method used to extract the cross sections will be introduced, followed by a discussion of errors.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Beam Charge 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\input{analysis_charge.tex}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Dead Time
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\input{analysis_dt.tex}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Target
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\input{analysis_target.tex}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Efficiencies
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\input{analysis_effi.tex}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Cross Section Model & Monte Carlo 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\input{analysis_mc.tex}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Yield and Cross Section
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\input{analysis_xs.tex}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Errors
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\input{analysis_errors.tex}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%% BIBLIOGRAPHY %%%%%%%%%%%%%%%%%%%%%%%%%%
+\renewcommand{\baselinestretch}{1}\normalsize
+\bibliographystyle{h-physrev3.bst}
+%\bibliographystyle{nature}
+\bibliography{xgt2}
+
+\end{document}
+

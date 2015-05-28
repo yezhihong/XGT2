@@ -1,0 +1,289 @@
+\documentclass[a4paper,12.pt]{article}
+%\documentclass[a4paper,10.5pt]{article}
+\makeindex
+\usepackage{booktabs}
+\usepackage{epsfig}
+\usepackage{graphicx}
+\usepackage{epstopdf}
+\usepackage{amsmath}
+\usepackage{rotating}
+\usepackage{caption}
+\usepackage{subfig}
+
+ \renewcommand{\arraystretch}{1.5}
+    
+% Title Page
+\textwidth 15 true cm
+\textheight 25 true cm
+\def\marginset#1#2{
+\setlength{\oddsidemargin}{#1}
+\iffalse
+\reversemarginpar
+\addtolength{\oddsidemargin}{\marginparsep}
+\addtolength{\oddsidemargin}{\marginparwidth}
+\fi
+
+  \setlength{\evensidemargin}{0mm}
+\iffalse
+\addtolength{\evensidemargin}{\marginparsep}
+\addtolength{\evensidemargin}{\marginparwidth}
+\fi
+
+\setlength{\hoffset}{\paperwidth}
+\addtolength{\hoffset}{-\oddsidemargin}
+\addtolength{\hoffset}{-\textwidth}
+\addtolength{\hoffset}{-\evensidemargin}
+\setlength{\hoffset}{0.5\hoffset}
+\addtolength{\hoffset}{-1in}           % h = \hoffset + 1in
+
+  \setlength{\voffset}{-1in}             % 0 = \voffset + 1in
+\setlength{\topmargin}{\paperheight}
+\addtolength{\topmargin}{-\headheight}
+\addtolength{\topmargin}{-\headsep}
+\addtolength{\topmargin}{-\textheight}
+\addtolength{\topmargin}{-\footskip}
+\addtolength{\topmargin}{#2}
+\setlength{\topmargin}{0.5\topmargin}
+}
+
+\marginset{10mm}{12mm}
+\title{E08014 Cross Section Extraction}
+%\subtitle{A note}
+\author{Zhihong Ye\\ University of Virginia}
+
+\begin{document}
+%\maketitle
+\section{Overview}
+
+The experimental Born cross section with $x_{bj}$ binning can be extracted by using the Yield Ratio method:
+\begin{equation}
+   \sigma_{EX}(x_{bj}^{i}) = \frac{ Y^{i}_{EX}}{Y^{i}_{MC}} \cdot \sigma^{born}_{model}(E_{0},E'_{i}, \theta_{0}),
+   \label{eqxs}
+\end{equation}
+where $E_{0}$ is the incoming electron beam energy fixed at 3.356GeV during E08-014 experiment, $E'_{i}$ is the scattered momentum directly calculated by using the central value of the $ith$ $x_{bj}$ bin and the central scattering $\theta_{0}$. $Y^{i}_{EX}$ and $Y^{i}_{MC}$ are the experimental yield and Monte Carlo yield, respectively.
+
+The experimental yield can be written as:
+\begin{equation}
+   Y^{i}_{EX} = \frac{N^{i}_{EX}\cdot \epsilon_{\pi/e}}{N_{e} \cdot \epsilon_{eff}},
+ \label{eqyex}
+\end{equation}
+where $N^{i}_{EX}$ is the total number of events in the $ith$ $x_{bj}$ bin after all cuts, $N_{e}$ is the total charge of all runs and $\epsilon_{eff}$ is the combination of all efficiencies, including detection efficiencies of all detectors and PID cut efficiencies, and the values are set to one as we will discuss later.
+
+The Monte Carlo yield is given by:
+\begin{equation}
+   Y^{i}_{MC} = N_{tg}\cdot \sum_{j\in i}\sigma^{rad}_{model}(E'_{j},\theta_{j}) \cdot \frac{\Delta\Omega_{MC} \Delta E'_{MC}}{N_{MC}^{gen}} ,
+   \label{eqymc}
+\end{equation}
+where $N_{tg}$ is the total scattering centers of the target; $\sum_{j\in i}$ means summarizing the radiated cross section values, $\sigma(E'_{j},\theta_{j})$), of all Monte Carlo events in the $ith$ $x_{bj}$ bin. $\Delta\Omega_{MC} \Delta E'_{MC}$ is the full phase space in the Monte Carlo and $N_{MC}^{gen}$ is the total generated events (Normally 20 million events per setting).
+
+Each quantities involved in the formulas above will be discussed individually in the following sections, including the calculation of errors. 
+
+\section{Electron Beam Charge}
+ With the BCM parameters calibrated by Patricia, we are able to calculate total electron charge delivered from the accelerator in each run. Normally we use the last reading of counts by a BCM scaler to calculate the charge recorded by this monitor. However, if we intend to eliminate events taken during beam trip, the amount of electron charge accumulated when the beam current was lower than requested values will need to be subtracted from the total charge. A script was written to calculate the values of charge and current between two consecutive scaler events, and to assign the values for all events taken during this time period. For example, the charge and current calculated base on beam charge monitor (BCM) $U_{1}$ for $ith$ scaler event are given by:
+\begin{equation}
+  \Delta C_{i}^{U_{1}} = C_{i+1}^{U_{1}} - C_{i}^{U_{1}},  I_{i}^{U_{1}} = \Delta C_{i}^{U_{1}}/(T_{i+1}-T_{i}),
+\end{equation}
+where $\Delta C_{i+1}^{U_{1}}$ gives the calibrated values of charge accumulated between two consecutive scaler events happening at CPU clock $T_{i+1}$ and $T_{i}$, of which the difference is normally set to three seconds. Values of charge and current for BCM $U_{1}, U_{3}, D_{1}$ and $D_{3}$ are calculated similarly. Then a beam trip cut will remove events taken during the current was low, and the total number of electrons from the beam for each run is re-evaluated:
+\begin{equation}
+  N_{e} = \sum_{i^{*}} \frac{1}{4}(\Delta C_{i^{*}}^{U_{1}}+\Delta C_{i^{*}}^{U_{3}}+\Delta C_{i^{*}}^{D_{1}}+\Delta C_{i^{*}}^{D_{3}})(\frac{1}{4}(I_{i^{*}}^{U_{1}}+I_{i^{*}}^{U_{3}}+I_{i^{*}}^{D_{1}}+I_{i^{*}}^{D_{3}})>I_{beam\_trip\_cut}),
+  \label{eq_ne}
+\end{equation}
+where $i^{*}$ means summarizing scaler events with beam current $I_{i^{*}}$ higher than the cutting value $I_{beam\_trip\_cut}$, which we chose to be half of the value we requested during the experiment.
+
+During the experiment, BCM scalers in HRS-L did not work properly so we only used the values of charge in HRS-R since scalers on both side shared the same signals from the beam.
+
+\section{Targets}
+
+\subsection{Boiling Effect}
+Total number of scattering centers (or nuclei) in a target with its known thickness is given by:
+\begin{equation}
+ N_{tg} = \frac{\rho\cdot l \cdot N_{a}}{A},
+ \label{eq_ntg}
+\end{equation}
+where $\rho$ is the target density in $g/cm^{3}$, $l$ is the effective target length in cm, $N_{a}$ is the Avogadro's number and A is the nuclear number of the target. For cryogenic long targets, $l$ should be equal to the effective length after cuts, instead of the design length.
+
+Heat deposits in the target system when beam is on and cause the variation of target densities. This so called boiling effect are needed to be corrected:
+\begin{equation}
+  \rho_{cor} = \rho \cdot (1.0 - B \cdot I /100),
+   \label{eq_tgrho}
+\end{equation}
+where $I$ and $B$ are the value of beam current and the boiling factor for a specific target, respectively. Study of boiling factors is performed by Patrica Solvignon %\ref{boiling_patricia}.
+
+\begin{table}[htbp]
+   \begin{tabular}{lccccc}
+   \toprule
+   Target       &$\rho$ ($\mathrm{g/cm^{3}}$)& Length (cm)   & $\mathrm{\delta\rho}$ ($\mathrm{g/cm^{2}}$)& I ($\mathrm{\mu A}$)& Comment   \\
+   \midrule
+   $\mathrm{LD_{2}}$& 0.1676                 & 20.0          &     N/A                & 40          &Loop2      \\
+   Al can (Loop-2)  & 2.7                    & 0.0272        &     0.0001             &             &  Entrance\\
+                    & 2.7                    & 0.0361        &     0.0011             &             &  Exit     \\
+                    & 2.7                    & 0.0328        &     0.0002             &             &  Wall     \\
+   $\mathrm{^{3}He}$& 0.0296                 & 20.0          &     N/A                &120         &  Loop1    \\
+   $\mathrm{^{4}He}$& 0.0324                 & 20.0          &     N/A                &90           &  Loop1    \\
+   Al-can (Loop-1)  & 2.7                    & 0.0272        &     0.0002             &             &  Entrance \\
+                    & 2.7                    & 0.0361        &     0.0006             &             &  Exit     \\
+                    & 2.7                    & 0.0328        &     0.0005             &             &  Wall     \\
+   $\mathrm{^{12}C}$&      2.265             & 0.3937        &     0.0008             &120          &           \\
+   $\mathrm{^{40}C}$&      1.55              & 0.5735        &     0.01               &40           &  Loop3    \\
+   $\mathrm{^{48}C}$&      1.55              & 0.5284        &     0.01               &40           &  Loop3    \\
+   Al-can (Loop-3)  & 2.7                    & 0.0272        &     0.0001             &             &  Entrance \\
+                    & 2.7                    & 0.0361        &     0.001             &              &  Exit     \\
+                    & 2.7                    & 0.0328        &     0.0002             &             &  Wall     \\
+   Dummy-20cm       &      2.7               & 0.1581        &     0.0005             &40           & Upstream  \\
+                    &      2.7               & 0.1589        &     0.0005             &             & Downstream\\
+   Dummy-10cm       &      2.7               & 0.1019        &     0.0003             &40           & Upstream  \\
+                    &      2.7               & 0.1000        &     0.0003             &             & Downstream\\        
+   \bottomrule
+   \end{tabular}
+  % \centering
+  \caption[Targets in the E08-014]{\footnotesize{Targets in the E08-014, where BeO target and optics target are not listed. The detailed report is in Ref.~\cite{target_report}. The uncertainties of three cryo-targets are needed to be conformed so they are listed temporarily as "N/A". }}
+  \label{target_table}
+  \end{table}
+  
+\section{Dead-Time}
+   The average value of dead-time in each run for the main production triggers was calculated individually during the offline analysis. Although the total number of events recorded by the DAQ system was scaled by the pre-scale factor, their total triggers were counted by scalers, hence the average dead-time for the $ith$ trigger can be given by:
+\begin{equation}
+  DT_{T_{i}} = 1 - \frac{PS_{T_{i}}\cdot N_{T_{i}}^{DAQ} }{N_{T_{i}}^{Scaler}},
+  \label{eq_dt}
+\end{equation}
+where $PS_{T_{i}}$ is the pre-scale factor of the trigger. $N_{T_{i}}^{Scaler}$ and $N_{T_{i}}^{DAQ}$ are the total number of scaler counts (in $\mathbf{RIGHT}$ tree for $i=1$ or $\mathbf{LEFT}$ tree for $i=3$) and trigger events (in $\mathbf{T}$ tree) for each run, respectively. The beam trip cut was applied when calculating $N_{T_{i}}^{Scaler}$ and $N_{T_{i}}^{DAQ}$.
+
+  A different quantity, live-time ($LT_{T_{i}} = 1 -DT_{T_{i}}$), is more commonly used to correct the total number of good events in each run:
+ \begin{equation}
+  N^{r}_{T_{i},EX} = PS^{r}_{T_{i}}\cdot \frac{N^{r,recorded}_{T_{i}}}{LT^{r}_{T_{i}}},
+  \label{eq_lt}
+ \end{equation}
+where $r$ denotes the run number; $PS^{r}_{T_{i}}=PS1^{r}$ for the $T_{1}$ trigger on HRS-R and $PS^{r}_{T_{i}}=PS3^{r}$ for the $T_{3}$ trigger on HRS-L; $N^{r}_{T_{i},EX}$ and $N^{r,recorded}_{T_{i}}$ are the number of selected events which create triggers and the number of those events which are recorded by the DAQ system after pre-scaling, respectively. Note that without event selection, e.g. PID cuts, $N^{r,recorded}_{T_{i}}=N^{r,DAQ}_{T_{i}}$.
+
+\section{Efficiencies}
+
+Detectors do not work in 100\% performance and the inefficiencies of detectors caused by hardware and software are needed to be evaluated and corrected when extracting cross sections. The analysis results show that for E08014 data, the detection efficiencies of all detectors are very close to $99\%$ and meanwhile, loose PID cuts are good enough to eliminate most of pions and their cut efficiencies are also close to 99\%. So during the cross section calculation, we don't apply corrections of those efficiencies but only quote $1\%$ of the systematic errors.
+
+\section{Calculation of Errors}
+ In the cross section extraction package, a new type of variable is defined by a C++ class $XGT2\_VAR$, which not only includes the exact value of one quantity but also includes its sysmatic error and statistic error, respectively. When a new quantity is calculated from the operation of other quantities, all sysmatic errors and statistic errors from them will be seperately combined and carried by this new quantity. Comparing with evaluation of total errors after we exact the cross section values, this step-by-step method has its advantage to avoid mistakes such as miss-counting or multi-counting. The detail explaination of errors calculation and propagation is given as follows.
+
+ From Eq.\ref{eqxs},
+  \begin{equation}
+  \delta^{stat/sys} \sigma_{EX} = \sigma_{EX} \cdot \sqrt{(\frac{\delta^{stat/sys} Y_{EX}}{Y_{EX}})^{2}+(\frac{\delta^{stat/sys} Y_{MC}}{Y_{MC}})^{2}}
+\end{equation}
+
+\subsection{$Y_{EX}:$}
+ From Eq.\ref{eqyex},
+\begin{equation}
+  \delta^{stat/sys} Y_{EX} =  Y_{EX} \cdot \sqrt{(\frac{\delta^{stat/sys} N_{EX}}{N_{EX}})^{2}+(\frac{\delta^{stat/sys} N_{e}}{N_{e}})^{2}+(\frac{\delta^{stat/sys}\epsilon_{\pi/e}}{\epsilon_{\pi/e}})^{2}+(\frac{\delta^{stat/sys}\epsilon_{eff}}{\epsilon_{eff}})^{2}},
+\end{equation}
+where I always set $\epsilon_{\pi/e} = 1$, and $\epsilon_{eff} = 1$.
+
+\subsubsection{Statistic Errors}
+\begin{enumerate}
+
+\item $\delta^{stat} \epsilon_{\pi/e} = 0$
+
+\item $\delta^{stat} \epsilon_{\pi/e} = 0$
+
+\item $\delta^{stat} N_{e} = 0$
+
+\item \textbf{$N_{EX}$}: From  Eq.\ref{eq_lt} and $N_{EX}=\sum_{r}N_{EX}^{r}$ for all runs, we have:
+\begin{equation}
+  \delta^{stat} N_{EX}^{r} = N_{EX}^{r} \cdot \sqrt{\frac{1}{N_{T_{i}}^{r} PS_{T_{i}}} + (\frac{\delta^{stat} LT_{T_{i}}^{r}}{LT_{T_{i}}^{r}})^{2} }, \delta^{stat} N_{EX}=\sqrt{\sum_{r}(\delta^{stat} N_{EX}^{r})^{2}}
+\end{equation}
+
+\end{enumerate}
+
+\subsubsection{Systematic Errors}
+\begin{enumerate}
+
+\item $\delta^{sys} \epsilon_{\pi/e} = 0.01$
+
+\item $\delta^{sys} \epsilon_{\pi/e} = 0.01$
+
+\item From Eq.\ref{eq_ne}, since the charge is obtained from the average of four BCM monitor outputs ($u_{1},u_{3},d_{1}$ and $d_{3}$),the error is also averaged:
+\begin{eqnarray*}
+  \delta N_{e}^{r} &=& \sqrt{\frac{(\delta N_{e}^{r,d_{1}})^{2}+(\delta N_{e}^{r,d_{3}})^{2}+(\delta N_{e}^{r,u_{1}})^{2}+(\delta N_{e}^{r,u_{3}})^{2}}{4}}\\
+                  &=& \sqrt{\frac{N_{e}^{r,d_{1}}+N_{e}^{r,d_{3}}+N_{e}^{r,u_{1}}+N_{e}^{r,u_{3}}}{4}}\\
+                  &=& \frac{\sqrt{N_{e}^{r}}}{2} \\
+\end{eqnarray*}
+Hence,
+\begin{equation}
+  \delta N_{e} = \sqrt{\sum_{r}(\delta N_{e}^{r})^{2}}=\frac{1}{2}\sqrt{\sum_{r}N_{e}^{r}}=\frac{1}{2}\sqrt{N_{e}},
+\end{equation}
+where, $r$ means the run number.
+
+\item $\delta^{sys} N_{EX} = N_{EX} \cdot \sqrt{ \sum_{r} (\delta^{sys} LT^{r}/LT^{r})^{2}}$. Form Eq.\ref{eq_lt},
+\begin{equation}
+  \delta^{sys} LT^{r}_{T_{i}} = LT^{r}_{T_{i}} \cdot \sqrt{\frac{1}{N_{T_{i}}^{Scaler}}-\frac{1}{N_{T_{i}}^{DAQ} PS_{T_{i}}}},
+\end{equation}
+where there is one thing that confuses me, which is that whether I should multiply $PS_{T_{i}}$ in the first term or not. It won't give us problem so far since most of runs have PS equal to one.
+
+\end{enumerate}
+
+\subsection{$Y_{MC}:$} 
+
+From Eq.\ref{eqymc},
+\begin{equation}
+  \delta^{stat/sys} Y_{MC} =  Y_{MC} \cdot \sqrt{(\frac{\delta^{stat/sys} N_{tg}}{N_{tg}})^{2}+(\frac{\delta^{stat/sys}\sum_{j\in i}}{\sum_{j\in i}})^{2}+(\frac{\delta^{stat/sys} N_{MC}^{gen}}{N_{MC}^{gen}})^{2}},
+\end{equation}
+
+\subsubsection{Statistical Errors}
+ Statistical errors from all three terms are set to zero.
+
+\subsubsection{Systematic Errors}
+
+\begin{enumerate}
+
+
+\item Form $N_{tg} = \frac{\rho\cdot l \cdot N_{a}}{A}$, and $\rho_{cor} = \rho \cdot (1.0 - B \cdot I /100)$, there are three terms that can introduce errors: beam current measurement and calculation ($\delta I$), acuracy of Boiling Factors ($\delta B$), and the acuracy of target thickness measurement ($\delta \rho$). Last term is known but I temperately set the first two terms to zero. Hence:
+ \begin{equation}
+    \delta N^{sys}_{tg} = \frac{\delta\rho}{\rho} \cdot N_{tg}
+ \end{equation} 
+
+\item $\delta^{sys}\sum_{j\in i} = (\sum_{j\in i})\cdot\frac{1}{\sqrt{N_{MC}^{i}}}$, since it is sumarizing the cross section values of MC events ($N_{MC}^{i}$) in one bin.
+
+\item $\delta^{sys} N_{MC}^{gen} = \sqrt{N_{MC}^{gen}}$. I generated $2\cdot 10^{7}$ events for cryogenic targets and $5\cdot 10^{6}$ for foil targets.
+
+\end{enumerate}
+
+ \section{Systematic Table}
+ 
+ \begin{table}[htbp]
+ \centering
+    \begin{tabular}{|l|c|c|c|c|}
+    \hline
+     Source               & Scale & Relative & $\delta\sigma/\sigma$& Comment   \\[6pt]
+  \hline
+    \hline
+    Trigger Efficiency    &      &     $<$1.0\%  &                      &          \\[7pt] \hline
+    Tracking Efficiency   &      &     $<$1.0\%  &                      &          \\[7pt] \hline
+    GC Efficiency         &      &     $<$1.0\%  &                      &          \\[7pt] \hline
+    Calo Efficiency       &      &     $<$1.0\%  &                      &          \\[7pt] \hline
+ %   PID Cut Efficiency    &      &          &                      &          \\[5pt] \hline
+     Dead Time             &      &     $<$0.4\%     &                      &      \\[7pt] \hline
+    Pion Contamination (PID)    &      &          &                      &          \\[7pt] 
+    \hline
+    \hline
+    Acceptance Correction       &      &          &                      &          \\[7pt] \hline
+    Bin-Centering Correction    &      &          &                      &          \\[7pt] \hline
+    Radiative Correction        &      &          &                      &          \\[7pt] \hline
+    Coulomb Correction          &      &          &                      &          \\[7pt]
+    \hline
+    \hline
+    HRS Momentum         &      &   0.02\%      &                      &          \\[7pt] \hline
+    HRS Angle            &      &   $<$0.5mrad  &                      &          \\[7pt] \hline
+    Beam Energy          &      &   0.05\%      &                      &          \\[7pt] \hline
+    Beam Charge          &      &   $<$1.0\%    &                      &          \\[7pt] 
+   \hline
+    \hline
+    Target Density       &      &          &                      &          \\[7pt] \hline
+    Target Boiling       &      &          &                      &          \\[7pt] \hline
+    Dummy Subtraction    &      &          &                      &          \\[7pt] 
+    \hline
+    \hline
+    Total               &       &          &                      &          \\[7pt]
+    \hline
+    \end{tabular}
+      \caption{E08-014 systematic error table}
+  \label{sys_table}
+  \end{table}
+   
+\end{document}
+

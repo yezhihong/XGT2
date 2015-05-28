@@ -1,0 +1,13 @@
+ %This is pagefix.sty it changes page number font to text font
+ \def\ps@headings{\ps@empty
+   \def\@evenhead{\normalfont
+       \rlap{\thepage}\hfil \leftmark{}{}\hfil}%
+   \def\@oddhead{\normalfont \hfil
+       \rightmark{}{}\hfil \llap{\thepage}}%
+   \let\@mkboth\markboth
+   \def\partmark{\@secmark\markboth\partrunhead\partname}%
+   \def\chaptermark{%
+     \@secmark\markboth\chapterrunhead{}}%
+   \def\sectionmark{%
+     \@secmark\markright\sectionrunhead\sectionname}%
+ }

@@ -1,0 +1,68 @@
+\makeindex
+%\documentclass[12 pt, oneside]{amsart}
+%\documentclass[12 pt,oneside]{amsbook}
+\documentclass[12 pt,oneside]{report}
+%\documentclass[12 pt,oneside]{uvathesis}
+\usepackage{epsfig}
+\usepackage{amsmath}
+\usepackage{rotating}
+\usepackage{caption}
+\usepackage{subfig}
+\usepackage{graphicx}
+\usepackage{booktabs}
+%\usepackage{epstopdf}
+
+%\documentclass[12 pt, oneside]{report}
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+%page shape
+%%%%%%%%%%%%%%%%%%%%%%%%
+\include{pageshape}
+
+\begin{document}
+
+%\newcommand{\abcd}[2]{{chapter}{\tocchapter {#1}{}{#2}}}
+
+
+%\newcommand{\ps@plain}{
+%	\renewcommand{@oddhead}{}
+%	\renewcommand{@evenhead}{}
+%	\renewcommand{@oddfoot}{}
+%	\renewcommand{@evenfoot}{}}
+
+%\include{title}
+%\include{abstract}
+%\include{acknowledgment}
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+% contents
+%%%%%%%%%%%%%%%%%%%%%%%%
+
+\tableofcontents
+%\listoftables
+\listoffigures
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%introduction, prelim. %%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%\input intro.tex
+
+%\input equip.tex
+
+\input analysis/analysis.tex
+
+%\input result.tex
+
+%%%%%%%%%%%%% BIBLIOGRAPHY %%%%%%%%%%%%%%%%%%%%%%%%%%
+\bibliographystyle{h-physrev3.bst}
+\bibliography{src}
+
+%\appendix
+%\input AppendixElectronicsScheme.tex
+%\input AppendixCosmics.tex
+%\input AppendixSasySoft.tex
+%\input AppendixDataTables.tex
+
+\end{document}

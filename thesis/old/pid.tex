@@ -1,0 +1,158 @@
+\section{Particle Identification Study}
+
+ Before we calculate cross section of electron scattering, the detection efficiencies of Cerenkov detectors and lead glass calorimeters have to be extracted, and the Particle Identification (PID)cuts need to be optimized to mostly remove pion contamination while to keep most of electrons.
+ 
+ For each HRS, there are two major production triggers (T1 and T6 for HRS-R, and T3 and T7 for HRS-L). T1 and T3 require coincident triggers from S1,S2,and Cerenkov planes ( or said, 3 out of 3 trigger), while T6 and T7 are the traditional HRS single arm trigger (which is coincident trigger of S1 and S2, or said, 2 out of 2 trigger). We have to study the detector efficiencies independently for different trigger types due to the big difference of rates. 
+
+\subsection{Cerenkov}
+
+We used the data of run\#3590 for analysis, since the kinematic setting for this run is at 3N-SRC region. The rate at this region is low and the distribution of scattered electrons on detector planes are more uniform. To study the efficiencies of gas Cerenkov detectors, we selected one track events which are inside the spectrometer acceptance (Fig ~\ref{acc_hrsl} and Fig ~\ref{acc_hrsr}), to eliminate multi-scattering particles. After this selection, we cut on calorimeters to sample pure electrons, as well as pure pions for cuts efficiencies study. Fig ~\ref{pid_hrsl} and Fig ~\ref{pid_hrsr} show the PID cut we applied. 
+
+ %\clearpage
+\begin{figure}[htb]
+\centerline{\psfig{figure=figures/pid/L.PID.Acc.Cut.eps,width=12cm,scale=0.5,angle=0,clip=}}
+\caption[Acceptance Cuts for HRS-L]{\footnotesize{Acceptance Cuts for HRS-L}
+\label{acc_hrsl}}
+\end{figure}
+
+%\clearpage
+\begin{figure}[htb]
+\centerline{\psfig{figure=figures/pid/R.PID.Acc.Cut.eps,width=12cm,scale=0.5,angle=0,clip=}}
+\caption[Acceptance Cuts for HRS-L]{\footnotesize{Acceptance Cuts for HRS-L}
+\label{acc_hrsr}}
+\end{figure}
+
+%\clearpage
+\begin{figure}[htb]
+\centerline{\psfig{figure=figures/pid/L.PID.Calo.Cut.eps,width=12cm,scale=0.5,angle=0,clip=}}
+\caption[PID Cuts on Calorimeters for HRS-L]{\footnotesize{PID Cuts on Calorimeters for HRS-L}
+\label{pid_hrsl}}
+\end{figure}
+
+%\clearpage
+\begin{figure}[htb]
+\centerline{\psfig{figure=figures/pid/R.PID.Calo.Cut.eps,width=12cm,scale=0.5,angle=0,clip=}}
+\caption[PID Cuts on Calorimeters for HRS-L]{\footnotesize{PID Cuts on Calorimeters for HRS-R}
+\label{pid_hrsr}}
+\end{figure}
+
+\clearpage
+
+\subsubsection{Detection Efficiency}
+ Assuming that the average number of photoelectrons produced per meter of Cerenkov box is $\mu$, the detection efficiency can be given by:
+\begin{equation}
+ \epsilon_{Cerenkov} = 1 - e^{-\mu}
+\end{equation}
+The value of $\mu$ for gas Cerenkov detectors on both HRS is approximately equal to nine, hence the expect efficiencies of both detectors are above 99\%. After cutting pure electrons from the data, the detection efficiency can be calcuated as:
+\begin{equation}
+ \epsilon_{det} = \frac{N_{cer}}{N_{calo}}
+\end{equation}
+where $N_{cer}$ and $N_{calo}$ are number of electrons detected by gas Cerenkov detector and Calorimeters respectively. For HRS-R, the detection efficiency of trigger 1 is 100\%, which is true since trigger 1 requires that the Cerenkov plane has to detect the particle. And the detection efficiency of trigger 6 is about 99.95\%, which also reaches our expectation. The 0.5\% lose could be due to high rates or the mirrors  do not collect enough Cerenkov light radiated by low energy electrons. For HRS-L, the results are similar but the detection efficiency of trigger 7 is a little bit low (99.77\%), which we need to discuss the reason.
+
+\subsubsection{Cuts Efficiency}
+  The goal of cuts efficiency study is to obtain a most optimized cut value on Cerenkov ADC sum so we can reject most of background particles (mainly pions) while keeping as much of electrons as possible. After selecting pure electron and pion samples through acceptance cuts and calorimeter cuts, we calculate the leftover of electrons and pions simultaneously each time we change the cut values of gas Cerenkov ADC sum. A plot of electrons and pions cut efficiency correlated with cut values can give us a tool to select the best cut value. From Fig~\ref{cer_eff_t1} to Fig~\ref{cer_eff_t3}, we can see that pions are already rejected by the triggers so we can safely applying a very loose cuts on Cerenkov ADC sum to remove pedestal or other background. From plots for trigger 6 and trigger 7 (Fig~\ref{cer_eff_t6} to Fig~\ref{cer_eff_t7}), the efficiency of electrons is dropping while the cut value is increasing to get high pion cut efficiency. For HRS-R, the cut value of gas Cerenkov ADC sum can be chose to be about 150, where we have both high efficiencies of electrons and pions. For HRS-L, however, if we require high cut efficiency on pion, for example, cutting at 150, we lose too much efficiency on electrons (about 97\%)  We need to study in more detail the reason of the difference between left and right gas Cerenkov detectors, and determine an optimized cut value.
+
+ %\clearpage
+ \begin{figure}[htb]
+ \centerline{\psfig{figure=figures/R.Cer.Cut_Eff_Geo_T1.eps,width=12cm,scale=0.5,angle=0,clip=}}
+ \caption[Cut Efficiency of HRS-R gas Cerenkov with trigger 1 ]{\footnotesize{Cut Efficiency of HRS-R gas Cerenkov with trigger 1}
+ \label{cer_eff_t1}}
+ \end{figure}
+
+ %\clearpage
+ \begin{figure}[htb]
+ \centerline{\psfig{figure=figures/R.Cer.Cut_Eff_Geo_T6.eps,width=12cm,scale=0.5,angle=0,clip=}}
+ \caption[Cut Efficiency of HRS-R gas Cerenkov with trigger 6 ]{\footnotesize{Cut Efficiency of HRS-R gas Cerenkov with trigger 6}
+ \label{cer_eff_t6}}
+ \end{figure}
+
+ %\clearpage
+ \begin{figure}[htb]
+ \centerline{\psfig{figure=figures/L.Cer.Cut_Eff_Geo_T3.eps,width=12cm,scale=0.5,angle=0,clip=}}
+ \caption[Cut Efficiency of HRS-L gas Cerenkov with trigger 3 ]{\footnotesize{Cut Efficiency of HRS-L gas Cerenkov with trigger 3}
+ \label{cer_eff_t3}}
+ \end{figure}
+
+ %\clearpage
+ \begin{figure}[htb]
+ \centerline{\psfig{figure=figures/L.Cer.Cut_Eff_Geo_T7.eps,width=12cm,scale=0.5,angle=0,clip=}}
+ \caption[Cut Efficiency of HRS-L gas Cerenkov with trigger 7 ]{\footnotesize{Cut Efficiency of HRS-L gas Cerenkov with trigger 7}
+ \label{cer_eff_t7}}
+ \end{figure}
+
+
+\clearpage
+
+\subsection{Lead Glass Calorimeter}
+
+ To study efficiencies of calorimeters, besides applying cuts on HRS acceptance and single track events, we cut on corrected Cerenkov ADC sum (\emph{R(L).cer.asum$\_$c}) to gather pure electrons (high ADC sum values) and pure pions (particles which does not trigger Cerenkov, hence R(L).cer.asum$\_$c<=0). 
+
+\subsubsection{Detection Efficiency}
+
+ Calorimeters on HRS-R and HRS-L are composed by many lead glass blocks, so particles have chances to go through gaps in between blocks, hence the detection efficiencies could be lower than gas Cerenkov detectors,which are two unit gas boxes. And during data analysis, those events, which can reconstruct radiation clusters in certain groups of blocks, are given values on total deposited energy base on the ADC sum of those clusters, otherwise the deposited energy will be treated as zero, so for detection efficiency study, which does not care about the energy amplitude but only care about whether the calorimeter can detect the particles passing through it or not, we need to use the corrected ADC sum, such as for HRS-R, using R.ps.asum$\_$c and R.sh.asum$\_$c, instead of R.ps.e and R.sh.e). The detection efficiency of lead glass calorimeters on HRS-R can be given by:
+\begin{equation}
+ \epsilon_{det} = \frac{N_{(R.sh.asum\_c+R.ps.asum\_c)>0}}{N_{800<R.cer.asum\_c<1000}}
+\end{equation}
+
+ After applying spectrometer acceptance cuts, We futher cut on R.cer.asum$\_$c to be in between 800 and 1000, which removes most of pions and only leave with electrons, and a cut on $(R.sh.asum$\_$c+R.ps.asum$\_$c)>0$ requires that at lease one block of lead glass has to be fired. The results give 99.90\% for trigger 1 and trigger 6. Similarly applying the same method to lead glass on HRS-L, we get 98.57\% for trigger 3 and 97.67\% for trigger 7. The reason of low detection efficiency for the calorimeter is needed to be discussed. 
+
+%  \begin{figure}[htb]
+%  \centerline{\psfig{figure=figures/R_Cer_Det_Eff_T1.eps,width=12cm,scale=0.5,angle=0,clip=}}
+%  \caption[Detection Efficiency of HRS-R Lead Glass with trigger 1 ]{\footnotesize{Detection Efficiency of HRS-R Lead Glass with trigger 1}
+%  \label{calo_det_t1}}
+%  \end{figure}
+% 
+%  \begin{figure}[htb]
+%  \centerline{\psfig{figure=figures/R_Cer_Det_Eff_T6.eps,width=12cm,scale=0.5,angle=0,clip=}}
+%  \caption[Detection Efficiency of HRS-R Lead Glass with trigger 6 ]{\footnotesize{Detection Efficiency of HRS-R Lead Glass with trigger 6}
+%  \label{calo_det_t6}}
+%  \end{figure}
+% 
+%  \begin{figure}[htb]
+%  \centerline{\psfig{figure=figures/L_Cer_Det_Eff_T3.eps,width=12cm,scale=0.5,angle=0,clip=}}
+%  \caption[Detection Efficiency of HRS-L Lead Glass with trigger 3]{\footnotesize{Detection Efficiency of HRS-L Lead Glass with trigger 3}
+%  \label{calo_det_t3}}
+%  \end{figure}
+% 
+%  \begin{figure}[htb]
+%  \centerline{\psfig{figure=figures/L_Cer_Det_Eff_T7.eps,width=12cm,scale=0.5,angle=0,clip=}}
+%  \caption[Detection Efficiency of HRS-L Lead Glass with trigger 7]{\footnotesize{Detection Efficiency of HRS-L Lead Glass with trigger 7}
+%  \label{calo_det_t7}}
+%  \end{figure}
+
+
+\subsubsection{Cuts Efficiency}
+
+Similarly with cut efficiency study of gas Cerenkov, we plot the distribution of cut efficiency versus with cut values of energy particles depositing in the lead glass calorimeters (for HRS-R, $E\setminus P =(R.sh.e+R.ps.e)\setminus (1000.0 R.tr.p)$,for HRS-L, $E\setminus P = (L.prl1.e+L.prl2.e)\setminus(1000.0 L.tr.p)$). Fig ~\ref{calo_eff_t1} and Fig ~\ref{calo_eff_t3} give the similar results as gas Cerenkov detectors, since most of pions have already removed by the triggers. We need to discuss what values of calorimeter cuts needed to choose to get best electrons cut efficiencies (Fig ~\ref{calo_eff_t6} and Fig ~\ref{calo_eff_t7}).
+
+%\clearpage
+ \begin{figure}[htb]
+ \centerline{\psfig{figure=figures/R.Calo.Cut_Eff_Geo_T1.eps,width=12cm,scale=0.5,angle=0,clip=}}
+ \caption[Cut Efficiency of HRS-R Lead Glass with trigger 1 ]{\footnotesize{Cut Efficiency of HRS-R Lead Glass with trigger 1}
+ \label{calo_eff_t1}}
+ \end{figure}
+
+ %\clearpage
+ \begin{figure}[htb]
+ \centerline{\psfig{figure=figures/R.Calo.Cut_Eff_Geo_T6.eps,width=12cm,scale=0.5,angle=0,clip=}}
+ \caption[Cut Efficiency of HRS-R Lead Glass with trigger 6 ]{\footnotesize{Cut Efficiency of HRS-R Lead Glass with trigger 6}
+ \label{calo_eff_t6}}
+ \end{figure}
+
+ %\clearpage
+ \begin{figure}[htb]
+ \centerline{\psfig{figure=figures/L.Calo.Cut_Eff_Geo_T3.eps,width=12cm,scale=0.5,angle=0,clip=}}
+ \caption[Cut Efficiency of HRS-L Lead Glass with trigger 3 ]{\footnotesize{Cut Efficiency of HRS-L Lead Glass with trigger 3}
+ \label{calo_eff_t3}}
+ \end{figure}
+
+ %\clearpage
+ \begin{figure}[htb]
+ \centerline{\psfig{figure=figures/L.Calo.Cut_Eff_Geo_T7.eps,width=12cm,scale=0.5,angle=0,clip=}}
+ \caption[Cut Efficiency of HRS-L Lead Glass with trigger 7 ]{\footnotesize{Cut Efficiency of HRS-L Lead Glass with trigger 7}
+ \label{calo_eff_t7}}
+ \end{figure}
+
+
+
+\clearpage

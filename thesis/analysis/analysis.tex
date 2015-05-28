@@ -1,0 +1,20 @@
+\chapter{Calibration}
+
+\section{Overview}
+ Experimental raw data collected by the DAQ system is stored in individual data files. Each file is associated with a unique run number and hence is also called "a run". The raw data contains plentiful information on each event, including the experimental settings during the run and all the signal readouts from experimental instruments. However, those information can not be directly read out for offline analysis. The Hall A C++ Analyzer~\cite{analyzer}, an object-oriented framework on top of ROOT~\cite{cern_root} and developed by the Hall A software group, is used to replay the raw data, extract and calculate important quantities, and store these quantities in ROOT files which can then be directly accessed through the ROOT interface or C/C++ subroutines. Each ROOT file contains several subdirectories which are called  "trees". The event-by-event detector readouts, including both the uncalibrated and calibrated signals, are stored in the \emph{\bf{T}} tree. The EPICS readings are put in the \emph{\bf{E}} tree, and the \emph{\bf{RIGHT}} tree and \emph{\bf{LEFT}} tree store signal readouts from scalers in HRS-R and HRS-L, respectively.
+ 
+   During the data replay, each quantity must be correctly linked to the corresponding readout-signal with an up-to-date map which contains the front-end crate number, the model of the electronic module and the slot ID in the FastBus crate, and the channel number which the signal cable connects to. Such a map is given in an individual file associated with the instrument. The Analyzer's data base (DB) stores these files for all Hall-A instruments. The parameters to convert the raw signals into calibrated quantities are also stored in the DB.  
+   
+  The first step of the data analysis is to calibrate the parameters for each instrument with the calibration data, which will be discussed in this chapter. After these parameters are updated, the raw data will be replayed again and the new ROOT files can be used to extract useful physics quantities, for example, inclusive cross sections, as given in the next chapter. 
+  
+  In this experiment, the calibration is composed of three major parts: beam instruments, detector packages and optics matrices of the HRSs. 
+ 
+ The calibration of beam instruments aims to obtain the parameters of the beam position monitors (BPMs) and the raster system which determines the event-by event beam position, and to calculate the accumulated beam charge from the scaler readings of the beam charge monitors (BCMs). The beam position calibration has been processed during the experiment by using the Harp scan data~\cite{bpm_runs}. The detailed calibration procedure of the BPMs and the raster system can be found in Ref.~\cite{bpm_cali}. The result of BCM calibration is given in Ref.~\cite{bcm_patricia}, and the calculation of beam charge will be presented in Section 5.2.
+ 
+ Each detector in the HRS can be individually calibrated, while the calibration of HRS optics requires a good determination of the beam position and an updated reference time ($\mathrm{T_{0}}$) for each VDC wire. $\mathrm{T_{0}}$ can be changed when the parameters of the TDC signals from S1 and S2m are updated. In this experiment, S1 and S2m were unable to be calibrated because several TDC channels showed multiple peaks in each TDC spectrum and the real signals could not be identified. The values of $\mathrm{T_{0}}$ were calculated with old S1 and S2m parameters. The detailed calibration of the gas \v{C}erenkov detectors, calorimeters and the HRS optics will be given in next two sections.
+
+%\section{Detector}
+\input analysis/analysis_detector.tex
+
+%\section{HRS Optics}
+\input analysis/analysis_optics.tex

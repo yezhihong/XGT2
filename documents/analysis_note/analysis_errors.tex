@@ -1,0 +1,189 @@
+\section{Calculation of Errors}
+ In the cross section extraction package, a new type of variable is defined by a C++ class $XGT2\_VAR$, which not only includes the exact value of one quantity but also includes its sysmatic error and statistic error, respectively. When a new quantity is calculated from the operation of other quantities, all sysmatic errors and statistic errors from them will be seperately combined and carried by this new quantity. Comparing with evaluation of total errors after we exact the cross section values, this step-by-step method has its advantage to avoid mistakes such as miss-counting or multi-counting. The detail explaination of errors calculation and propagation is given as follows.
+
+ From Eq.\ref{eqxs_ratio},
+  \begin{equation}
+  \delta^{stat/sys} \sigma_{EX} = \sigma_{EX} \cdot \sqrt{(\frac{\delta^{stat/sys} Y_{EX}}{Y_{EX}})^{2}+(\frac{\delta^{stat/sys} Y_{MC}}{Y_{MC}})^{2}}
+\end{equation}
+
+\subsection{$Y_{EX}:$}
+ From Eq.\ref{eqyex},
+\begin{equation}
+  \delta^{stat/sys} Y_{EX} =  Y_{EX} \cdot \sqrt{(\frac{\delta^{stat/sys} N_{EX}}{N_{EX}})^{2}+(\frac{\delta^{stat/sys} N_{e}}{N_{e}})^{2}+(\frac{\delta^{stat/sys}\epsilon_{\pi/e}}{\epsilon_{\pi/e}})^{2}+(\frac{\delta^{stat/sys}\epsilon_{eff}}{\epsilon_{eff}})^{2}},
+\end{equation}
+where I always set $\epsilon_{\pi/e} = 1$, and $\epsilon_{eff} = 1$.
+
+\subsubsection{Statistic Errors}
+\begin{enumerate}
+
+\item $\delta^{stat} \epsilon_{\pi/e} = 0$
+
+\item $\delta^{stat} \epsilon_{\pi/e} = 0$
+
+\item $\delta^{stat} N_{e} = 0$
+
+\item \textbf{$N_{EX}$}: From  Eq.\ref{eq_lt} and $N_{EX}=\sum_{r}N_{EX}^{r}$ for all runs, we have:
+\begin{equation}
+  \delta^{stat} N_{EX}^{r} = N_{EX}^{r} \cdot \sqrt{\frac{1}{N_{T_{i}}^{r} PS_{T_{i}}} + (\frac{\delta^{stat} LT_{T_{i}}^{r}}{LT_{T_{i}}^{r}})^{2} }, \delta^{stat} N_{EX}=\sqrt{\sum_{r}(\delta^{stat} N_{EX}^{r})^{2}}
+\end{equation}
+
+\end{enumerate}
+
+\subsubsection{Systematic Errors}
+\begin{enumerate}
+
+\item $\delta^{sys} \epsilon_{\pi/e} = 0.01$
+
+\item $\delta^{sys} \epsilon_{\pi/e} = 0.01$
+
+\item From Eq.\ref{eq_ne}, since the charge is obtained from the average of four BCM monitor outputs ($u_{1},u_{3},d_{1}$ and $d_{3}$),the error is also averaged:
+\begin{eqnarray*}
+  \delta N_{e}^{r} &=& \sqrt{\frac{(\delta N_{e}^{r,d_{1}})^{2}+(\delta N_{e}^{r,d_{3}})^{2}+(\delta N_{e}^{r,u_{1}})^{2}+(\delta N_{e}^{r,u_{3}})^{2}}{4}}\\
+                  &=& \sqrt{\frac{N_{e}^{r,d_{1}}+N_{e}^{r,d_{3}}+N_{e}^{r,u_{1}}+N_{e}^{r,u_{3}}}{4}}\\
+                  &=& \frac{\sqrt{N_{e}^{r}}}{2} \\
+\end{eqnarray*}
+Hence,
+\begin{equation}
+  \delta N_{e} = \sqrt{\sum_{r}(\delta N_{e}^{r})^{2}}=\frac{1}{2}\sqrt{\sum_{r}N_{e}^{r}}=\frac{1}{2}\sqrt{N_{e}},
+  \label{eq:beam_charge}
+\end{equation}
+where, $r$ means the run number.
+
+\item $\delta^{sys} N_{EX} = N_{EX} \cdot \sqrt{ \sum_{r} (\delta^{sys} LT^{r}/LT^{r})^{2}}$. Form Eq.\ref{eq_lt},
+\begin{equation}
+  \delta^{sys} LT^{r}_{T_{i}} = LT^{r}_{T_{i}} \cdot \sqrt{\frac{1}{N_{T_{i}}^{Scaler}}-\frac{1}{N_{T_{i}}^{DAQ} PS_{T_{i}}}},
+\end{equation}
+where there is one thing that confuses me, which is that whether I should multiply $PS_{T_{i}}$ in the first term or not. It won't give us problem so far since most of runs have PS equal to one.
+
+\end{enumerate}
+
+\subsection{$Y_{MC}:$} 
+
+From Eq.\ref{eqymc},
+\begin{equation}
+  \delta^{stat/sys} Y_{MC} =  Y_{MC} \cdot \sqrt{(\frac{\delta^{stat/sys} N_{tg}}{N_{tg}})^{2}+(\frac{\delta^{stat/sys}\sum_{j\in i}}{\sum_{j\in i}})^{2}+(\frac{\delta^{stat/sys} N_{MC}^{gen}}{N_{MC}^{gen}})^{2}},
+\end{equation}
+
+\subsubsection{Statistical Errors}
+ Statistical errors from all three terms are set to zero.
+
+\subsubsection{Systematic Errors}
+
+\begin{enumerate}
+
+
+\item Form $N_{tg} = \frac{\rho\cdot l \cdot N_{a}}{A}$, and $\rho_{cor} = \rho \cdot (1.0 - B \cdot I /100)$, there are three terms that can introduce errors: beam current measurement and calculation ($\delta I$), acuracy of Boiling Factors ($\delta B$), and the acuracy of target thickness measurement ($\delta \rho$). Last term is known but I temperately set the first two terms to zero. Hence:
+ \begin{equation}
+    \delta N^{sys}_{tg} = \frac{\delta\rho}{\rho} \cdot N_{tg}
+ \end{equation} 
+
+\item $\delta^{sys}\sum_{j\in i} = (\sum_{j\in i})\cdot\frac{1}{\sqrt{N_{MC}^{i}}}$, since it is sumarizing the cross section values of MC events ($N_{MC}^{i}$) in one bin.
+
+\item $\delta^{sys} N_{MC}^{gen} = \sqrt{N_{MC}^{gen}}$. I generated $2\cdot 10^{7}$ events for cryogenic targets and $5\cdot 10^{6}$ for foil targets.
+
+\end{enumerate}
+
+\subsection{Systematic Table}
+ 
+ \begin{table}[htbp]
+ \centering
+    \begin{tabular}{|l|c|c|c|c|}
+    \hline
+     Source               & Scale & Relative & $\delta\sigma/\sigma$& Comment   \\[6pt]
+  \hline
+    \hline
+    Trigger Efficiency    &      &     $<$1.0\%  &                      &          \\[7pt] \hline
+    Tracking Efficiency   &      &     $<$1.0\%  &                      &          \\[7pt] \hline
+    GC Efficiency         &      &     $<$1.0\%  &                      &          \\[7pt] \hline
+    Calo Efficiency       &      &     $<$1.0\%  &                      &          \\[7pt] \hline
+ %   PID Cut Efficiency    &      &          &                      &          \\[5pt] \hline
+     Dead Time             &      &     $<$0.4\%     &                      &      \\[7pt] \hline
+    Pion Contamination (PID)    &      &          &                      &          \\[7pt] 
+    \hline
+    \hline
+    Acceptance Correction       &      &          &                      &          \\[7pt] \hline
+    Bin-Centering Correction    &      & $<$1.0\% &                      &          \\[7pt] \hline
+    Radiative Correction        &      &          &                      &          \\[7pt] \hline
+    Coulomb Correction          &      &          &                      &          \\[7pt]
+    \hline
+    \hline
+    HRS Momentum         &      &   0.02\%      &                      &          \\[7pt] \hline
+    HRS Angle            &      &   $<$0.5mrad  &                      &          \\[7pt] \hline
+    Beam Energy          &      &   0.05\%      &                      &          \\[7pt] \hline
+    Beam Charge          &      &   $<$1.0\%    &                      &          \\[7pt] 
+   \hline
+    \hline
+    Target Density       &      &          &                      &          \\[7pt] \hline
+    Target Boiling       &      &          &                      &          \\[7pt] \hline
+    Dummy Subtraction    &      &          &                      &          \\[7pt] 
+    \hline
+    \hline
+    Total               &       &          &                      &          \\[7pt]
+    \hline
+    \end{tabular}
+      \caption{E08-014 systematic error table}
+  \label{sys_table}
+  \end{table}
+  
+  \clearpage
+\subsection{Systematic Errors in Cross Section Ratio}
+
+The spread-out formula of the experimental differential cross section is given as:
+\begin{equation}
+  \sigma_{EX} = \frac{Y_{EX}}{Y_{MC}}\sigma_{XEMC}=\frac{N_{EX}}{N_{e}\cdot \epsilon_{eff}} \frac{N_{MC}}{\eta_{tg}\cdot \sum_{j\in i}\sigma^{rad}_{model}(E'_{j},\theta_{j}) \cdot \Delta\Omega_{MC} \Delta E'_{MC}}\cdot\sigma_{XEMC}.
+\end{equation}
+To decompose each term, we have:
+\begin{equation}
+ \sigma_{EX} = N_{EX}\cdot N_{e}^{-1}\cdot \epsilon_{eff}^{-1}\cdot (N_{MC})^{-1}\cdot\eta_{tg}^{-1}\cdot (\sum_{j\in i}\sigma^{rad}_{model}(E'_{j},\theta_{j}))^{-1}\cdot\sigma_{XEMC}\cdot (\Delta\Omega_{MC} \Delta E'_{MC})^{-1}.
+\end{equation}
+
+Now let's sort out the sources of the systematic error for the cross section:
+\begin{equation}
+  \delta \sigma_{EX} = \delta N_{EX} \oplus\delta N_{e}^{-1} \oplus\delta \epsilon_{eff}^{-1}\oplus\delta (N_{MC})^{-1}\oplus\delta\eta_{tg}^{-1}\oplus\delta (\sum_{j\in i}\sigma^{rad}_{model}(E'_{j},\theta_{j}))^{-1},
+\end{equation}
+where $\oplus$ stands for a quadric sum between two uncorrelated errors, e.g. $\delta_{1}\oplus\delta_{2}=\sqrt{(\delta_{1})^{2} + (\delta_{2})^{2}}$. $\delta N_{e}^{-1}$ is calculated with Eq.~\ref{eq:beam_charge}, and $\delta (N_{MC})^{-1}$ is determined by how many events have been simulated. We can further decompose rest of terms:
+\begin{itemize}
+
+\item The number of experimental events in each bin:
+\begin{equation}
+  \delta N_{EX} = \delta \overline{LT}^{-1} \oplus\delta P_{0}^{HRS} \oplus\delta \theta_{0}^{HRS} \oplus\delta E_{0}^{beam},
+\end{equation}
+where $\overline{LT}^{-1}$ is the quadric sum of the live-time values for all runs in the same setting, defined by Eq.~\ref{eq_lt}. Three other terms are quoted from Table~\ref{sys_table}.
+
+\item Efficiency:
+\begin{equation}
+  \delta \epsilon_{eff} = \delta \epsilon_{eff}^{tracking}\oplus\delta \epsilon_{eff}^{trigger}\oplus\delta \epsilon_{eff}^{GC}\oplus\delta \epsilon_{eff}^{EC}\oplus\delta\delta \epsilon_{eff}^{PID}.
+\end{equation}
+The value of each term is given in Table~\ref{sys_table}.
+
+\item Target areal density:
+\begin{equation}
+  \delta \eta_{tg} = \delta\rho \oplus\delta Boiling,
+\end{equation}
+where $\delta\rho$ is the uncertainty of the target density, $\delta Boiling$ is the uncertainty of the target boiling correction. The value of each term is given in Table~\ref{sys_table}.
+
+\item Model and corrections:
+\begin{equation}
+ \delta (\sum_{j\in i}\sigma^{rad}_{model}(E'_{j},\theta_{j})) =\delta RadCorr\oplus\delta BinCorr\oplus\delta CoulombCorr\oplus\delta AccCorr,
+\end{equation}
+where $RadCorr$, $BinCorr$, $CoulombCorr$ and $AccCorr$ denote the radiation correction, bin-centering correction, Coulomb correction and acceptance correction, respectively, while their corresponding errors are listed in Table~\ref{sys_table}.
+\end{itemize}
+
+Now, the cross section ratio between two targets is given as:
+\begin{equation}
+  R = \frac{\sigma_{EX}^{\#1}}{\sigma_{EX}^{\#2}}, \delta R = \sigma_{EX}^{\#1} \oplus \sigma_{EX}^{\#2}.
+\end{equation}
+Since the cross sections of two targets are taken with both the same HRS with the same kinematic settings, uncertainties related to HRS and beam are all can celled. The efficiency-uncertainties, except $\delta \epsilon_{eff}^{trigger}$, are also canceled. Since the data is binned with the same method and the same simulation tool is used, $BinCorr$ and $AccCorr$ are expected to be the same between two targets, unless they have different target lengths, e.g. one is a foil and the other is a long target. Rest of terms are expected to be different between two targets and hence can not be canceled, which lead to:
+
+\begin{eqnarray*}
+  \delta R &=& [\delta (\overline{LT}^{\#1})^{-1}\oplus \delta \overline{LT}^{\#2}]  \\
+            &\oplus& [\delta (N_{e}^{\#1})^{-1} \oplus \delta (N_{e}^{\#2}]  \\
+            &\oplus& [\delta (N_{MC}^{\#1})^{-1}\oplus \delta N_{MC}^{2}]  \\
+            &\oplus& [\delta (\epsilon_{eff}^{trigger-\#1})^{-1}\oplus\delta \epsilon_{eff}^{trigger-\#2} ] \\
+            &\oplus& [\delta (\rho^{\#1})^{-1} \oplus\delta \rho^{2}]  \\
+            &\oplus& [\delta (Boiling^{\#1})^{-1} \oplus\delta Boiling^{\#2}]  \\
+            &\oplus& [\delta (RadCorr^{\#1})^{-1} \oplus\delta RadCorr^{\#2}]  \\
+            &\oplus& [\delta (CoulombCorr^{\#1})^{-1} \oplus\delta CoulombCorr^{\#2}]  \\
+            &\oplus& [\delta (AccCorr^{\#1})^{-1} \oplus\delta AccCorr^{\#2}].
+\end{eqnarray*}
+

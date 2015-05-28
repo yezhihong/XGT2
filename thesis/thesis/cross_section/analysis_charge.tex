@@ -1,0 +1,28 @@
+\section{Beam Charge}
+The accumulated electron charge from the beam was monitored by BCMs, where signals were recorded in scalers. The scalers signals, in term of number of counts, have been calibrated~\cite{bcm_patricia} to correctly reflect the accumulated electron charge. When the beam is stable during one run, the total electron charge is simply the product of the beam current and the total run time, and should be directly proportional to the total number of scaler counts. However, events taken during the beam trips must be removed by applying a cut on the electron beam current.
+
+ The average electron beam current in between two consecutive scaler events, called the real-time current, is calculated from the total electron charge collected between these events divided by the time gap. For example, between the $ith$ and the $ith+1$ event, the real-time current measured by the upstream BCM scaler, $\mathrm{U_{1}}$, is given by:
+\begin{equation}
+  I_{i}^{U_{1}} = \Delta C_{i}^{U_{1}}/\Delta T_{i}, 
+\end{equation}
+where $\mathrm{\Delta C_{i}^{U_{1}} = C_{i+1}^{U_{1}} - C_{i}^{U_{1}}}$ gives the charge accumulated between two scaler events with the time gap, $\mathrm{\Delta T_{i}=T_{i+1}-T_{i}}$. Similarly, the real-time current measured by the downstream BCM scaler, $\mathrm{D_{1}}$, is also calculated. There are other BCM scaler signals, $\mathrm{U_{3}}$ and $\mathrm{U_{10}}$ ($\mathrm{D_{3}}$ and $\mathrm{D_{10}}$), which basically measure the same charge signal as $\mathrm{U_{1}}$ ($\mathrm{D_{1}}$) but with 3 times and 10 times amplification, respectively. Only $\mathrm{U_{1}}$ and $\mathrm{D_{1}}$ were used since this experiment required very high currents.
+
+ The beam trip cut is applied on the average of these two real-time current values:
+\begin{equation}
+\frac{1}{2}(I_{i^{*}}^{U_{1}}+I_{i^{*}}^{D_{1}})>I_{beam\_trip\_cut},
+\end{equation}
+where the cut value can be any value between zero (when beam is tripped) and the value slightly below the maximum current. In this analysis, the beam trip cut was chosen to be 50\% of the normal beam current. The total charge after the beam trip cut is given as:
+\begin{equation}
+   Q_{e} = \frac{1}{2}\sum_{i^{*}}(\Delta C_{i^{*}}^{U_{1}}+\Delta C_{i^{*}}^{D_{1}}), 
+  \label{eq_qe}
+\end{equation}
+where $i^{*}$ means summing over scaler events with beam current $I_{i^{*}}$ higher than the cut. And the number of electrons in the beam can be calculated as follows:
+\begin{equation}
+   N_{e} = Q_{e}/e, 
+  \label{eq_ne}
+\end{equation}
+with the electron charge, $\mathrm{e=1.602\times 10^{-19}~C}$.
+
+ After the data replay, scaler events are stored in the scaler trees, \emph{\bf{RIGHT}} for HRS-R and \emph{\bf{LEFT}} for HRS-L, respectively, and they are synchronized with trigger events in the \emph{\bf{T}} tree. There are certain number of trigger events recorded between two consecutive scaler events, and these events are assigned the same value of the real-time beam current evaluated between these two scaler events. Consequently, a beam trip cut removes all trigger events in between two scaler events if the real-time current is lower than the cut.
+
+ During this experiment, BCM scalers on HRS-L did not work properly. Due to the fact that the scalers on both HRSs recorded the same BCM signals, the real-time current for data taken in HRS-L was calculated with scaler events in HRS-R.

@@ -1,0 +1,82 @@
+\makeindex
+%\documentclass[12 pt, oneside]{amsart}
+%\documentclass[12 pt,oneside]{amsbook}
+\documentclass[12 pt,oneside]{book}
+\usepackage{epsfig}
+\usepackage{amsmath}
+\usepackage{rotating}
+%\documentclass[12 pt, oneside]{report}
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+%page shape
+%%%%%%%%%%%%%%%%%%%%%%%%
+\include{pageshape}
+
+\begin{document}
+\def \g {\gamma} 
+\def \th {\theta} 
+\def \pz {\pi^{0}}
+\def \pip {\pi^{+}}
+\def \pim {\pi^{-}}
+\def \om{ \omega}
+
+%\newcommand{\abcd}[2]{{chapter}{\tocchapter {#1}{}{#2}}}
+
+
+%\newcommand{\ps@plain}{
+%	\renewcommand{@oddhead}{}
+%	\renewcommand{@evenhead}{}
+%	\renewcommand{@oddfoot}{}
+%	\renewcommand{@evenfoot}{}}
+
+
+%\include{title}
+
+%\include{abstract}
+%\include{acknowledgment}
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+% contents
+%%%%%%%%%%%%%%%%%%%%%%%%
+
+\tableofcontents
+%\listoftables
+\listoffigures
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%introduction, prelim. %%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%\input intro.tex
+
+%\input equip.tex
+
+%\input eloss.tex
+%\input elec.tex
+%\input mag.tex
+
+%\input outlook.tex
+%\input aquisition.tex
+
+%\input calibration.tex
+%\input MonteCarlo.tex
+
+\input analysis.tex
+
+%\input tables.tex
+
+%\input figures.tex
+%\input result.tex
+%%%%%%%%%%%%% BIBLIOGRAPHY %%%%%%%%%%%%%%%%%%%%%%%%%%
+\bibliographystyle{h-physrev3.bst}
+\bibliography{xgt2}
+
+%\input bib.tex
+
+%\appendix
+%\input AppendixElectronicsScheme.tex
+%\input AppendixCosmics.tex
+%\input AppendixSasySoft.tex
+%\input AppendixDataTables.tex
+\end{document}

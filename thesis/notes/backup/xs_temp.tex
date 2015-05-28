@@ -1,0 +1,112 @@
+\documentclass[a4paper,10.5pt]{report}
+%\documentclass[a4paper,10.5pt]{article}
+\makeindex
+\usepackage{booktabs}
+\usepackage{epsfig}
+\usepackage{graphicx}
+\usepackage{epstopdf}
+\usepackage{amsmath}
+\usepackage{rotating}
+\usepackage{caption}
+\usepackage{subfig}
+
+% Title Page
+\textwidth 15 true cm
+\textheight 25 true cm
+%\headheight  14pt
+%\headsep    16pt
+%\footskip   27pt
+%\marginparsep 10pt
+%\marginparwidth  100pt
+\def\marginset#1#2{
+\setlength{\oddsidemargin}{#1}
+\iffalse
+\reversemarginpar
+\addtolength{\oddsidemargin}{\marginparsep}
+\addtolength{\oddsidemargin}{\marginparwidth}
+\fi
+
+  \setlength{\evensidemargin}{0mm}
+\iffalse
+\addtolength{\evensidemargin}{\marginparsep}
+\addtolength{\evensidemargin}{\marginparwidth}
+\fi
+
+  % \paperwidth = h + \oddsidemargin+\textwidth+\evensidemargin + h
+\setlength{\hoffset}{\paperwidth}
+\addtolength{\hoffset}{-\oddsidemargin}
+\addtolength{\hoffset}{-\textwidth}
+\addtolength{\hoffset}{-\evensidemargin}
+\setlength{\hoffset}{0.5\hoffset}
+\addtolength{\hoffset}{-1in}           % h = \hoffset + 1in
+
+  \setlength{\voffset}{-1in}             % 0 = \voffset + 1in
+\setlength{\topmargin}{\paperheight}
+\addtolength{\topmargin}{-\headheight}
+\addtolength{\topmargin}{-\headsep}
+\addtolength{\topmargin}{-\textheight}
+\addtolength{\topmargin}{-\footskip}
+\addtolength{\topmargin}{#2}
+\setlength{\topmargin}{0.5\topmargin}
+}
+
+\marginset{10mm}{12mm}
+\title{E08014 Cross Section Extraction}
+%\subtitle{A note of $x>2$ cross section extraction package}
+\author{Zhihong Ye\\ University of Virginia}
+
+\begin{document}
+%\maketitle
+
+\subsection{Cross Section Results}
+
+\begin{figure}[!h]
+ \begin{center}
+  \includegraphics[width=1.0\textwidth]{../figures/xs/He3_Com_Kin3.1.eps}
+  \caption[$^{3}He$ Cross Section at Kin3.1]{$^{3}He$ Cross Section at Kin3.1}
+  \label{xs_1}
+ \end{center}
+\end{figure}
+
+\begin{figure}[!h]
+ \begin{center}
+  \includegraphics[width=1.0\textwidth]{../figures/xs/He3_Com_Kin4.1.eps}
+  \caption[$^{3}He$ Cross Section at Kin4.1]{$^{3}He$ Cross Section at Kin4.1}
+  \label{xs_2}
+ \end{center}
+\end{figure}
+
+\begin{figure}[!h]
+ \begin{center}
+  \includegraphics[width=1.0\textwidth]{../figures/xs/He3_Com_Kin5.1.eps}
+  \caption[$^{3}He$ Cross Section at Kin5.1]{$^{3}He$ Cross Section at Kin5.1}
+  \label{xs_3}
+ \end{center}
+\end{figure}
+
+\begin{figure}[!h]
+ \begin{center}
+  \includegraphics[width=1.0\textwidth]{../figures/xs/C12_Com_Kin3.1.eps}
+  \caption[$^{12}C$ Cross Section at Kin3.1]{$^{12}C$ Cross Section at Kin3.1}
+  \label{xs_4}
+ \end{center}
+\end{figure}
+
+\begin{figure}[!h]
+ \begin{center}
+  \includegraphics[width=1.0\textwidth]{../figures/xs/C12_Com_Kin4.1.eps}
+  \caption[$^{12}C$ Cross Section at Kin4.1]{$^{12}C$ Cross Section at Kin4.1}
+  \label{xs_5}
+ \end{center}
+\end{figure}
+
+\begin{figure}[!h]
+ \begin{center}
+  \includegraphics[width=1.0\textwidth]{../figures/xs/C12_Com_Kin5.1.eps}
+  \caption[$^{12}C$ Cross Section at Kin5.1]{$^{12}C$ Cross Section at Kin5.1}
+  \label{xs_6}
+ \end{center}
+\end{figure}
+
+\end{document}
+

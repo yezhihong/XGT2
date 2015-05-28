@@ -1,0 +1,22 @@
+\section{Dead-Time}
+  There are two types of dead-time that can cause the loss of events, the electronic dead-time and the computer dead-time. The electronic dead-time comes from the front-end electronics of the DAQ system, which can discard the incoming trigger events while they are busy with processing the current trigger. The computer dead-time is caused by the limitation of computer speed which can lead to the loss of new events when the computer is still writing the current event into the hard disk. Unless the computer is overloaded by processes other than the DAQ system, the computer dead-time is negligible due to the application of high performance computer hardware. 
+ 
+ One evaluates the dead-time as the percentage of the trigger events being discarded to the total trigger events in a certain period of time. The value of the dead-time is directly related to the performance of electronics and computers, but also strongly depends on the total trigger rate. Rather than increasing the hardware performance, a typical method to reduce the dead-time is to limit the total trigger rate below a reasonable value by assigning a pre-scale factor to each trigger. 
+ 
+ The online dead-time during data taking is monitored by using the electron dead-time monitor module (EDTM) which mixes pulse signals with fixed frequency into TDC signals. Within a certain amount of time, the total number of the pulse signals is known and the dead-time value can be given by calculating the percentage of the pulse signals which are not recorded by the DAQ system. By changing the pre-scale factors before the start of the each run, this value was kept under 30\% in this experiment.
+ 
+ The average value of dead-time in each run for the main production triggers was calculated individually during the offline analysis. Although the total number of events recorded by the DAQ system was scaled by the pre-scale factor, their total triggers were counted by scalers, hence the average dead-time for the $ith$ trigger can be given by:
+\begin{equation}
+  DT_{T_{i}} = 1 - \frac{PS_{T_{i}}\cdot N_{T_{i}}^{DAQ} }{N_{T_{i}}^{Scaler}},
+  \label{eq_dt}
+\end{equation}
+where $PS_{T_{i}}$ is the pre-scale factor of the trigger. $N_{T_{i}}^{Scaler}$ and $N_{T_{i}}^{DAQ}$ are the total number of scaler counts (in $\mathbf{RIGHT}$ tree for $i=1$ or $\mathbf{LEFT}$ tree for $i=3$) and trigger events (in $\mathbf{T}$ tree) for each run, respectively. The beam trip cut was applied when calculating $N_{T_{i}}^{Scaler}$ and $N_{T_{i}}^{DAQ}$.
+
+  A different quantity, live-time ($LT_{T_{i}} = 1 -DT_{T_{i}}$), is more commonly used to correct the total number of good events in each run:
+ \begin{equation}
+  N^{r}_{T_{i},EX} = PS^{r}_{T_{i}}\cdot \frac{N^{r,recorded}_{T_{i}}}{LT^{r}_{T_{i}}},
+  \label{eq_lt}
+ \end{equation}
+where $r$ denotes the run number; $PS^{r}_{T_{i}}=PS1^{r}$ for the $T_{1}$ trigger on HRS-R and $PS^{r}_{T_{i}}=PS3^{r}$ for the $T_{3}$ trigger on HRS-L; $N^{r}_{T_{i},EX}$ and $N^{r,recorded}_{T_{i}}$ are the number of selected events which create triggers and the number of those events which are recorded by the DAQ system after pre-scaling, respectively. Note that without event selection, e.g. PID cuts, $N^{r,recorded}_{T_{i}}=N^{r,DAQ}_{T_{i}}$.
+
+ In this experiment, since only events from $T_{1}$ ($T_{3}$) were used for data analysis on HRS-R (HRS-L), the subscript, $T_{i}$, is omitted in any future discussion.

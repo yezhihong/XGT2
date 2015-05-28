@@ -1,0 +1,72 @@
+\section{Gas Cerenkov}
+ Light travels in a transparent medium reduces its velocity by factor of 1/n, where n is the index of fraction, and when a high energy particle pass through this medium with velocity exceed the speed of light,$\beta c \geq \frac{c}{n}$, Cerenkov radiation happens and the particle emits conical pattern light with half angle written as:
+\begin{equation}
+ cos \theta = \frac{1}{\beta n}
+\end{equation}
+
+ The property of velocity dependence of Cerenkov radiation gives an effective tool to discriminate between particles with different mass, since the momentum threshold to emit Cerenkov light is given by:
+\begin{equation}
+ P_{threshold} = \frac{mc}{\sqrt{n^{2}-1}}
+\end{equation}
+
+
+ In each HRS detector hut, a Gas Cerenkov detector (GC) is mounted in between S1 and S2 plane for use in particle identification \cite{halla_nim}. Each detector contains ten individual mirrors to collect the Cerenkov light and focus it onto five photomultiplier (PMT) attached on each side of the box (See Fig ~\ref{gc_pmt}). The detector on HRS-R has the length of 130 cm which leads to an average of about twelve photoelectrons, while the length of the detector on HRS-L is 80cm with seven photoelectrons on average. Both detectors are filled with atmospheric pressure $CO_{2}$ and their index of refraction are equal to 1.00041, which requires the momentum threshold for electrons detection to be about 18 MeV/c, while for pions detection to be about 4.9 GeV/c. Since the momentum coverage of HRS is from 0.5 GeV/c to 4.0 GeV/c, pions cannot emit Cerenkov light in the detectors.
+
+%\clearpage
+\begin{figure}[htb]
+\centerline{\psfig{figure=figures/cer/cerenkov_design.eps,width=12cm,scale=0.5,angle=0,clip=}}
+\caption[Design of Cerenkov Detector]{\footnotesize{Design of Cerenkov Detector}
+\label{gc_pmt}}
+\end{figure}
+
+\clearpage
+
+%\subsection{Gas Cerenkov Calibration}
+
+ The Major purpose of calibration is to align ADC channel of ten PMT tubes on each Gas Cerenkov Detector to a commom unit of energy scale. The same amplitude of Cerenkov light detected by each PMT usually gives different ADC values, mainly because of different property of individual PMT tube, electronic connection and high voltage applied on each tube. However, if those PMT tubes use the same materials to create photon electrons, we are still able to align their ADC values by looking the peak position of single photon electrons (SPE). Durling the calibration, for each PMT, we locate the peak of pedestal and the peak of SPE, and align the distance in between the two peaks to 100 channels by timing a gain factor:
+\begin{equation}
+ C_{i} = \frac{100}{M_{i}^{SPE}-M_{i}^{pedestal}}
+\end{equation}
+
+ where $M_{i}^{SPE}$ and $M_{i}^{pedestal}$ are the mean values of SPE peak and pedestal peak for the $ith$ PMT. Then We put the values of pedestal peaks and gain factors in data base of Gas Cerenkov (db$\_$R.cer.dat for HRS-R, and db$\_$L.cer.dat for HRS-L), to calculate the corrected ADC value of each PMT and the ADC sum of 10 PMT. The Fig~\ref{gcr_ac} and Fig~\ref{gcl_ac} give the results of calibration for all PMT ADC output, and Fig ~\ref{gc_spe} shows that for both arms, single photon electrons peaks of Gas Cerenkov ADC sum are all well aligned to 100 channel.
+
+%\clearpage
+\begin{figure}[htb]
+\centerline{\psfig{figure=figures/cer/R.cer.a_c.eps,width=12cm,scale=0.5,angle=0,clip=}}
+\caption[Calibrated ADC of each Cerenkov PMT]{\footnotesize{Calibrated ADC of each Cerenkov PMT on HRS-R}
+\label{gcr_ac}}
+\end{figure}
+
+%\clearpage
+\begin{figure}[htb]
+\centerline{\psfig{figure=figures/cer/L.cer.a_c.eps,width=12cm,scale=0.5,angle=0,clip=}}
+\caption[Calibrated ADC of each Cerenkov PMT]{\footnotesize{Calibrated ADC of each Cerenkov PMT on HRS-L}
+\label{gcl_ac}}
+\end{figure}
+
+%\clearpage
+\begin{figure}[htb]
+\centerline{\psfig{figure=figures/cer/Cer_SPE.eps,width=12cm,scale=0.5,angle=0,clip=}}
+\caption[Gas Cerenkov ADC SUM. Single photon electron peaks of Gas Cerenkov on both arm are aligned to 100 ADC channels]{\footnotesize{Gas Cerenkov ADC SUM. Single photon electron peaks of Gas Cerenkov on both arm are aligned to 100 ADC channels}
+\label{gc_spe}}
+\end{figure}
+
+ A check of stability of Gas Cerenkov alignment was proceeded afterreplaying the data with new data base we obtained. We sampled out one run for each target in each kinematics setting and plot the ADC sum of Gas Cerenkov ADC, then we fitted the single photon electron peaks of each run and check the peaks value and resolution. The distribution is displayed in Fig~\ref{gcr_stability} and Fig~\ref{gcl_stability}, where you can see that the calibration results are very consistent in different run conditions.  
+
+%\clearpage
+\begin{figure}[htb]
+\centerline{\psfig{figure=figures/cer/R_Cer_Stability.eps,width=12cm,scale=0.5,angle=0,clip=}}
+\caption[HRS-R Cerenkov S.P.E. peaks and resolution vs run number]{\footnotesize{HRS-R Cerenkov S.P.E. peaks and resolution vs run number}
+\label{gcr_stability}}
+\end{figure}
+
+%\clearpage
+\begin{figure}[htb]
+\centerline{\psfig{figure=figures/cer/L_Cer_Stability.eps,width=12cm,scale=0.5,angle=0,clip=}}
+\caption[HRS-L Cerenkov S.P.E. peaks and resolution vs run number]{\footnotesize{HRS-L Cerenkov S.P.E. peaks and resolution vs run number}
+\label{gcl_stability}}
+\end{figure}
+
+
+
+\clearpage
