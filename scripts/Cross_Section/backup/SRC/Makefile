@@ -1,23 +1,22 @@
-#-------------------------------------------
+ #-------------------------------------------
 # Makefile for any C program with ROOT lib
 # Zhihong Ye, 01/09/2009
 #-------------------------------------------
 
-PROGRAM = Xbj_Cross_Section
+PROGRAM = Cross_Section
 CFLAGS = $(shell $(ROOTSYS)/bin/root-config --cflags)
 LIBS   = $(shell $(ROOTSYS)/bin/root-config --libs)
 GLIBS  = $(shell $(ROOTSYS)/bin/root-config --glibs)
 
-CFLAGS += -Wall -g
-INCLUDE := -I${ROOTSYS}/include -I$(XEMDIR) -I$(ANALYZER)/src
+INCLUDE := -I${ROOTSYS}/include 
 RTLIBS := -L${ROOTSYS}/lib -lCore -L${ANALYZER} -lHallA -ldc -lscaler
+CFLAGS += -Wall -fno-exceptions -fPIC $(INCLUDES)
 all: $(PROGRAM)
 
 $(PROGRAM): $(PROGRAM).o
-	clang++ -o $(PROGRAM) $(PROGRAM).o $(CFLAGS) $(LIBS) $(RTLIBS)
-
+	g++ -o $(PROGRAM) $(PROGRAM).o $(CFLAGS) $(LIBS) $(RTLIBS)
 $(PROGRAM).o: $(PROGRAM).C
-	clang++ $(CFLAGS) -c -o $(PROGRAM).o $(PROGRAM).C ${INCLUDE}
+	g++ $(CFLAGS) -c -o $(PROGRAM).o $(PROGRAM).C
 
 clean:
 	rm -f *.o	

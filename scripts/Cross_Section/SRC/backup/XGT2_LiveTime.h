@@ -1,6 +1,7 @@
 /////////////////////////////////
 // PreScale Factors
 /////////////////////////////////
+//Swape Sys. and Stat. Errors, 12/19/2013
 //
 //
 /*inline void gGet_PS(const Int_t& RunNo,const TString& aArm, Int_t *aPar ){{{*/
@@ -54,12 +55,12 @@ inline void gCheck_PS(const vector<Int_t>& aRunNoChain, int* kPS)
 /*inline XGT2_VAR* gCal_LiveTime(TTree* aT_Tree,const TString& aDAQ_Cut,TTree* aS_Tree,const TString& aRaw_Branch){{{*/
 inline XGT2_VAR* gCal_LiveTime(TTree* aT_Tree,const Int_t aRunNo,const TString& aDAQ_Cut,TTree* aS_Tree,const TString& aRaw_Branch,const TString& aI_Name, Int_t aPS)
 {
-	//Note: Run "Scaler" to add branch rt_t?s for #counts in each scaler time windows, and the total counts after beam trip cut will just be adding up those counts
 	Int_t DAQ_Trigger=(Int_t)aT_Tree->GetEntries(aDAQ_Cut.Data());
 	DAQ_Trigger *=aPS; //Corrected if PS is larger than one
 	aT_Tree->SetNotify(0);
 	Double_t Raw_Trigger,Raw_Trigger_Mean,rms;
 
+	// Run "Scaler" to add branch rt_t?s for #counts in each scaler time windows, and the total counts after beam trip cut will just be adding up those counts
 	Int_t Raw_Trigger_Count = aS_Tree -> GetEntries(Form("%s>=%f",aI_Name.Data(),Beam_Trip_Cut));
 	gGet_Leaf_Mean_and_RMS(aS_Tree,aRaw_Branch.Data(), Form("%s>=%f",aI_Name.Data(),Beam_Trip_Cut),Raw_Trigger_Mean,rms); 
 	Raw_Trigger = Raw_Trigger_Mean * Raw_Trigger_Count;
@@ -72,8 +73,9 @@ inline XGT2_VAR* gCal_LiveTime(TTree* aT_Tree,const Int_t aRunNo,const TString& 
 		LiveTime->Value=(Double_t) DAQ_Trigger/Raw_Trigger;
 		LiveTime->Sys_Err=LiveTime->Value*sqrt(fabs(1./DAQ_Trigger-1./Raw_Trigger));
 		LiveTime->Stat_Err= 0.0;
-		//LiveTime->Stat_Err=LiveTime->Value*sqrt(1./DAQ_Trigger+1./Raw_Trigger/Raw_Trigger);
-	}
+	
+        cout<<Form("-1- Run=%d, N_DAQ = %d,  N_Raw = %f, LT = %5.3f (%6.4f)", aRunNo, DAQ_Trigger, Raw_Trigger, LiveTime->Value, LiveTime->Sys_Err)<<endl;
+    }
 	return LiveTime;
 }
 /*}}}*/
@@ -95,7 +97,8 @@ inline XGT2_VAR* gCal_LiveTime_Avg(TTree* aT_Tree,const Int_t aRunNo,const TStri
 		LiveTime->Value=(Double_t) DAQ_Trigger/Raw_Trigger;
 		LiveTime->Sys_Err=LiveTime->Value*sqrt(fabs(1./DAQ_Trigger-1./Raw_Trigger)); //Z. Ye, fix the "+" into "-" since DAQ_Trigger and RAW_Trigger are correlated. 01/15/2015
 		LiveTime->Stat_Err= 0.0;
-		//LiveTime->Stat_Err=LiveTime->Value*sqrt(1./DAQ_Trigger+1./Raw_Trigger/Raw_Trigger);
+    
+        cout<<Form("-2- Run=%d, N_DAQ = %d,  N_Raw = %f, LT = %5.3f (%6.4f)", aRunNo, DAQ_Trigger, Raw_Trigger, LiveTime->Value, LiveTime->Sys_Err)<<endl;
 	}
 	return LiveTime;
 }
@@ -209,7 +212,7 @@ inline void gLoad_LiveTime_Chain(const vector<Int_t>& aRunNoChain,const TString&
 					aLT= kLT;
 					aLT_Sys_Err= kLT_Err;
 					aLT_Stat_Err= 0.00;
-					if(aLT>1.5||aLT<1e-33){
+					if(aLT>1.04||aLT<1e-33){
 						aLT= kLT_Avg;
 						aLT_Sys_Err= kLT_Avg_Err;
 						aLT_Stat_Err = 0.00;
@@ -232,8 +235,8 @@ inline void gLoad_LiveTime_Chain(const vector<Int_t>& aRunNoChain,const TString&
 		table.close();
 
 		if(aLT<=1.2&&aLT>0.4){
-			outlog <<Form("      For Run#%d, the LiveTime = %5.4f",aRunNo,aLT)<<endl;
-			cerr <<Form("      For Run#%d, the LiveTime = %5.4f",aRunNo,aLT)<<endl;
+			outlog <<Form("      For Run#%d, the LiveTime = %5.4f (%4.2f%%)",aRunNo,aLT, aLT_Sys_Err/aLT*100)<<endl;
+			cerr   <<Form("      For Run#%d, the LiveTime = %5.4f (%4.2f%%)",aRunNo,aLT, aLT_Sys_Err/aLT*100)<<endl;
 		}
 		else{ 
             Int_t aPS[8];
@@ -292,8 +295,8 @@ inline void gCheck_LiveTime(const vector<Int_t>& aRunNoChain,const TString& aArm
 		aI_Name = "right_current";
 	}
 	else 
-		outlog <<"   *************** Wrong ARM! Stop now!!!"<<endl;
-		cerr <<"   *************** Wrong ARM! Stop now!!!"<<endl;
+		outlog <<"   XXXXXXXXXXXXXXX Wrong ARM! Stop now!!!"<<endl;
+		cerr <<"   XXXXXXXXXXXXXXX Wrong ARM! Stop now!!!"<<endl;
 
 	for ( unsigned int i=0; i<aRunNoChain.size(); i++ )
 	{

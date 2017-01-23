@@ -1,6 +1,5 @@
   //////////////////////////
   // Check Data and Cuts
-  // Note in use and not test yet; Just a demo
   //////////////////////////
   
 /*inline void gCheck_Data_Cuts(TTree *aT_Tree,const TString& aArm,const TString& aCuts,Bool_t aIsExtTgt=kFALSE){{{*/

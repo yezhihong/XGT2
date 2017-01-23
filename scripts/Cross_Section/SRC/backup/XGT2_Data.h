@@ -3,6 +3,126 @@ inline void gCheck_E0(const vector<Int_t>& aRunNoChain,const TString& aArm,const
 inline void gCheck_Angle(const vector<Int_t>& aRunNoChain,const TString& aArm,const TString& aT_Tree_Name, double* aAngleChain);
 inline void gCheck_P0(const vector<Int_t>& aRunNoChain,const TString& aArm,const TString& aE_Tree_Name,double* aP0Chain);
 
+/*Cuts on the edge of Ep{{{*/
+// Cut_L_Min Cut_L_Max Cut_R_Min Cut_R_Max
+const double E0 = 3.356;
+const double Ep_Cut_21_1[4] = {2.80, 3.00,2.80,3.00}; 
+const double Ep_Cut_21_2[4] = {2.94, 3.18,2.94,3.18}; 
+const double Ep_Cut_23_1[4] = {2.74, 2.94,2.74,2.94}; 
+const double Ep_Cut_23_2[4] = {2.92, 3.16,2.92,3.16};
+const double Ep_Cut_QE_1[4] = {2.42, 2.58,2.42,2.58}; 
+const double Ep_Cut_QE_2[4] = {2.56, 2.74,2.56,2.74}; 
+const double Ep_Cut_25_1[4] = {2.70, 2.88,2.70,2.88};
+const double Ep_Cut_25_2[4] = {2.88, 3.12,2.88,3.12}; 
+const double Ep_Cut_28_1[4] = {2.74, 2.98,2.74,2.98}; 
+/*}}}*/
+
+/*gGet_Ep_Cut{{{*/
+void gGet_Ep_Cut(const TString &aKinName, const TString & aArm, double* aEp_Min, double* aEp_Max){
+
+	if(aKinName.Contains("Kin3.1")){
+		if(aArm=="L"){
+			aEp_Min[0] = Ep_Cut_21_1[0];		
+			aEp_Max[0] = Ep_Cut_21_1[1];		
+		}
+		else if(aArm=="R"){
+			aEp_Min[0] = Ep_Cut_21_1[2];		
+			aEp_Max[0] = Ep_Cut_21_1[3];		
+		}
+	}
+	else if(aKinName.Contains("Kin3.2")){
+		if(aArm=="L"){
+			aEp_Min[0] = Ep_Cut_21_2[0];		
+			aEp_Max[0] = Ep_Cut_21_2[1];		
+		}
+		else if(aArm=="R"){
+			aEp_Min[0] = Ep_Cut_21_2[2];		
+			aEp_Max[0] = Ep_Cut_21_2[3];		
+		}
+	}
+
+	else if(aKinName.Contains("Kin4.1")){
+		if(aArm=="L"){
+			aEp_Min[0] = Ep_Cut_23_1[0];		
+			aEp_Max[0] = Ep_Cut_23_1[1];		
+		}
+		else if(aArm=="R"){
+			aEp_Min[0] = Ep_Cut_23_1[2];		
+			aEp_Max[0] = Ep_Cut_23_1[3];		
+		}
+	}
+	else if(aKinName.Contains("Kin4.2")){
+		if(aArm=="L"){
+			aEp_Min[0] = Ep_Cut_23_2[0];		
+			aEp_Max[0] = Ep_Cut_23_2[1];		
+		}
+		else if(aArm=="R"){
+			aEp_Min[0] = Ep_Cut_23_2[2];		
+			aEp_Max[0] = Ep_Cut_23_2[3];		
+		}
+	}
+
+	else if(aKinName.Contains("Kin5.0") && ! aKinName.Contains("Kin5.05")){
+		if(aArm=="L"){
+			aEp_Min[0] = Ep_Cut_QE_1[0];		
+			aEp_Max[0] = Ep_Cut_QE_1[1];		
+		}
+		else if(aArm=="R"){
+			aEp_Min[0] = Ep_Cut_QE_1[2];		
+			aEp_Max[0] = Ep_Cut_QE_1[3];		
+		}
+	}
+	else if(aKinName.Contains("Kin5.05")){
+		if(aArm=="L"){
+			aEp_Min[0] = Ep_Cut_QE_2[0];		
+			aEp_Max[0] = Ep_Cut_QE_2[1];		
+		}
+		else if(aArm=="R"){
+			aEp_Min[0] = Ep_Cut_QE_2[2];		
+			aEp_Max[0] = Ep_Cut_QE_2[3];		
+		}
+	}
+
+	else if(aKinName.Contains("Kin5.1")){
+		if(aArm=="L"){
+			aEp_Min[0] = Ep_Cut_25_1[0];		
+			aEp_Max[0] = Ep_Cut_25_1[1];		
+		}
+		else if(aArm=="R"){
+			aEp_Min[0] = Ep_Cut_25_1[2];		
+			aEp_Max[0] = Ep_Cut_25_1[3];		
+		}
+	}
+	else if(aKinName.Contains("Kin5.2")){
+		if(aArm=="L"){
+			aEp_Min[0] = Ep_Cut_25_2[0];		
+			aEp_Max[0] = Ep_Cut_25_2[1];		
+		}
+		else if(aArm=="R"){
+			aEp_Min[0] = Ep_Cut_25_2[2];		
+			aEp_Max[0] = Ep_Cut_25_2[3];		
+		}
+	}
+
+	else if(aKinName.Contains("Kin6.5")){
+		if(aArm=="L"){
+			aEp_Min[0] = Ep_Cut_28_1[0];		
+			aEp_Max[0] = Ep_Cut_28_1[1];		
+		}
+		else if(aArm=="R"){
+			aEp_Min[0] = Ep_Cut_28_1[2];		
+			aEp_Max[0] = Ep_Cut_28_1[3];		
+		}
+	}
+
+	else{
+		aEp_Min[0]=-1.0;
+		aEp_Max[0]=10.0;
+	}
+
+}
+/*}}}*/
+
 /*inline TString gGet_Delta_Correct(const TString& aArm, const bool aIsExtTgt){{{*/
 inline TString gGet_Delta_Correct(const TString& aArm, const bool aIsExtTgt){
 
@@ -184,8 +304,23 @@ XGT2_VAR* gGet_Nf_EX(const vector<Int_t>& aRunNoChain,const TString& aArm, const
                         aEX_VZ.Data(),
                         aVZ_Cut[1]
                         );
-            
-                        else
+            /*
+			else if(aBin_Variable=="xbj"){
+				double aEp_Min =1000.0, aEp_Max = -10000.0;
+				gGet_Ep_Cut(aKin.Data(), aArm.Data(), &aEp_Min, &aEp_Max);
+				aEX_Cuts=Form("%s>=%f&&%s<%f&&abs(%s-%f)<=%f&&%s>=%f",
+						aEX_Ep.Data(),
+						aEp_Min,
+						aEX_Ep.Data(),
+						aEp_Max,
+						aEX_Xbj.Data(),
+						aBin,
+						aBin_Size,
+						aEX_Current.Data(),
+						Beam_Trip_Cut
+						);
+			}*/
+			else
 				cerr<<"*** ERROR***, in XGT2_Data.h, Ln166, unknown binning vairable!!"<<endl;
 			aEX_Cuts+="&&"+aElectronCuts;
 		    /*

@@ -6,6 +6,8 @@
 //#include "XEMC.h"
 //Make sure the bins are the same as ones when generating tables
 const int Bin_T = 200;
+const int Bin_P = 200;   //For old tables by Kin
+//const int Bin_P = 1000; //For new tables
 const double Ep_Bin_Size = 0.001;// 1 MeV/c per Bin
 class Get_XS
 {

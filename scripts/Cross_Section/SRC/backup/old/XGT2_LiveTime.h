@@ -1,6 +1,7 @@
 /////////////////////////////////
 // PreScale Factors
 /////////////////////////////////
+//Swape Sys. and Stat. Errors, 12/19/2013
 //
 //
 /*inline void gGet_PS(const Int_t& RunNo,const TString& aArm, Int_t *aPar ){{{*/
@@ -54,12 +55,12 @@ inline void gCheck_PS(const vector<Int_t>& aRunNoChain, int* kPS)
 /*inline XGT2_VAR* gCal_LiveTime(TTree* aT_Tree,const TString& aDAQ_Cut,TTree* aS_Tree,const TString& aRaw_Branch){{{*/
 inline XGT2_VAR* gCal_LiveTime(TTree* aT_Tree,const Int_t aRunNo,const TString& aDAQ_Cut,TTree* aS_Tree,const TString& aRaw_Branch,const TString& aI_Name, Int_t aPS)
 {
-	//Note: Run "Scaler" to add branch rt_t?s for #counts in each scaler time windows, and the total counts after beam trip cut will just be adding up those counts
 	Int_t DAQ_Trigger=(Int_t)aT_Tree->GetEntries(aDAQ_Cut.Data());
 	DAQ_Trigger *=aPS; //Corrected if PS is larger than one
 	aT_Tree->SetNotify(0);
 	Double_t Raw_Trigger,Raw_Trigger_Mean,rms;
 
+	// Run "Scaler" to add branch rt_t?s for #counts in each scaler time windows, and the total counts after beam trip cut will just be adding up those counts
 	Int_t Raw_Trigger_Count = aS_Tree -> GetEntries(Form("%s>=%f",aI_Name.Data(),Beam_Trip_Cut));
 	gGet_Leaf_Mean_and_RMS(aS_Tree,aRaw_Branch.Data(), Form("%s>=%f",aI_Name.Data(),Beam_Trip_Cut),Raw_Trigger_Mean,rms); 
 	Raw_Trigger = Raw_Trigger_Mean * Raw_Trigger_Count;
@@ -292,8 +293,8 @@ inline void gCheck_LiveTime(const vector<Int_t>& aRunNoChain,const TString& aArm
 		aI_Name = "right_current";
 	}
 	else 
-		outlog <<"   *************** Wrong ARM! Stop now!!!"<<endl;
-		cerr <<"   *************** Wrong ARM! Stop now!!!"<<endl;
+		outlog <<"   XXXXXXXXXXXXXXX Wrong ARM! Stop now!!!"<<endl;
+		cerr <<"   XXXXXXXXXXXXXXX Wrong ARM! Stop now!!!"<<endl;
 
 	for ( unsigned int i=0; i<aRunNoChain.size(); i++ )
 	{

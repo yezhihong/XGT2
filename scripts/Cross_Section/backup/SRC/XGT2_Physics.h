@@ -119,38 +119,27 @@ inline void gLoad_EpicsTable(const int aRunNo, const TString& aArm, double* aE0,
 			 /*Offsets using JinGe's Optics Matrix{{{*/
 			 
 			 if((aRunNo >= 3565 && aRunNo <= 3656) && fabs(aAngle_Left - 25.00)<0.5)
-				 //*aAngle = aAngle_Left;
-				 *aAngle = aAngle_Left + (24.98 - 25.00);//Using Dien's new pointing study
+				 *aAngle = aAngle_Left;
 			 else if((aRunNo >= 3657 && aRunNo <= 3683) && fabs(aAngle_Left - 21.00)<0.5)
-				 //*aAngle = aAngle_Left + (21.03 - 21.00);
-				 *aAngle = aAngle_Left + (20.98 - 21.00);//Using Dien's new pointing study
+				 *aAngle = aAngle_Left + (21.03 - 21.00);
 			 else if((aRunNo >= 3684 && aRunNo <= 3708) && fabs(aAngle_Left - 23.00)<0.5)
-				 //*aAngle = aAngle_Left + (23.00 - 23.00);
-				 *aAngle = aAngle_Left + (22.98 - 23.00);//Using Dien's new pointing study
+				 *aAngle = aAngle_Left + (23.00 - 23.00);
 			 else if((aRunNo >= 3735 && aRunNo <= 3891) && fabs(aAngle_Left - 25.00)<0.5)
-				 //*aAngle = aAngle_Left + (24.99 - 25.00);
-				 *aAngle = aAngle_Left + (24.98 - 25.00);//Using Dien's new pointing study
+				 *aAngle = aAngle_Left + (24.99 - 25.00);
 			 else if((aRunNo >= 3892 && aRunNo <= 3916) && fabs(aAngle_Left - 21.00)<0.5)
-				 //*aAngle = aAngle_Left + (21.03 - 21.00);
-				 *aAngle = aAngle_Left + (24.98 - 25.00);//Using Dien's new pointing study
+				 *aAngle = aAngle_Left + (21.03 - 21.00);
 			 else if((aRunNo >= 3917 && aRunNo <= 4071) && fabs(aAngle_Left - 28.00)<0.5)
-				 //*aAngle = aAngle_Left + (27.98 - 28.00); //Or 28.03 from Multi-C, 28.00 from C12
-				 *aAngle = aAngle_Left + (27.98 - 28.00);//Using Dien's new pointing study
+				 *aAngle = aAngle_Left + (27.98 - 28.00); //Or 28.03 from Multi-C, 28.00 from C12
 			 else if((aRunNo >= 4073 && aRunNo <= 4103) && fabs(aAngle_Left - 21.00)<0.5)
-				 //*aAngle = aAngle_Left + (21.04 - 21.00);                                        
-				 *aAngle = aAngle_Left + (20.99 - 21.00);//Using Dien's new pointing study
+				 *aAngle = aAngle_Left + (21.04 - 21.00);                                        
 			 else if((aRunNo >= 4112 && aRunNo <= 4179) && fabs(aAngle_Left - 23.00)<0.5)
-				 //*aAngle = aAngle_Left + (23.00 - 23.00);                                        
-				 *aAngle = aAngle_Left + (22.98 - 23.00);//Using Dien's new pointing study
+				 *aAngle = aAngle_Left + (23.00 - 23.00);                                        
 			 else if((aRunNo >= 4181 && aRunNo <= 4241) && fabs(aAngle_Left - 25.00)<0.5)
-				 //*aAngle = aAngle_Left + (24.98 - 25.00);                                        
-				 *aAngle = aAngle_Left + (24.97 - 25.00);//Using Dien's new pointing study
+				 *aAngle = aAngle_Left + (24.98 - 25.00);                                        
 			 else if((aRunNo >= 4242 && aRunNo <= 4250) && fabs(aAngle_Left - 21.00)<0.5)
-				 //*aAngle = aAngle_Left + (21.02 - 21.00);                                        
-				 *aAngle = aAngle_Left + (20.99 - 21.00);//Using Dien's new pointing study
+				 *aAngle = aAngle_Left + (21.02 - 21.00);                                        
 			 else if((aRunNo >= 4251 && aRunNo <= 4299) && fabs(aAngle_Left - 28.00)<0.5)
-				 //*aAngle = aAngle_Left + (27.98 - 28.00);                                        
-				 *aAngle = aAngle_Left + (27.98 - 28.00);//Using Dien's new pointing study
+				 *aAngle = aAngle_Left + (27.98 - 28.00);                                        
 			 else{
 				 *aAngle = aAngle_Left;
 				 cerr <<Form("      *** ERROR - In XGT2_Physics.h, RunNo#%d is not in the table!!!",aRunNo)<<endl;

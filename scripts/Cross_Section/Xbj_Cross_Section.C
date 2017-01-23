@@ -5,6 +5,7 @@
 /******************************************/
 /*Include{{{*/
 #include "./SRC/XGT2_Main.h"
+#include "./SRC/XGT2_Tools.h"
 #include "./SRC/XGT2_LiveTime.h"
 #include "./SRC/XGT2_Beam.h"
 #include "./SRC/XGT2_Data.h"
@@ -55,7 +56,7 @@ int CrossSection(const TString& aInputFile,const TString& aLogFile,const TString
 	const Double_t Ebeam = 3.356; //GeV
 	/*Read InputFile{{{*/
 	outlog << endl << Form("@@@@@@ Initialize Input values from %s ...",aInputFileName.Data())<<endl;
-	cerr   << endl << Form("@@@@@@ Initialize Input values from %s ...",aInputFileName.Data())<<endl;
+	cout   << endl << Form("@@@@@@ Initialize Input values from %s ...",aInputFileName.Data())<<endl;
 	Int_t RunNo=-1;
 	Int_t aline=0;
 	RunNo=gGet_InputFile_Var(aInputFileName,aline).Atoi(); aline++;
@@ -102,12 +103,12 @@ int CrossSection(const TString& aInputFile,const TString& aLogFile,const TString
 	///////////////////////////////////
 	/*Get Ne{{{*/
 	outlog << endl << "@@@@@@ Calculating Incident Particle ..."<<endl;	
-	cerr   << endl << "@@@@@@ Calculating Incident Particle ..."<<endl;	
+	cout   << endl << "@@@@@@ Calculating Incident Particle ..."<<endl;	
 	Double_t runtime;
 	Double_t* NeChain = new double[Chain_Size];
 	const XGT2_VAR* Ne=gCal_Ne(RunNoChain,Arm,runtime, NeChain);
 	outlog <<Form("     Ne = %4.3e", Ne->Value)<<endl;	
-	cerr   <<Form("     Ne = %4.3e", Ne->Value)<<endl;	
+	cout   <<Form("     Ne = %4.3e", Ne->Value)<<endl;	
 	log->WriteToLogFile(__FILE__,__LINE__,Form("     Ne = %f, Runtime = %f",Ne->Value, runtime));
 	/*}}}end of Get Ne*/
 
@@ -116,7 +117,7 @@ int CrossSection(const TString& aInputFile,const TString& aLogFile,const TString
 	//////////////////////////
 	/*Get PS{{{*/
 	outlog << endl << "@@@@@@ Checking and Storing PreScaler Factors for every run ..." <<endl;	
-	cerr   << endl << "@@@@@@ Checking and Storing PreScaler Factors for every run ..." <<endl;	
+	cout   << endl << "@@@@@@ Checking and Storing PreScaler Factors for every run ..." <<endl;	
 	Int_t* PSChain = new int[Chain_Size*8];
 	gCheck_PS(RunNoChain,PSChain);
 	/*}}}end of PS*/
@@ -126,7 +127,7 @@ int CrossSection(const TString& aInputFile,const TString& aLogFile,const TString
 	//////////////////////////
 	/*LiveTime{{{*/
 	outlog  << endl<< "@@@@@@ Checking and Storing Live Time for every run ..." <<endl; 
-	cerr    << endl<< "@@@@@@ Checking and Storing Live Time for every run ..." <<endl;
+	cout    << endl<< "@@@@@@ Checking and Storing Live Time for every run ..." <<endl;
 	Double_t* LiveTimeChain = new double[Chain_Size];
 	Double_t* LiveTimeStatErrChain = new double[Chain_Size]; //Store the Stat Error of Livetime for total Error_Bar calculation;
 	Double_t* LiveTimeSysErrChain = new double[Chain_Size];  //Store the Stat Error of Livetime for total Error_Bar calculation;
@@ -150,7 +151,7 @@ int CrossSection(const TString& aInputFile,const TString& aLogFile,const TString
 	Livetime->Sys_Err=Livetime->Value*sqrt(Livetime->Sys_Err);
 
 	outlog << "      Average Lifetime = " << Livetime->Value<<endl;
-	cerr   << "      Average Lifetime = " << Livetime->Value<<endl;
+	cout   << "      Average Lifetime = " << Livetime->Value<<endl;
 	/*}}}end of LiveTime*/
 
 	//////////////////////
@@ -174,7 +175,7 @@ int CrossSection(const TString& aInputFile,const TString& aLogFile,const TString
 	// Chain Runs
 	//////////////
 	outlog << endl << "@@@@@@ Chain Runs ..."<<endl;
-	cerr   << endl << "@@@@@@ Chain Runs ..."<<endl;
+	cout   << endl << "@@@@@@ Chain Runs ..."<<endl;
 	TChain* T_Tree=gGetTree(RunNoChain,Arm,T_Tree_Name);
 
 	////////////////////////////////////
@@ -184,16 +185,16 @@ int CrossSection(const TString& aInputFile,const TString& aLogFile,const TString
 	outlog       << "oO0Oo              --- Calculating Cross Section ---              oO0Oo" <<endl;
 	outlog       << "oO0Oo oO0Oo oO0Oo oO0Oo oO0Oo oO0Oo oO0Oo oO0Oo oO0Oo oO0Oo oO0Oo oO0Oo "<<endl<<endl;
 
-	cerr <<endl<< "oO0Oo oO0Oo oO0Oo oO0Oo oO0Oo oO0Oo oO0Oo oO0Oo oO0Oo oO0Oo oO0Oo oO0Oo "<<endl;
-	cerr       << "oO0Oo              --- Calculating Cross Section ---              oO0Oo" <<endl;
-	cerr       << "oO0Oo oO0Oo oO0Oo oO0Oo oO0Oo oO0Oo oO0Oo oO0Oo oO0Oo oO0Oo oO0Oo oO0Oo "<<endl<<endl;
+	cout <<endl<< "oO0Oo oO0Oo oO0Oo oO0Oo oO0Oo oO0Oo oO0Oo oO0Oo oO0Oo oO0Oo oO0Oo oO0Oo "<<endl;
+	cout       << "oO0Oo              --- Calculating Cross Section ---              oO0Oo" <<endl;
+	cout       << "oO0Oo oO0Oo oO0Oo oO0Oo oO0Oo oO0Oo oO0Oo oO0Oo oO0Oo oO0Oo oO0Oo oO0Oo "<<endl<<endl;
 
 	/*Kinematics Settings{{{*/
 	////////////////////////////////////////////
 	//Check Beam Energy and Store all P0
 	/////////////////////////////////////////////  
 	outlog  << endl<< "@@@@@@ Checking Beam Energy for each run ..." <<endl; 
-	cerr    << endl<< "@@@@@@ Checking Beam Energy for each run ..." <<endl; 
+	cout    << endl<< "@@@@@@ Checking Beam Energy for each run ..." <<endl; 
 	Double_t* E0Chain = new double[Chain_Size]; //GeV
 	Double_t* dEEChain = new double[Chain_Size];//GeV
 	gCheck_E0(RunNoChain,Arm,E_Tree_Name,E0Chain, dEEChain); //Check P0 for each run from the Dipole readings. 
@@ -202,7 +203,7 @@ int CrossSection(const TString& aInputFile,const TString& aLogFile,const TString
 	//Check Central Momentum and Store all P0
 	/////////////////////////////////////////////  
 	outlog  << endl<< "@@@@@@ Checking Central Momentum for each run ..." <<endl; 
-	cerr    << endl<< "@@@@@@ Checking Central Momentum for each run ..." <<endl; 
+	cout    << endl<< "@@@@@@ Checking Central Momentum for each run ..." <<endl; 
 	Double_t* P0Chain = new double[Chain_Size];//GeV/c
 	gCheck_P0(RunNoChain,Arm,E_Tree_Name,P0Chain); //Check P0 for each run from the Dipole readings. 
 	Double_t P0_Avg = 0.0;
@@ -214,7 +215,7 @@ int CrossSection(const TString& aInputFile,const TString& aLogFile,const TString
 	//Check Scattering Angle and Store all values
 	/////////////////////////////////////////////  
 	outlog  << endl<< "@@@@@@ Checking Scattering Angle for each run ..." <<endl; 
-	cerr    << endl<< "@@@@@@ Checking Scattering Angle for each run ..." <<endl; 
+	cout    << endl<< "@@@@@@ Checking Scattering Angle for each run ..." <<endl; 
 	Double_t* AngleChain = new double[Chain_Size];//Degree
 	gCheck_Angle(RunNoChain,Arm,E_Tree_Name,AngleChain); //Check P0 for each run from the Dipole readings. 
 	Double_t Angle_Avg = 0.0;
@@ -228,35 +229,36 @@ int CrossSection(const TString& aInputFile,const TString& aLogFile,const TString
 	//////////////////
 	/*Set Cuts{{{*/
 	outlog << endl << "@@@@@@ Obtaining Cuts ..." <<endl;
-	cerr   << endl << "@@@@@@ Obtaining Cuts ..." <<endl;
+	cout   << endl << "@@@@@@ Obtaining Cuts ..." <<endl;
 	TString ElectronCuts;
 	Double_t Target_Length_Cut = 0.0; //in meter, Symmetry Cuts, like |VZ|<Target_Length_Cut
-	//TString AccCut_FileName = Form("%s/Acceptance/Acc_%s_Table.dat",   XGT2_DIR.Data(), Arm.Data());
 	TString AccCut_FileName = Form("%s/Acceptance/Acc_%s_Table.dat_%s",XGT2_DIR.Data(), Arm.Data(),aCommentName.Data());
-	//TString AccCut_FileName = Form("%s/Acceptance/Acc_%s_Table.dat",XGT2_DIR.Data(), Arm.Data());
 	////If there is not a specific acceptance file, use the default one
-	if (!(gSystem->FindFile(Form("%s/Acceptance/",XGT2_DIR.Data()),AccCut_FileName)))
-		AccCut_FileName = Form("%s/Acceptance/Acc_%s_Table.dat",XGT2_DIR.Data(), Arm.Data());
+	if (!(gSystem->FindFile(Form("%s/Acceptance/",XGT2_DIR.Data()),AccCut_FileName))){
+	        cout<<endl<<"******* No acceptance file is found. Use the default one!!"<<endl;
+                AccCut_FileName = Form("%s/Acceptance/Acc_%s_Table.dat",XGT2_DIR.Data(), Arm.Data());
+        }
+        cout<<endl<<Form("        The Acceptance file is: %s", AccCut_FileName.Data())<<endl;
 
 	outlog <<"     Getting Electron Cuts for "<<Target_Name <<" Run = "<<RunNo <<" on "<<Arm<<" Arm, from "<< AccCut_FileName.Data() <<endl; 
-	cerr   <<"     Getting Electron Cuts for "<<Target_Name <<" Run = "<<RunNo <<" on "<<Arm<<" Arm, from "<< AccCut_FileName.Data() <<endl; 
+	cout   <<"     Getting Electron Cuts for "<<Target_Name <<" Run = "<<RunNo <<" on "<<Arm<<" Arm, from "<< AccCut_FileName.Data() <<endl; 
 	ElectronCuts = gGet_XGT2_Cut(RunNo,Arm,Target_Name.Data(),Kin.Data(),Angle_Avg,P,Main_Trigger,AccCut_FileName,IsExtTgt, &Target_Length_Cut); 
 	outlog <<"--------------------------------------------------------------------------------------"<<endl;
-	cerr <<"--------------------------------------------------------------------------------------"<<endl;
+	cout <<"--------------------------------------------------------------------------------------"<<endl;
 	outlog <<"     --> "<<ElectronCuts.Data()<<endl;
-	cerr   <<"     --> "<<ElectronCuts.Data()<<endl;
+	cout   <<"     --> "<<ElectronCuts.Data()<<endl;
 	outlog <<"--------------------------------------------------------------------------------------"<<endl;
-	cerr   <<"--------------------------------------------------------------------------------------"<<endl;
+	cout   <<"--------------------------------------------------------------------------------------"<<endl;
 	
 	TString ElectronCuts_AL="1";
 	if(Target_Name == "H2"||Target_Name == "D2"||Target_Name =="He3" || Target_Name =="He4"){
 		ElectronCuts_AL = gGet_XGT2_Cut(RunNo,Arm,"Dummy",Kin.Data(),Angle_Avg,P,Main_Trigger,AccCut_FileName,IsExtTgt, &Target_Length_Cut); 
 		outlog <<"-------------------Dummy Cuts:--------------------------------------------------------"<<endl;
-		cerr <<"----------Dummy Cuts:-------------------------------------------------------------------"<<endl;
+		cout <<"----------Dummy Cuts:-------------------------------------------------------------------"<<endl;
 		outlog <<"     --> "<<ElectronCuts_AL.Data()<<endl;
-		cerr   <<"     --> "<<ElectronCuts_AL.Data()<<endl;
+		cout   <<"     --> "<<ElectronCuts_AL.Data()<<endl;
 		outlog <<"--------------------------------------------------------------------------------------"<<endl;
-		cerr   <<"--------------------------------------------------------------------------------------"<<endl;
+		cout   <<"--------------------------------------------------------------------------------------"<<endl;
 	}
 
 	/*}}}end of Cuts*/
@@ -293,7 +295,7 @@ int CrossSection(const TString& aInputFile,const TString& aLogFile,const TString
 	TString outfile_name=Form("%s/results/%s/%s/%s_%s_%s_Yield.dat_%s",
 			XGT2_DIR.Data(),Target_Name.Data(),aCommentName.Data(),Arm.Data(),Kin.Data(),Target_Name.Data(),aCommentName.Data());
 	outlog<<"      Backup and Save Output file to "<<outfile_name.Data()<<endl;
-	cerr  <<"      Backup and Save Output file to "<<outfile_name.Data()<<endl;
+	cout  <<"      Backup and Save Output file to "<<outfile_name.Data()<<endl;
 	gSystem->Exec("cp -vpf "+outfile_name+" "+outfile_name+".old");
 	gSystem->Exec("chmod -w "+outfile_name+".old");
 	gSystem->Exec("chmod +w "+outfile_name);
@@ -339,13 +341,13 @@ int CrossSection(const TString& aInputFile,const TString& aLogFile,const TString
 	////////////////////////////////
 	/*Get Ntg{{{*/
 	outlog << endl << "@@@@@@ Calculating Target Luminocity ..."<<endl;
-	cerr   << endl << "@@@@@@ Calculating Target Luminocity ..."<<endl;
+	cout   << endl << "@@@@@@ Calculating Target Luminocity ..."<<endl;
 
 	XGT2_VAR* Ntg = new XGT2_VAR();
 	Double_t* NtgChain = new double[Chain_Size];
 	if(IsExtTgt){
 		Target_Length_Cut*=100.0; //From meter to centi-meter
-		cerr<<Form("      Cutting on Extended Long Target <= %5.4f cm.", Target_Length_Cut)<<endl;
+		cout<<Form("      Cutting on Extended Long Target <= %5.4f cm.", Target_Length_Cut)<<endl;
 		//Boiling Effect for long cryo-targets will be corrected in this subroutine
 		Ntg= gCal_Ntg(RunNoChain,Arm.Data(),Target_A,Target_Length_Cut, Target_Thickness,Target_Thickness_Stat_Err,NtgChain);
 	}
@@ -357,7 +359,7 @@ int CrossSection(const TString& aInputFile,const TString& aLogFile,const TString
 			NtgChain[i]=Ntg->Value;
 	}
 	outlog <<Form("     Avg Ntg = %4.3e; Before Boiling Corrected = %4.3e",Ntg->Value,Target_Thickness/Target_A*Na)<<endl;
-	cerr   <<Form("     Avg Ntg = %4.3e; Before Boiling Corrected = %4.3e",Ntg->Value,Target_Thickness/Target_A*Na)<<endl;
+	cout   <<Form("     Avg Ntg = %4.3e; Before Boiling Corrected = %4.3e",Ntg->Value,Target_Thickness/Target_A*Na)<<endl;
 	log->WriteToLogFile(__FILE__,__LINE__,Form("     Ntg = %f, No Boiling Corrected = %f",Ntg->Value,Target_Thickness/Target_A*Na));
 	/*}}}end of Get Ntg*/
 
@@ -369,11 +371,11 @@ int CrossSection(const TString& aInputFile,const TString& aLogFile,const TString
 	//const TString Bin_Variable = "Ep";//Bin on Ep
 	Double_t AccBin[3], Acc_var_Value;
 	outlog <<"++++++ Getting Acceptance Binning from File "<<AccBin_File.Data()<<endl;
-	cerr   <<"++++++ Getting Acceptance Binning from File "<<AccBin_File.Data()<<endl;
+	cout   <<"++++++ Getting Acceptance Binning from File "<<AccBin_File.Data()<<endl;
 	gGet_Acc_Bin(AccBin_File.Data(),AccBin,Target_Name.Data(),Bin_Variable.Data());
 	for ( j=0; j<3; j++){
 		outlog << Form("      AccBin[%d]=%f",j,AccBin[j])<<endl;
-		cerr   << Form("      AccBin[%d]=%f",j,AccBin[j])<<endl;
+		cout   << Form("      AccBin[%d]=%f",j,AccBin[j])<<endl;
 	}
 	if(Target_Name.Contains("He3")&&AccBin[1]>3.0)
 		AccBin[1]=3.2; //Heavier target x->4.0, check few more out of range points for error study
@@ -383,7 +385,7 @@ int CrossSection(const TString& aInputFile,const TString& aLogFile,const TString
 	Int_t TotalBin = TMath::Nint((AccBin[1]-AccBin[0])/AccBin[2]);
 
 	outlog <<endl<< "      Total Number of Bins = " << TotalBin<<endl<<endl;
-	cerr   <<endl<< "      Total Number of Bins = " << TotalBin<<endl<<endl;
+	cout   <<endl<< "      Total Number of Bins = " << TotalBin<<endl<<endl;
 	/*}}}*/
 
 	Int_t NumOfAccInput=0, NoCal=0;
@@ -394,7 +396,7 @@ int CrossSection(const TString& aInputFile,const TString& aLogFile,const TString
 	/////////////	
 	/*Get Info From SAMC Simulation{{{*/
 	outlog <<endl<<"++++++ Info in SAMC:"<<endl;
-	cerr   <<endl<<"++++++ Info in SAMC:"<<endl;
+	cout   <<endl<<"++++++ Info in SAMC:"<<endl;
 	Double_t SAMC_dDp    = 0.12;    outlog << Form("       Full Range of Dp    in SAMC = %f PCT",  SAMC_dDp)<<endl;     //% 
 	Double_t SAMC_dTheta = 0.18;    outlog << Form("       Full Range of Theta in SAMC = %f Rad",  SAMC_dTheta)<<endl;  // Rad  
 	Double_t SAMC_dPhi   = 0.09;    outlog << Form("       Full Range of Phi   in SAMC = %f Rad",  SAMC_dPhi)<<endl;    // Rad
@@ -406,15 +408,15 @@ int CrossSection(const TString& aInputFile,const TString& aLogFile,const TString
 	TString SAMC_RootFile = SAMCFILES_DIR+SAMC_File;
 	SAMC_Tree->Add(SAMC_RootFile.Data());
 	outlog<<Form("       Added SAMC Rootfile %s.",SAMC_RootFile.Data())<<endl;
-	cerr  <<Form("       Added SAMC Rootfile %s.",SAMC_RootFile.Data())<<endl;
+	cout  <<Form("       Added SAMC Rootfile %s.",SAMC_RootFile.Data())<<endl;
 	XGT2_VAR* Nf_SAMC_Gen_All=new XGT2_VAR();  //Total Number of simulation events in the file, without any cuts
-    Nf_SAMC_Gen_All->Value = SAMC_Tree->GetEntries();
-	Nf_SAMC_Gen_All->Stat_Err = 0.0;
+        Nf_SAMC_Gen_All->Value = SAMC_Tree->GetEntries();
+        Nf_SAMC_Gen_All->Stat_Err = 0.0;
 	Nf_SAMC_Gen_All->Sys_Err = sqrt(Nf_SAMC_Gen_All->Value);//Set it to be the Sys Error, 01/13/2015
 	outlog << Form("       Total Events generated in SAMC = %f ",Nf_SAMC_Gen_All->Value)<<endl;
-	cerr   << Form("       Total Events generated in SAMC = %f ",Nf_SAMC_Gen_All->Value)<<endl;
+	cout   << Form("       Total Events generated in SAMC = %f ",Nf_SAMC_Gen_All->Value)<<endl;
 	outlog<<endl;
-	cerr  <<endl;
+	cout  <<endl;
 
 	//Get SAMC Accptance Cuts. Read the values from the same Acc File as for Data
 	Double_t SAMC_AccCut[9]; //0->x_fp,1->y_fp,2->th_fp,3->ph_fp,4->dp_tg,5->y_tg,6->th_tg,7->ph_tg,8->reactz
@@ -457,8 +459,8 @@ int CrossSection(const TString& aInputFile,const TString& aLogFile,const TString
 	T->Branch("Y_AL",            &Yield_AL->Value,        "Y_AL/D");
 	T->Branch("Y_AL_Stat",       &Yield_AL->Stat_Err,     "Y_AL_Stat/D");
 	T->Branch("Y_AL_Sys",        &Yield_AL->Sys_Err,      "Y_AL_Sys/D");
-		T->Branch("Y_EX_Avg",        &Yield_EX_Avg->Value,    "Y_EX_Avg/D");
-	T->Branch("Y_EX_AvgStat",    &Yield_EX_Avg->Stat_Err, "Y_EX_AvgStat/D");
+        T->Branch("Y_EX_Avg",        &Yield_EX_Avg->Value,    "Y_EX_Avg/D");
+        T->Branch("Y_EX_AvgStat",    &Yield_EX_Avg->Stat_Err, "Y_EX_AvgStat/D");
 	T->Branch("Y_EX_AvgSys",     &Yield_EX_Avg->Sys_Err,  "Y_EX_AvgSys/D");
 	T->Branch("XS",              &Cross_Section->Value,   "XS/D");
 	T->Branch("XS_Stat",         &Cross_Section->Stat_Err,"XS_Stat/D");
@@ -552,7 +554,7 @@ int CrossSection(const TString& aInputFile,const TString& aLogFile,const TString
 		while ( Acc_var_Value<=AccBin[1] ){
 			if ( NoCal%5==0 ){
 				outlog<<Form(" +++ Calculating %d Points ...", NoCal)<<endl;
-				cerr  <<Form(" +++ Calculating %d Points ...", NoCal)<<endl;
+				cout  <<Form(" +++ Calculating %d Points ...", NoCal)<<endl;
 			}
 
 			xbj = Acc_var_Value; //We are binning on Xbj so use its bin-center values
@@ -561,7 +563,7 @@ int CrossSection(const TString& aInputFile,const TString& aLogFile,const TString
 			nu = qsq/(2.0*PROTON_MASS*xbj);
 
 			outlog<<Form("******** xbj=%7.4f, Ep = %7.5f GeV/c",xbj,Ep)<<endl;
-			cerr  <<Form("******** xbj=%7.4f, Ep = %7.5f GeV/c",xbj,Ep)<<endl;
+			cout  <<Form("******** xbj=%7.4f, Ep = %7.5f GeV/c",xbj,Ep)<<endl;
 
 			//ROOT 5.18 bug: have to add this after GetEntries(sel) fixed in 5.20
 			T_Tree->SetNotify(0);
@@ -569,9 +571,8 @@ int CrossSection(const TString& aInputFile,const TString& aLogFile,const TString
 
 			/*Get_Nf_Bin{{{*/ 
 			//Calculate Number of Events in each bin, For SAMC data, weighted by cross section, for Real data, do only correction.
-			Nf_EX = gGet_Nf_EX(RunNoChain,Arm,Kin,Target_Name,xbj, bin_size/2.,ElectronCuts.Data(),Bin_Variable.Data(),LiveTimeChain,LiveTimeStatErrChain,LiveTimeSysErrChain,
-			//Nf_EX = gGet_Nf_EX_Xbj(RunNoChain,Arm,Kin,Target_Name,xbj, bin_size/2.,ElectronCuts.Data(),Bin_Variable.Data(),LiveTimeChain,LiveTimeStatErrChain,LiveTimeSysErrChain,
-					PSChain,E0Chain, P0Chain, AngleChain,IsExtTgt, Nf_EX_Chain,Nf_EX_StatChain,Nf_EX_SysChain);
+			Nf_EX = gGet_Nf_EX(RunNoChain,Arm,Kin,Target_Name,xbj, bin_size/2.,ElectronCuts.Data(),Bin_Variable.Data(),LiveTimeChain,LiveTimeStatErrChain,LiveTimeSysErrChain, PSChain,E0Chain, P0Chain, AngleChain,IsExtTgt, Nf_EX_Chain,Nf_EX_StatChain,Nf_EX_SysChain);
+			//Nf_EX = gGet_Nf_EX_Xbj(RunNoChain,Arm,Kin,Target_Name,xbj, bin_size/2.,ElectronCuts.Data(),Bin_Variable.Data(),LiveTimeChain,LiveTimeStatErrChain,LiveTimeSysErrChain, PSChain,E0Chain, P0Chain, AngleChain,IsExtTgt, Nf_EX_Chain,Nf_EX_StatChain,Nf_EX_SysChain);
 
 			if(Target_Name == "H2"||Target_Name == "D2"||Target_Name =="He3" || Target_Name =="He4")
 				Nf_AL = gGet_Nf_AL(Kin, Arm,xbj, bin_size/2.,ElectronCuts_AL.Data(),Bin_Variable.Data(),IsExtTgt);
@@ -586,7 +587,7 @@ int CrossSection(const TString& aInputFile,const TString& aLogFile,const TString
 			Nf_AL->Stat_Err= 1e-33;
 
 			outlog << Form("      Total EX Events = %5.0f, AL Event = %5.0f", Nf_EX->Value, Nf_AL->Value)<<endl;
-			cerr   << Form("      Total EX Events = %5.0f, AL Event = %5.0f", Nf_EX->Value, Nf_AL->Value)<<endl;
+			cout   << Form("      Total EX Events = %5.0f, AL Event = %5.0f", Nf_EX->Value, Nf_AL->Value)<<endl;
 			/*}}}*/
 
 			/*Yield{{{*/
@@ -652,7 +653,7 @@ int CrossSection(const TString& aInputFile,const TString& aLogFile,const TString
 						Yield_EX_Avg->Stat_Err += pow( Y_EX_StatChain[i], 2 ); 
 						Yield_EX_Avg->Sys_Err  += pow( Y_EX_SysChain[i] , 2 ); 
 					}
-					cerr  <<Form("   ---Run#%d, Yield_EX = %7.2e", RunChain[i],Y_EX_Chain[i])<<endl;
+					cout  <<Form("   ---Run#%d, Yield_EX = %7.2e", RunChain[i],Y_EX_Chain[i])<<endl;
 					outlog<<Form("   ---Run#%d, Yield_EX = %7.2e", RunChain[i],Y_EX_Chain[i])<<endl;
 				}
 				if(N_Y_EX>0){
@@ -675,11 +676,11 @@ int CrossSection(const TString& aInputFile,const TString& aLogFile,const TString
 
 				if(Ntg->Value>1. && XS_SAMC_SUM->Value>1e-33 && Nf_SAMC_Gen_All->Value>1.){	
 
-					cerr<<Form("-------------------------------------------------")<<endl;
+					cout<<Form("-------------------------------------------------")<<endl;
 					outlog<<Form("-------------------------------------------------")<<endl;
-					cerr<<Form(" P=%e, XS_Sum=%7.2e, ", P_MeV, XS_SAMC_SUM->Value )<<endl;
+					cout<<Form(" P=%e, XS_Sum=%7.2e, ", P_MeV, XS_SAMC_SUM->Value )<<endl;
 				    outlog<<Form(" P=%e, XS_Sum=%7.2e, ", P_MeV, XS_SAMC_SUM->Value )<<endl;
-					cerr<<Form("-------------------------------------------------")<<endl;
+					cout<<Form("-------------------------------------------------")<<endl;
 					outlog<<Form("-------------------------------------------------")<<endl;
 					
 					Yield_MC->Value =  Ntg->Value*XS_SAMC_SUM->Value*(SAMC_dOmega*(P_MeV*SAMC_dDp)/Nf_SAMC_Gen_All->Value); //Eq(4.18) in page 130 of Nadia's Thesis,set Det Effi to one and quote its sys err later
@@ -713,7 +714,7 @@ int CrossSection(const TString& aInputFile,const TString& aLogFile,const TString
 							Yield_MC_Avg->Stat_Err+= pow( Y_MC_StatChain[i], 2 ); 
 							Yield_MC_Avg->Sys_Err += pow( Y_MC_SysChain[i] , 2 ); 
 						}
-						cerr<<Form("   ---Run#%d, Yield_MC = %7.2e", RunChain[i],Y_MC_Chain[i])<<endl;
+						cout<<Form("   ---Run#%d, Yield_MC = %7.2e", RunChain[i],Y_MC_Chain[i])<<endl;
 						outlog<<Form("   ---Run#%d, Yield_MC = %7.2e", RunChain[i],Y_MC_Chain[i])<<endl;
 					}
 					if(N_Y_MC>0){
@@ -727,7 +728,7 @@ int CrossSection(const TString& aInputFile,const TString& aLogFile,const TString
 			}//if(bCal_XS) in Y_MC
 			/*Y_MC}}}*/
 
-			cerr   << Form( "       Yield_EX=%7.2e(%7.2e), Yield_MC=%7.2e(%7.2e), Yield_AL=%7.2e(%7.2e)", 
+			cout   << Form( "       Yield_EX=%7.2e(%7.2e), Yield_MC=%7.2e(%7.2e), Yield_AL=%7.2e(%7.2e)", 
 					Yield_EX->Value,Yield_EX->Stat_Err, Yield_MC->Value,Yield_AL->Stat_Err, Yield_AL->Value,Yield_AL->Stat_Err)<<endl;
 			outlog << Form( "       Yield_EX=%7.2e(%7.2e), Yield_MC=%7.2e(%7.2e), Yield_AL=%7.2e(%7.2e)",
 					Yield_EX->Value,Yield_EX->Stat_Err, Yield_MC->Value,Yield_AL->Stat_Err, Yield_AL->Value,Yield_AL->Stat_Err)<<endl;
@@ -827,10 +828,10 @@ int CrossSection(const TString& aInputFile,const TString& aLogFile,const TString
 				<<"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"<<endl;
 			outlog << Form("      --> Xbj=%5.3f, Cross_Section=%7.6e / %7.6e / %7.6e",xbj, Cross_Section->Value, Cross_Section->Sys_Err, Cross_Section->Stat_Err)<<endl;
 			outlog <<"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"<<endl<<endl;   
-			cerr <<endl
+			cout <<endl
 				<<"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"<<endl;
-			cerr << Form("      --> Xbj=%5.3f, Cross_Section=%7.6e / %7.6e / %7.6e",xbj, Cross_Section->Value, Cross_Section->Sys_Err, Cross_Section->Stat_Err)<<endl;
-			cerr <<"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"<<endl<<endl;   
+			cout << Form("      --> Xbj=%5.3f, Cross_Section=%7.6e / %7.6e / %7.6e",xbj, Cross_Section->Value, Cross_Section->Sys_Err, Cross_Section->Stat_Err)<<endl;
+			cout <<"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"<<endl<<endl;   
 			NoCal++;
 			NumOfAccInput++;
 
@@ -889,7 +890,7 @@ int main(int argc, char**argv){
 	int pserr = getargs(argc,argv);
 	if(pserr<0){
 		outlog<<"****** I can not recognize the parameters!"<<endl;
-		cerr<<"****** I can not recognize the parameters!"<<endl;
+		cout<<"****** I can not recognize the parameters!"<<endl;
 		return -1;
 	}
 
@@ -903,7 +904,7 @@ int main(int argc, char**argv){
 
 	if(err>0)
 		outlog<<"@@@@@@@@@ Code runs successfully!"<<endl;
-	cerr  <<"@@@@@@@@@ Code runs successfully!"<<endl;
+	cout  <<"@@@@@@@@@ Code runs successfully!"<<endl;
 
 }
 /*}}}*/
@@ -936,21 +937,21 @@ int getargs(int argc,char** argv)
 					err=0;
 					break;
 				case 'h':
-					cerr <<"================================================"<<endl;
-					cerr <<"Option: " <<endl;
-					cerr <<"-I[xs_c12_kin3.1.dat] Input File" <<endl;
-					cerr <<"-L[c12_kin3.1.log] Log File"<<endl;
-					cerr <<"-C[Dp0.04] Comment, such as Dp=4%"<<endl;
-					cerr <<endl<<"================================================"<<endl;
+					cout <<"================================================"<<endl;
+					cout <<"Option: " <<endl;
+					cout <<"-I[xs_c12_kin3.1.dat] Input File" <<endl;
+					cout <<"-L[c12_kin3.1.log] Log File"<<endl;
+					cout <<"-C[Dp0.04] Comment, such as Dp=4%"<<endl;
+					cout <<endl<<"================================================"<<endl;
 					noStop=false;
 					err=-1;
 					goto OUT;
 					break;
 				default:
-					cerr <<"================================================"<<endl;
-					cerr <<"Option: " <<endl;
-					cerr <<"-I[xs_c12_kin3.1.dat] Input File" <<endl;
-					cerr <<"-L[c12_kin3.1.log] Log File"<<endl;
+					cout <<"================================================"<<endl;
+					cout <<"Option: " <<endl;
+					cout <<"-I[xs_c12_kin3.1.dat] Input File" <<endl;
+					cout <<"-L[c12_kin3.1.log] Log File"<<endl;
 					break;
 			}
 

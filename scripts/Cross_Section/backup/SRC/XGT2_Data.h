@@ -3,6 +3,126 @@ inline void gCheck_E0(const vector<Int_t>& aRunNoChain,const TString& aArm,const
 inline void gCheck_Angle(const vector<Int_t>& aRunNoChain,const TString& aArm,const TString& aT_Tree_Name, double* aAngleChain);
 inline void gCheck_P0(const vector<Int_t>& aRunNoChain,const TString& aArm,const TString& aE_Tree_Name,double* aP0Chain);
 
+/*Cuts on the edge of Ep{{{*/
+// Cut_L_Min Cut_L_Max Cut_R_Min Cut_R_Max
+const double E0 = 3.356;
+const double Ep_Cut_21_1[4] = {2.80, 3.00,2.80,3.00}; 
+const double Ep_Cut_21_2[4] = {2.94, 3.18,2.94,3.18}; 
+const double Ep_Cut_23_1[4] = {2.74, 2.94,2.74,2.94}; 
+const double Ep_Cut_23_2[4] = {2.92, 3.16,2.92,3.16};
+const double Ep_Cut_QE_1[4] = {2.42, 2.58,2.42,2.58}; 
+const double Ep_Cut_QE_2[4] = {2.56, 2.74,2.56,2.74}; 
+const double Ep_Cut_25_1[4] = {2.70, 2.88,2.70,2.88};
+const double Ep_Cut_25_2[4] = {2.88, 3.12,2.88,3.12}; 
+const double Ep_Cut_28_1[4] = {2.74, 2.98,2.74,2.98}; 
+/*}}}*/
+
+/*gGet_Ep_Cut{{{*/
+void gGet_Ep_Cut(const TString &aKinName, const TString & aArm, double* aEp_Min, double* aEp_Max){
+
+	if(aKinName.Contains("Kin3.1")){
+		if(aArm=="L"){
+			aEp_Min[0] = Ep_Cut_21_1[0];		
+			aEp_Max[0] = Ep_Cut_21_1[1];		
+		}
+		else if(aArm=="R"){
+			aEp_Min[0] = Ep_Cut_21_1[2];		
+			aEp_Max[0] = Ep_Cut_21_1[3];		
+		}
+	}
+	else if(aKinName.Contains("Kin3.2")){
+		if(aArm=="L"){
+			aEp_Min[0] = Ep_Cut_21_2[0];		
+			aEp_Max[0] = Ep_Cut_21_2[1];		
+		}
+		else if(aArm=="R"){
+			aEp_Min[0] = Ep_Cut_21_2[2];		
+			aEp_Max[0] = Ep_Cut_21_2[3];		
+		}
+	}
+
+	else if(aKinName.Contains("Kin4.1")){
+		if(aArm=="L"){
+			aEp_Min[0] = Ep_Cut_23_1[0];		
+			aEp_Max[0] = Ep_Cut_23_1[1];		
+		}
+		else if(aArm=="R"){
+			aEp_Min[0] = Ep_Cut_23_1[2];		
+			aEp_Max[0] = Ep_Cut_23_1[3];		
+		}
+	}
+	else if(aKinName.Contains("Kin4.2")){
+		if(aArm=="L"){
+			aEp_Min[0] = Ep_Cut_23_2[0];		
+			aEp_Max[0] = Ep_Cut_23_2[1];		
+		}
+		else if(aArm=="R"){
+			aEp_Min[0] = Ep_Cut_23_2[2];		
+			aEp_Max[0] = Ep_Cut_23_2[3];		
+		}
+	}
+
+	else if(aKinName.Contains("Kin5.0") && ! aKinName.Contains("Kin5.05")){
+		if(aArm=="L"){
+			aEp_Min[0] = Ep_Cut_QE_1[0];		
+			aEp_Max[0] = Ep_Cut_QE_1[1];		
+		}
+		else if(aArm=="R"){
+			aEp_Min[0] = Ep_Cut_QE_1[2];		
+			aEp_Max[0] = Ep_Cut_QE_1[3];		
+		}
+	}
+	else if(aKinName.Contains("Kin5.05")){
+		if(aArm=="L"){
+			aEp_Min[0] = Ep_Cut_QE_2[0];		
+			aEp_Max[0] = Ep_Cut_QE_2[1];		
+		}
+		else if(aArm=="R"){
+			aEp_Min[0] = Ep_Cut_QE_2[2];		
+			aEp_Max[0] = Ep_Cut_QE_2[3];		
+		}
+	}
+
+	else if(aKinName.Contains("Kin5.1")){
+		if(aArm=="L"){
+			aEp_Min[0] = Ep_Cut_25_1[0];		
+			aEp_Max[0] = Ep_Cut_25_1[1];		
+		}
+		else if(aArm=="R"){
+			aEp_Min[0] = Ep_Cut_25_1[2];		
+			aEp_Max[0] = Ep_Cut_25_1[3];		
+		}
+	}
+	else if(aKinName.Contains("Kin5.2")){
+		if(aArm=="L"){
+			aEp_Min[0] = Ep_Cut_25_2[0];		
+			aEp_Max[0] = Ep_Cut_25_2[1];		
+		}
+		else if(aArm=="R"){
+			aEp_Min[0] = Ep_Cut_25_2[2];		
+			aEp_Max[0] = Ep_Cut_25_2[3];		
+		}
+	}
+
+	else if(aKinName.Contains("Kin6.5")){
+		if(aArm=="L"){
+			aEp_Min[0] = Ep_Cut_28_1[0];		
+			aEp_Max[0] = Ep_Cut_28_1[1];		
+		}
+		else if(aArm=="R"){
+			aEp_Min[0] = Ep_Cut_28_1[2];		
+			aEp_Max[0] = Ep_Cut_28_1[3];		
+		}
+	}
+
+	else{
+		aEp_Min[0]=-1.0;
+		aEp_Max[0]=10.0;
+	}
+
+}
+/*}}}*/
+
 /*inline TString gGet_Delta_Correct(const TString& aArm, const bool aIsExtTgt){{{*/
 inline TString gGet_Delta_Correct(const TString& aArm, const bool aIsExtTgt){
 
@@ -52,7 +172,7 @@ inline TString gGet_Delta_Correct(const TString& aArm, const bool aIsExtTgt){
 /*}}}*/
 
 /*XGT2_VAR* gGet_Nf_EX(const vector<Int_t>& aRunNoChain,const TString& aArm, const TString& aKin, const Double_t aBin, const Double_t aBin_Size, const TString& aElectronCuts,const TString& aBin_Variable, const Double_t* aLiveTimeChain,const Double_t* aLiveTimeStatErrChain,const Double_t* aLiveTimeSysErrChain, const Int_t* aPSChain, const Double_t* aE0Chain, const Double_t* aP0Chain, const Double_t* aAngleChain, double* aNf_EX_Chain,double* aNf_EX_Stat,double* aNf_EX_Sys, const bool aIsExtTgt){{{*/
-XGT2_VAR* gGet_Nf_EX(const vector<Int_t>& aRunNoChain,const TString& aArm, const TString& aKin, const TString& aTarget,const Double_t aBin, const Double_t aBin_Size, const TString& aElectronCuts, const double aVZ_Cut[2], const TString aBin_Variable, const Double_t* aLiveTimeChain,const Double_t* aLiveTimeStatErrChain,const Double_t* aLiveTimeSysErrChain, const Int_t* aPSChain, const Double_t* aE0Chain, const Double_t* aP0Chain, const Double_t* aAngleChain, const bool aIsExtTgt, double* aNf_EX_Chain,double* aNf_EX_Stat,double* aNf_EX_Sys){
+XGT2_VAR* gGet_Nf_EX(const vector<Int_t>& aRunNoChain,const TString& aArm, const TString& aKin, const TString& aTarget,const Double_t aBin, const Double_t aBin_Size, const TString& aElectronCuts,const TString aBin_Variable, const Double_t* aLiveTimeChain,const Double_t* aLiveTimeStatErrChain,const Double_t* aLiveTimeSysErrChain, const Int_t* aPSChain, const Double_t* aE0Chain, const Double_t* aP0Chain, const Double_t* aAngleChain, const bool aIsExtTgt, double* aNf_EX_Chain,double* aNf_EX_Stat,double* aNf_EX_Sys){
     XGT2_VAR* nf = new XGT2_VAR();
 
 	Int_t aPS[8],aNf[aRunNoChain.size()];
@@ -67,8 +187,6 @@ XGT2_VAR* gGet_Nf_EX(const vector<Int_t>& aRunNoChain,const TString& aArm, const
 	TString aEX_Current ="", aEX_Cuts = "";
 	Double_t aAngle=0.0, aE0 = 0.0, aP0 = 0.0;
 	Int_t aRunNo= 0 ;
-
-    Double_t TARGET_MASS_A = gGet_Target_Mass_A(aTarget.Data());
 
 	for ( unsigned int i=0; i<aRunNoChain.size(); i++ )
 	{
@@ -113,7 +231,7 @@ XGT2_VAR* gGet_Nf_EX(const vector<Int_t>& aRunNoChain,const TString& aArm, const
 				aEX_Ep =Form("(%7.5f*(1.0+%s))",aP0,aEX_Dp.Data());
 				aEX_Nu= Form("(%7.5f-%7.5f*(1.0+%s))",aE0,aP0,aEX_Dp.Data());
 				aEX_Q2 = Form("4.0*%7.5f*(%7.5f*(1.0+%s))*%s",aE0,aP0,aEX_Dp.Data(),aEX_SinSQ.Data());
-				aEX_Xbj=Form("%s/(2.0*%8.6f*%s)",aEX_Q2.Data(),TARGET_MASS_A,aEX_Nu.Data());//use the per-nucleon target mass for x, 07/30/2015
+				aEX_Xbj=Form("%s/(2.0*%8.6f*%s)",aEX_Q2.Data(),PROTON_MASS,aEX_Nu.Data());
 				//aEX_Xbj=Form("ExtEK%s.x_bj",aArm.Data());
 			}
 			else{
@@ -133,10 +251,9 @@ XGT2_VAR* gGet_Nf_EX(const vector<Int_t>& aRunNoChain,const TString& aArm, const
 				aEX_Ep =Form("(%7.5f*(1.0+%s))",aP0,aEX_Dp.Data());
 				aEX_Nu= Form("(%7.5f-%7.5f*(1.0+%s))",aE0,aP0,aEX_Dp.Data());
 				aEX_Q2 = Form("4.0*%7.5f*(%7.5f*(1.0+%s))*%s",aE0,aP0,aEX_Dp.Data(),aEX_SinSQ.Data());
-				aEX_Xbj=Form("%s/(2.0*%8.6f*%s)",aEX_Q2.Data(),TARGET_MASS_A,aEX_Nu.Data());//use the per-nucleon target mass for x, 07/30/2015
+				aEX_Xbj=Form("%s/(2.0*%8.6f*%s)",aEX_Q2.Data(),PROTON_MASS,aEX_Nu.Data());
 				//aEX_Xbj=Form("EK%s.x_bj",aArm.Data());
 			}
-            TString aEX_VZ = Form("RctPt%s.z", aArm.Data());
 
 			/*			cerr<<"============================================="<<endl;
 						cerr<<Form("EX_Th = %s,  EX_Ph = %s, EX_SA = %s, EX_SinSQ = %s", aEX_Th.Data(),aEX_Ph.Data(), aEX_SA.Data(), aEX_SinSQ.Data() )<<endl;
@@ -157,35 +274,32 @@ XGT2_VAR* gGet_Nf_EX(const vector<Int_t>& aRunNoChain,const TString& aArm, const
 				aEX_Current = "left_current";
 
 			if(aBin_Variable=="Ep"){//Add a xbj<2.80 cut for He3 to exclude the elastic peak
-				aEX_Cuts=Form("abs(%s-%f)<=%f&&%s>=%f&&(%s>=%f && %s<%f)",
+				aEX_Cuts=Form("abs(%s-%f)<=%f&&%s>=%f",
 						aEX_Ep.Data(),
 						aBin,
 						aBin_Size,
 						aEX_Current.Data(),
-						Beam_Trip_Cut,
-                        aEX_VZ.Data(),
-                        aVZ_Cut[0],
-                        aEX_VZ.Data(),
-                        aVZ_Cut[1]
+						Beam_Trip_Cut
 						);
 		//	  if(aTarget=="He3")
 		//		  aEX_Cuts+=Form("&&%s=<%f",aEX_Xbj.Data(), 2.8);
 			}
-
-			else if(aBin_Variable=="xbj")
-				aEX_Cuts=Form("abs(%s-%f)<=%f&&%s>=%f&&(%s>=%f && %s<%f)",
+			else if(aBin_Variable=="xbj"){
+				double aEp_Min =1000.0, aEp_Max = -10000.0;
+				gGet_Ep_Cut(aKin.Data(), aArm.Data(), &aEp_Min, &aEp_Max);
+				aEX_Cuts=Form("%s>=%f&&%s<%f&&abs(%s-%f)<=%f&&%s>=%f",
+						aEX_Ep.Data(),
+						aEp_Min,
+						aEX_Ep.Data(),
+						aEp_Max,
 						aEX_Xbj.Data(),
 						aBin,
 						aBin_Size,
 						aEX_Current.Data(),
-						Beam_Trip_Cut,
-						aEX_VZ.Data(),
-                        aVZ_Cut[0],
-                        aEX_VZ.Data(),
-                        aVZ_Cut[1]
-                        );
-            
-                        else
+						Beam_Trip_Cut
+						);
+			}
+			else
 				cerr<<"*** ERROR***, in XGT2_Data.h, Ln166, unknown binning vairable!!"<<endl;
 			aEX_Cuts+="&&"+aElectronCuts;
 		    /*
@@ -208,7 +322,7 @@ XGT2_VAR* gGet_Nf_EX(const vector<Int_t>& aRunNoChain,const TString& aArm, const
 			}
 			else
 				outlog << Form("   *** ERROR, I cann't understand the name %s ARM", aArm.Data())<<endl;
-			//Swape Stat Err and Sys Err, Z. Ye 06/12/2014
+//Swape Stat Err and Sys Err, Z. Ye 06/12/2014
 
 			for(int j=0;j<8;j++)
 				aPS[j] = aPSChain[i*8+j];
@@ -243,8 +357,7 @@ XGT2_VAR* gGet_Nf_EX(const vector<Int_t>& aRunNoChain,const TString& aArm, const
 		}
 	}   
 	nf->Value    = aNf_Total;
-	//nf->Stat_Err = aNf_Total * sqrt(1.0/aNf_Total + aNf_Stat_Err_Total);//FIX_HERE, not sure now ZYe 06/12/2014
-	nf->Stat_Err = aNf_Total * sqrt(1.0/aNf_Total);//FIX_HERE, the second term should be a mistake
+	nf->Stat_Err = aNf_Total * sqrt(1.0/aNf_Total + aNf_Stat_Err_Total);//FIX_HERE, not sure now ZYe 06/12/2014
 	nf->Sys_Err  = aNf_Total * sqrt(aNf_Sys_Err_Total);
     return nf;
 }
@@ -342,8 +455,6 @@ XGT2_VAR* gGet_Nf_AL(const TString& aKin, const TString& aArm, const Double_t aB
 	Double_t* aNf_AL_Chain = new double[aChain_Size];
 	Double_t* aNf_AL_StatChain = new double[aChain_Size];
 	Double_t* aNf_AL_SysChain = new double[aChain_Size];
-	
-    Double_t TARGET_MASS_A = gGet_Target_Mass_A("Al27");
 
 	//Consider the difference of the Al-Windows and Dummy-Foils thickness and radiative effect
 	const double aFact_AlDummy = gGet_AlDummy_Factor(aKin.Data());
@@ -391,7 +502,7 @@ XGT2_VAR* gGet_Nf_AL(const TString& aKin, const TString& aArm, const Double_t aB
 				aEX_Ep =Form("(%7.5f*(1.0+%s))",aP0,aEX_Dp.Data());
 				aEX_Nu= Form("(%7.5f-%7.5f*(1.0+%s))",aE0,aP0,aEX_Dp.Data());
 				aEX_Q2 = Form("4.0*%7.5f*(%7.5f*(1.0+%s))*%s",aE0,aP0,aEX_Dp.Data(),aEX_SinSQ.Data());
-				aEX_Xbj=Form("%s/(2.0*%8.6f*%s)",aEX_Q2.Data(),TARGET_MASS_A,aEX_Nu.Data());//use the per-nucleon target mass for x, 07/30/2015
+				aEX_Xbj=Form("%s/(2.0*%8.6f*%s)",aEX_Q2.Data(),PROTON_MASS,aEX_Nu.Data());
 				//aEX_Xbj=Form("ExtEK%s.x_bj",aArm.Data());
 			}
 			else{
@@ -411,7 +522,7 @@ XGT2_VAR* gGet_Nf_AL(const TString& aKin, const TString& aArm, const Double_t aB
 				aEX_Ep =Form("(%7.5f*(1.0+%s))",aP0,aEX_Dp.Data());
 				aEX_Nu= Form("(%7.5f-%7.5f*(1.0+%s))",aE0,aP0,aEX_Dp.Data());
 				aEX_Q2 = Form("4.0*%7.5f*(%7.5f*(1.0+%s))*%s",aE0,aP0,aEX_Dp.Data(),aEX_SinSQ.Data());
-				aEX_Xbj=Form("%s/(2.0*%8.6f*%s)",aEX_Q2.Data(),TARGET_MASS_A,aEX_Nu.Data());//use the per-nucleon target mass for x, 07/30/2015
+				aEX_Xbj=Form("%s/(2.0*%8.6f*%s)",aEX_Q2.Data(),PROTON_MASS,aEX_Nu.Data());
 				//aEX_Xbj=Form("EK%s.x_bj",aArm.Data());
 			}
 			//Current Branch for cutting out Beam Trip events
@@ -491,7 +602,7 @@ XGT2_VAR* gGet_Nf_AL(const TString& aKin, const TString& aArm, const Double_t aB
 		}
 	}   
 	nf->Value    = aNf_Total;
-	nf->Stat_Err = aNf_Total * sqrt(1.0/aNf_Total);
+	nf->Stat_Err = aNf_Total * sqrt(1.0/aNf_Total + aNf_Stat_Err_Total);
 	nf->Sys_Err  = aNf_Total * sqrt(aNf_Sys_Err_Total);
    
 	delete aLiveTimeChain;

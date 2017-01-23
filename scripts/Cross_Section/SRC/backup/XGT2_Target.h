@@ -1,6 +1,5 @@
 /* 
 Update: Add Boiling Effects along Z_react, in 01/09/2013
-        Make sure to modify this code to match the new target info and boiling study results
 */
 /*Boiling Correction{{{*/
 double Boiling_Corr(const int aTarget_A, const double aVZ, const double aCurrent, const double aRho){
@@ -81,7 +80,7 @@ double Boiling_Corr_Inverse(const int aTarget_A, const double aVZ, const double 
 /*}}}*/
 
 /*inline void gGet_Cryo_Density(  const Int_t aRunNo, const Int_t aTarget_A, const Double_t aCurrent, const TString& aArm){{{*/
-inline void gGet_Cryo_Density(  const Int_t aRunNo, const Int_t aTarget_A, const Double_t aCurrent, const TString& aArm, const Double_t aTarget_Length_Cut, double* aTarget_Density, double* aTarget_Density_Err){
+inline void gGet_Cryo_Density(  const Int_t aRunNo, const Int_t aTarget_A, const Double_t aCurrent, const TString& aArm, const Double_t aTarget_Length_Cut[2], double* aTarget_Density, double* aTarget_Density_Err){
 
 	//Boiling Factor in each VZ bin
 	const double aTarget_Length = 20.00;//cm
@@ -123,7 +122,7 @@ inline void gGet_Cryo_Density(  const Int_t aRunNo, const Int_t aTarget_A, const
 	aInfile >> aCom >> aCom >> aCom >> aCom >> aCom;
 	for(int i=0;i<aBin_Size;i++){
 		aInfile >> aVZ[i] >> aRho[i] >> aRho_Err[i] >> aBF[i] >> aBF_Err[i]; //aVZ[i] is in cm here
-		if(abs(aVZ[i])<=aTarget_Length_Cut){ //Cut on Target Length, it is symmetric now.
+		if((aVZ[i]>=aTarget_Length_Cut[0])&&(aVZ[i]<=aTarget_Length_Cut[1])){ //Cut on Target Length, it is symmetric now.
 			//aRho_New[i] = Boiling_Corr(aTarget_A, aVZ[i], aCurrent, aRho[i]); //Older File with BF only
 			aRho_New[i] = aRho[i] * (1 + aBF[i]*aCurrent);
 
@@ -143,8 +142,67 @@ inline void gGet_Cryo_Density(  const Int_t aRunNo, const Int_t aTarget_A, const
 }
 /*}}}*/
 
+/*inline double gGet_Density( const Int_t aRunNo, const Int_t aTarget_A, const double aCurrent, const TString& aArm){{{*/
+inline double gGet_Density( const Int_t aRunNo, const Int_t aTarget_A, const Double_t aCurrent, const TString& aArm, const Double_t aTarget_Length_Cut[2]){
+	//Symmetric Cut, e.g., cut=7.5 cm, then we only count the target luminosity on these range
+	//const double aLength_Corrected = aTarget_Length_Cut/10.0; 
+	const double aLength_Corrected = 1.0;
+
+  //Boiling Factor are calculated at 100uA
+  //Values can be updated here.
+  Double_t Boiling_Factor = 0.0, aDensity = 0.0;
+  if(aTarget_A == 2){ //H2
+	  //Boiling_Factor = 0.188; aDensity = 3.352;
+	 aDensity = 3.352 * aLength_Corrected;
+   	 if(aArm=="R"){
+		  Boiling_Factor = 0.41179; //HRS-R
+	  }
+	  else {
+		  Boiling_Factor = 0.46394;//HRS-L
+	  }
+  }	
+  else if(aTarget_A == 3){ //He3
+	  if(aArm=="R"){
+		  Boiling_Factor = 0.25440; //HRS-R
+	  }
+	  else{ 
+		  Boiling_Factor = 0.26573; //HRS-L
+	  }
+	  if(aRunNo<3753)
+		  aDensity = 0.426 * aLength_Corrected;
+	  else 
+		  aDensity = 0.592 * aLength_Corrected;
+  }
+  else if(aTarget_A == 4){ //He4
+	 aDensity = 0.648 * aLength_Corrected;
+   	 if(aArm=="R"){
+		  Boiling_Factor = 0.284774; //HRS-R
+	  }
+	  else{ 
+		  Boiling_Factor = 0.30141; //HRS-L
+	  }
+  }
+  else if(aTarget_A == 12){ //C12
+	  Boiling_Factor = 0.0; aDensity = 0.8918;
+  }
+  else if(aTarget_A == 40){ //Ca40
+	  Boiling_Factor = 0.0; aDensity = 0.8890;
+  }
+   else if(aTarget_A == 48){ //Ca48
+    Boiling_Factor = 0.0; aDensity = 0.8190;
+  }
+  else
+    Boiling_Factor = 0.0;
+ 
+// Boiling_Factor = gGet_Boiling_Factor(aTarget_A, aArm.Data());
+  double aDensity_Real = aDensity * (1.0 - Boiling_Factor * aCurrent /100.00); 
+ // cerr<<Form("      ---1: I = %5.2f, Target Thickness, old = %6.4f, Corrected = %6.4f", aCurrent, aDensity, aDensity_Real)<<endl;
+  return aDensity_Real;
+}
+/*}}}*/
+
 /*inline XGT2_VAR* gCal_Ntg(const vector<Int_t>& aRunNoChain, const Double_t aTarget_Thickness, const Int_t aTarget_A){{{*/
-inline XGT2_VAR* gCal_Ntg(const vector<Int_t>& aRunNoChain,const TString& aArm,const Int_t aTarget_A, const Double_t aTarget_Length_Cut, const Double_t aTarget_Thickness,const Double_t aTarget_Thickness_Stat_Err, double* aNtgChain){
+inline XGT2_VAR* gCal_Ntg(const vector<Int_t>& aRunNoChain,const TString& aArm,const Int_t aTarget_A, const Double_t aTarget_Thickness,const Double_t aTarget_Thickness_Stat_Err, double* aNtgChain){
   XGT2_VAR* aNtg = new XGT2_VAR();
   Double_t aNtg_Sum = 0.0, aNtg_Err=0.0;
   for (unsigned int i=0; i<aRunNoChain.size(); i++ ){
@@ -153,10 +211,12 @@ inline XGT2_VAR* gCal_Ntg(const vector<Int_t>& aRunNoChain,const TString& aArm,c
 	  Double_t aCurrent = gGet_Current(aT_Tree, aArm.Data());
 	  Double_t aTarget_Thickness_Corrected = 0.0;
 	  Double_t aTarget_Thickness_Corrected_Err = 0.0;
+      Double_t aVZ_Cut[2] = {-10.0, 10.0};
 	  //Cryogenic Targets --> LH2, He3,He4
 	  if(aTarget_A == 2 || aTarget_A == 3 || aTarget_A ==4){
+		//    aTarget_Thickness_Corrected = gGet_Density( aRunNo, aTarget_A, aCurrent, aArm.Data(), aTarget_Length_Cut); //Average Boiling Effect
 		 //gGet_Cryo_Density( aRunNo, aTarget_A, aCurrent, aArm.Data(), aTarget_Length_Cut, &aTarget_Thickness_Corrected, &aTarget_Thickness_Corrected_Err); //Z-Dependence Boiling Effect
-		  gGet_Cryo_Density( aRunNo, aTarget_A, aCurrent, aArm.Data(), 10.0, &aTarget_Thickness_Corrected, &aTarget_Thickness_Corrected_Err); //Z-Dependence Boiling Effect
+          gGet_Cryo_Density( aRunNo, aTarget_A, aCurrent, aArm.Data(), aVZ_Cut, &aTarget_Thickness_Corrected, &aTarget_Thickness_Corrected_Err); //Z-Dependence Boiling Effect
 		  Double_t aNtg_Corrected = aTarget_Thickness_Corrected * Na / aTarget_A ; 
 		  aNtgChain[i] = aNtg_Corrected;
 	  }

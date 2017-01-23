@@ -6,6 +6,8 @@
 //#include "XEMC.h"
 //Make sure the bins are the same as ones when generating tables
 const int Bin_T = 200;
+const int Bin_P = 200;   //For old tables by Kin
+//const int Bin_P = 1000; //For new tables
 const double Ep_Bin_Size = 0.001;// 1 MeV/c per Bin
 class Get_XS
 {
@@ -57,8 +59,9 @@ class Get_XS
 				//MAKE-SURE to turn off this section when calculating the normal cross section values
 				if(0){//if(0) to turn off
 					double aE0 = 3.356; //Beam energy fixed at 3.356 GeV
-					double aQ2 = aE0 * aEp * pow( sin(aTheta*Pi/180./2.) ,2);
-					double aXbj = aQ2 / (2.*PROTON_MASS*(aE0-aEp));
+					double aQ2 = aE0 * aEp * pow( sin(aTheta*TMath::Pi()/180./2.) ,2);
+					double aXbj = aQ2 / (2.*TARGET_MASS_A*(aE0-aEp));
+					//double aXbj = aQ2 / (2.*PROTON_MASS*(aE0-aEp));
 
 					aXS_Born *= aXbj; aXS_Rad *= aXbj; //method#1: scale the model by aXbj
 			    	aXS_Born *= sqrt(aQ2)/2; aXS_Rad *= sqrt(aQ2)/2; //method#2: scale the model by sqrt(Q2)/2
