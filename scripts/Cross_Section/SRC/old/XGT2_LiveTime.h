@@ -73,9 +73,8 @@ inline XGT2_VAR* gCal_LiveTime(TTree* aT_Tree,const Int_t aRunNo,const TString& 
 		LiveTime->Value=(Double_t) DAQ_Trigger/Raw_Trigger;
 		LiveTime->Sys_Err=LiveTime->Value*sqrt(fabs(1./DAQ_Trigger-1./Raw_Trigger));
 		LiveTime->Stat_Err= 0.0;
-	
-        cout<<Form("-1- Run=%d, N_DAQ = %d,  N_Raw = %f, LT = %5.3f (%6.4f)", aRunNo, DAQ_Trigger, Raw_Trigger, LiveTime->Value, LiveTime->Sys_Err)<<endl;
-    }
+		//LiveTime->Stat_Err=LiveTime->Value*sqrt(1./DAQ_Trigger+1./Raw_Trigger/Raw_Trigger);
+	}
 	return LiveTime;
 }
 /*}}}*/
@@ -97,8 +96,7 @@ inline XGT2_VAR* gCal_LiveTime_Avg(TTree* aT_Tree,const Int_t aRunNo,const TStri
 		LiveTime->Value=(Double_t) DAQ_Trigger/Raw_Trigger;
 		LiveTime->Sys_Err=LiveTime->Value*sqrt(fabs(1./DAQ_Trigger-1./Raw_Trigger)); //Z. Ye, fix the "+" into "-" since DAQ_Trigger and RAW_Trigger are correlated. 01/15/2015
 		LiveTime->Stat_Err= 0.0;
-    
-        cout<<Form("-2- Run=%d, N_DAQ = %d,  N_Raw = %f, LT = %5.3f (%6.4f)", aRunNo, DAQ_Trigger, Raw_Trigger, LiveTime->Value, LiveTime->Sys_Err)<<endl;
+		//LiveTime->Stat_Err=LiveTime->Value*sqrt(1./DAQ_Trigger+1./Raw_Trigger/Raw_Trigger);
 	}
 	return LiveTime;
 }
@@ -212,7 +210,7 @@ inline void gLoad_LiveTime_Chain(const vector<Int_t>& aRunNoChain,const TString&
 					aLT= kLT;
 					aLT_Sys_Err= kLT_Err;
 					aLT_Stat_Err= 0.00;
-					if(aLT>1.04||aLT<1e-33){
+					if(aLT>1.5||aLT<1e-33){
 						aLT= kLT_Avg;
 						aLT_Sys_Err= kLT_Avg_Err;
 						aLT_Stat_Err = 0.00;
@@ -235,8 +233,8 @@ inline void gLoad_LiveTime_Chain(const vector<Int_t>& aRunNoChain,const TString&
 		table.close();
 
 		if(aLT<=1.2&&aLT>0.4){
-			outlog <<Form("      For Run#%d, the LiveTime = %5.4f (%4.2f%%)",aRunNo,aLT, aLT_Sys_Err/aLT*100)<<endl;
-			cerr   <<Form("      For Run#%d, the LiveTime = %5.4f (%4.2f%%)",aRunNo,aLT, aLT_Sys_Err/aLT*100)<<endl;
+			outlog <<Form("      For Run#%d, the LiveTime = %5.4f",aRunNo,aLT)<<endl;
+			cerr <<Form("      For Run#%d, the LiveTime = %5.4f",aRunNo,aLT)<<endl;
 		}
 		else{ 
             Int_t aPS[8];

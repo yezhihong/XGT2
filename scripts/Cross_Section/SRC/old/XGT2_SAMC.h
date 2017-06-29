@@ -75,7 +75,7 @@ inline Double_t gGet_Delta_Correct(const TString& aArm,const TString& aKin, cons
 /*}}}*/
 
 /*Int_t gGet_Nf_SAMC(TChain* aTree){{{*/
-Int_t gGet_Nf_SAMC(TChain* aTree,const Double_t aBin,const Double_t aBinCut, const Double_t aAccCut[9],const TString &aTarget, const TString &aKin,const Double_t aEp, Get_XS* aXS)
+Int_t gGet_Nf_SAMC(TChain* aTree,const Double_t aBin,const Double_t aBinCut, const Double_t aAccCut[9],const TString &aTarget, const TString &aKin,const Double_t aEp)
 {
 	/* Bin Cuts:
 	   |Xbj_tg -aBin| < aBinCut;
@@ -120,9 +120,9 @@ w[i] = aCS_Center / aCS[i];
 
 	//Get Average Cross Section at the Center Angle
 	Double_t aCS_Center = 0.0;
-    //Get_XS* aXS = new Get_XS();
-    //aXS->Load_Table(aTarget.Data(),aKin.Data());
-    aCS_Center = aXS->gGet_XS_Center(aEp) * gGet_Rad_Corr_Bump(aTarget.Data(),0.0); //CS for Ep with center angle
+	Get_XS* aXS = new Get_XS();
+		aXS->Load_Table(aTarget.Data(),aKin.Data());
+		aCS_Center = aXS->gGet_XS_Center(aEp) * gGet_Rad_Corr_Bump(aTarget.Data(),0.0); //CS for Ep with center angle
 
 	cerr<<" aCS_Center = "<< aCS_Center<<endl;
 	Double_t aCS = 0.0, aSum = 0.0, aWeight = 1.0;
@@ -157,13 +157,13 @@ w[i] = aCS_Center / aCS[i];
 	cerr   <<"      SAMC Events in this bin after Correction  = " <<aSum<<endl<<endl;
 	aNf = (Int_t) aSum;
 
-	//delete aXS;
+	delete aXS;
 	return aNf ; 
 }
 /*}}}*/
 
 /*XGT2_VAR* gGet_XS_SAMC_SUM(TChain* aTree){{{*/
-XGT2_VAR* gGet_XS_SAMC_SUM(TChain* aTree,const Double_t aBin,const Double_t aBinCut, const Double_t aAccCut[9], const Double_t aVZ_Cut[2], const TString &aArm, const TString &aTarget, const TString &aKin, const Double_t aP0, const Double_t aAngle, const TString& aBin_Variable, double *aBinCor, Get_XS* aXS)
+XGT2_VAR* gGet_XS_SAMC_SUM(TChain* aTree,const Double_t aBin,const Double_t aBinCut, const Double_t aAccCut[9], const TString &aArm, const TString &aTarget, const TString &aKin, const Double_t aP0, const Double_t aAngle, const TString& aBin_Variable, double *aBinCor)
 {
 	/* Bin Cuts:
 	   |Dp_tg -aBin| < aCut;
@@ -205,9 +205,9 @@ w[i] = aCS_Center / aCS[i];
 	// aTree->SetBranchAddress("cs_Final",     &cs_Final);
 	aTree->SetBranchAddress("IsPassed",     &aIsPassed);
 
-    ////Get Average Cross Section at the Center Angle
-	//Get_XS* aXS = new Get_XS();
-	//aXS->Load_Table(aTarget.Data(),aKin.Data());
+	//Get Average Cross Section at the Center Angle
+	Get_XS* aXS = new Get_XS();
+	aXS->Load_Table(aTarget.Data(),aKin.Data());
 
 	Double_t kTheta = 0.0, aCS = 0.0, aCS_Center = 0.0, aSum = 0.0, aSum_Center=0.0;
 	Int_t aCount = 0;
@@ -259,8 +259,6 @@ w[i] = aCS_Center / aCS[i];
 					fabs(ph_tg_rec)  < aAccCut[7] &&
 					fabs(reactz_rec) < aAccCut[8] &&
 					fabs(E_p_new - aBin)< aBinCut &&
-					reactz_rec >= aVZ_Cut[0] &&
-					reactz_rec < aVZ_Cut[1] &&
 					//fabs(E_p - aBin)< aBinCut &&
 					aIsPassed==1 ){
 
@@ -305,6 +303,7 @@ w[i] = aCS_Center / aCS[i];
 			double Angle_new = acos( (aCosA-ph_tg_rec*aSinA)/sqrt(1.+pow(th_tg_rec,2)+pow(ph_tg_rec,2))); 
 			double Q2_new = 4.0*E_s*E_p_new*pow( sin(Angle_new/2.), 2);
 			double xbj_new = Q2_new/2./TARGET_MASS_A/(E_s-E_p_new);
+			//double xbj_new = Q2_new/2./PROTON_MASS/(E_s-E_p_new);
 
 			if(fabs(x_fp)       < aAccCut[0] &&
 					fabs(y_fp)       < aAccCut[1] &&
@@ -324,6 +323,7 @@ w[i] = aCS_Center / aCS[i];
 
 				aSinSQ = pow(sin(Angle_new/2.0),2); //Define Sin(Theta/2.)^2
 				aEp_Bin = E_s/(1.0+4.0*E_s*aSinSQ/(2.0*TARGET_MASS_A*aBin)); //use xbj = Q2/2Mp/(Ei-Ep),Q2 = 4Ei*Ep*Sin_SQ 
+				//aEp_Bin = E_s/(1.0+4.0*E_s*aSinSQ/(2.0*PROTON_MASS*aBin)); //use xbj = Q2/2Mp/(Ei-Ep),Q2 = 4Ei*Ep*Sin_SQ 
 
 				//kTheta =  Angle_rec / TMath::DegToRad(); 
 				kTheta =  Angle_new / TMath::DegToRad(); 
@@ -357,7 +357,8 @@ w[i] = aCS_Center / aCS[i];
 		aTheta0 = aAngle;//Use the real data scattering angle
 
 		aSinSQ = pow(sin(aTheta0*TMath::DegToRad()/2.0),2); //Define Sin(Theta/2.)^2
-        aEp_Bin = E_s/(1.0+4.0*E_s*aSinSQ/(2.0*TARGET_MASS_A*aBin)); //use xbj = Q2/2Mp/(Ei-Ep),Q2 = 4Ei*Ep*Sin_SQ 
+		aEp_Bin = E_s/(1.0+4.0*E_s*aSinSQ/(2.0*TARGET_MASS_A*aBin)); //use xbj = Q2/2Mp/(Ei-Ep),Q2 = 4Ei*Ep*Sin_SQ 
+		//aEp_Bin = E_s/(1.0+4.0*E_s*aSinSQ/(2.0*PROTON_MASS*aBin)); //use xbj = Q2/2Mp/(Ei-Ep),Q2 = 4Ei*Ep*Sin_SQ 
 
 		//Bin Center Correction from XS(Ep_Bin, Theta_Avg) to XS(Ep_Bin, Theta_Center) -- Z. Ye, 03/04/2012
 		aBinCor[0] = aXS->gGet_XS_Center(aEp_Bin)/(aSum/aCount)*aWeight; 
@@ -379,7 +380,7 @@ w[i] = aCS_Center / aCS[i];
 		sum->Sys_Err = 0.0;
 	sum->Stat_Err = 0.0;
 
-	//delete aXS;
+	delete aXS;
 	return sum ; 
 }
 /*}}}*/
@@ -475,15 +476,15 @@ inline TChain* gGet_SAMC_Chain(const TString& aSAMC_File)
 }/*}}}*/
 
 /*inline Double_t gGet_XS_Born_XEMC(const TString& aTarget, const TString& aKin, const Double_t aE0, const Double_t aEp, const Double_t aTheta){{{*/
-inline Double_t gGet_XS_Born_XEMC(const TString& aTarget, const TString& aKin, const Double_t aE0, const Double_t aEp, const Double_t aTheta, Get_XS* aXS)
+inline Double_t gGet_XS_Born_XEMC(const TString& aTarget, const TString& aKin, const Double_t aE0, const Double_t aEp, const Double_t aTheta)
 {
 	//Get Born Cross Section at the Center Angle
+	Get_XS* aXS = new Get_XS();
 	Double_t aCS_Born=0.0;
-	//Get_XS* aXS = new Get_XS();
-	//aXS->Load_Table(aTarget.Data(),aKin.Data());
+	aXS->Load_Table(aTarget.Data(),aKin.Data());
 	aCS_Born = aXS->gGet_XS_Born(aE0,aEp,aTheta); //CS for this event
 
-	//delete aXS;
+	delete aXS;
 	return aCS_Born ; 
 }
 /*}}}*/

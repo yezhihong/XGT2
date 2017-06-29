@@ -45,14 +45,14 @@
 //#include <TMatrix.h>
 /*}}}*/
 
-//*ANALYZER Includes{{{*/
+//*analyzer Includes{{{*/
 //#include <THaAnalysisObject.h>
 //#include <THaApparatus.h>
 //#include <THaHRS.h>
 //#include <THaShower.h>
 //#include <THaCherenkov.h>
 //#include <THaScintillator.h>
-#include <THaUnRasteredBeam.h>
+//#include <THaUnRasteredBeam.h>
 //#include <THaRasteredBeam.h>
 //#include <THaDecData.h>
 //#include <THaScalerGroup.h>
@@ -60,13 +60,12 @@
 //#include <THaElectronKine.h>
 //#include <THaGoldenTrack.h>
 //#include <THaExtTarCor.h>
-#include <THaNormAna.h>
-#include <THaAnalyzer.h>
-#include <THaRun.h>
-#include <THaEvent.h>
-//*}}}*/
+//#include <THaNormAna.h>
+//#include <THaAnalyzer.h>
+//#include <THaRun.h>
+//#include <THaEvent.h>
 
-#include <THaRun.h>
+//*}}}*/
 
 using namespace std;
 
@@ -74,29 +73,23 @@ using namespace std;
 const Double_t GeVToMeV=1000.00;
 const Double_t MeVToGeV=0.001;
 const Double_t CM2M=0.01;
-const Double_t PROTON_MASS=0.938272; //GeV Mass of proton
 const Double_t ATOMIC_MASS_UNIT = 0.931494028;//GeV
-Double_t TARGET_MASS_A = 0.0;
+const Double_t PROTON_MASS=0.938272; //GeV Mass of proton
+Double_t TARGET_MASS_A = 0;
 
 /*Customization{{{*/
-const TString XGT2_DIR="/work/halla/e08014/disk1/yez/Xbj_Cross_Section/"; //this is for inputfiles,outfiles,logfiles
-const TString ROOTFILES_DIR="/work/halla/e08014/disk1/Rootfiles_Jan282017";     //JinGe's HRS-L optics but with new VDC cali
-//const TString ROOTFILES_DIR="/work/halla/e08014/disk1/Rootfiles_Sep122016";     //JinGe's HRS-L optics w/o new VDC cali
-//const TString ROOTFILES_DIR="/work/halla/e08014/disk1/Rootfiles";     //JinGe's HRS-L optics w/o new VDC cali
+const TString XGT2_DIR="/work/halla/e08014/disk1/yez/Ep_Cross_Section/"; //this is for inputfiles,outfiles,logfiles
+const TString ROOTFILES_DIR="/work/halla/e08014/disk1/Rootfiles";     //this is for rootfiles
+//const TString ROOTFILES_DIR="/volatile/halla/e08014/yez/Rootfiles";     //this is for rootfiles
 const TString ROOTFILES_NAME = "e08014"; //such as e08014_4299.root
-const TString SAMCFILES_DIR="/work/halla/e08014/disk1/yez/Monte_Calo/SAMC/rootfiles/";    //this is for SAMC Rootfiles
-//const TString SAMCFILES_DIR="/volatile/halla/e08014/yez/Monte_Calo/SAMC/rootfiles/";    //this is for SAMC Rootfiles
-const TString XEMC_Table_Path="/work/halla/e08014/disk1/yez/Monte_Calo/Cross_Section_Tables/"; 
-bool bXEMC_Model_New=kTRUE;
-//bool bXEMC_Model_New=kFALSE;
-//If kFALSE use the old cross section model int the sub-directory
-const TString XEMC_ByKin_Sub= "0920/";
+const TString SAMCFILES_DIR="/volatile/halla/e08014/yez/Monte_Calo/SAMC/rootfiles/";    //this is for SAMC Rootfiles
+const TString XEMC_Table_Path="/Users/yez/work/Xbj_Cross_Section/Cross_Section_Tables/"; 
 
 ofstream outlog; 
 Double_t Beam_Trip_Cut = 0.0;
 Double_t Target_Length = 0.0;
 Double_t Target_Length_Default = 0.20; // Default length for x>2 cryo-targets are 20cm;
-const Double_t GCPMT_For_1Photon=100;
+//const Double_t GCPMT_For_1Photon=100;
 /*}}}*/
 
 /*class XGT2_Logger{{{*/
@@ -166,6 +159,7 @@ class XGT2_Logger
 ;/*}}}*/
 
 XGT2_Logger* XGT2_Logger::m_pInstance = NULL;
+
 
 Bool_t IsBackground=kFALSE;
 
@@ -306,15 +300,14 @@ inline double gGet_Target_Mass_A(const TString& aTarget_Name){
 		cerr<<"*** ERROR, in XGT2_Data.h, Line#25, I don't know this target!"<<endl;
 		outlog <<"*** ERROR, in XGT2_Data.h, Line#25, I don't know this target!"<<endl;
 	}
-	//mass *= ATOMIC_MASS_UNIT;//convert from atomic-mass-unit to GeV 
-	  
-	mass = PROTON_MASS; //don't use the average-nucleon-mass to define xbj
-	  
+	mass *= ATOMIC_MASS_UNIT;//convert from atomic-mass-unit to GeV 
+	
+    //mass = PROTON_MASS; //don't use the average-nucleon-mass to define xbj
 	return mass;
 }
 /*}}}*/
 
-/*inline void gGet_Acc_Bin(const Int_t& aRunNo,Double_t aAccBin[4][3],const TString& aTarget){{{*/
+/*inline void gGet_Acc_Bin(const Int_t& aRunNo,Double_t aAccBin[4][3],const TString& aTarget,const TString& aBin_Variable){{{*/
 inline void gGet_Acc_Bin(const TString& aAccBin_File,Double_t aAccBin[3],const TString& aTarget,const TString& aBin_Variable)
 {
 	//aAccBin[3]
@@ -322,26 +315,29 @@ inline void gGet_Acc_Bin(const TString& aAccBin_File,Double_t aAccBin[3],const T
 	//[3] 0:min 1:max 2:stepsize
 
 	TString infilename=Form("%s/Bin/%s/%s",XGT2_DIR.Data(),aBin_Variable.Data(),aAccBin_File.Data());
-	TString aPath = Form("%s/Bin/%s",XGT2_DIR.Data(),aBin_Variable.Data());
+	TString aPath = Form("%s/Bin/%s/",XGT2_DIR.Data(),aBin_Variable.Data());
 
 	/*   gCheckDirectory(aPath);*/
-	if ( gSystem->FindFile(aPath.Data(),infilename) ){
+	if ( gSystem->FindFile(aPath.Data(),infilename) )
+	{
 		ifstream acc_bin_infile(infilename.Data());
 
 		TString varname;
 		Double_t min,max,stepsize;
 
 		varname.ReadLine(acc_bin_infile);//read first comment line
-		while ( acc_bin_infile>>varname>>min>>max>>stepsize ){
+		while ( acc_bin_infile>>varname>>min>>max>>stepsize )
+		{
 			/*Other Bins{{{*/
 			/*
+			   if ( varname.Contains("xbj") )
 			   if ( varname.Contains("nu") )
 			   if ( varname.Contains("Ep") )
-			   if ( varname.Contains("xbj") )
 			   if ( varname.Contains("qsq") )
 			   */
 			/*}}}*/
-			   if ( varname.Contains(aBin_Variable.Data()) ){
+			if ( varname.Contains(aBin_Variable.Data()) )
+			{
 				aAccBin[0]=min;
 				aAccBin[1]=max;
 				aAccBin[2]=stepsize;
@@ -366,8 +362,6 @@ inline TChain* gAddTree(const Int_t aRunNo,TString aTreeName="T")
 	TString File_Form=Form("%s_%d.root",ROOTFILES_NAME.Data(),aRunNo);
 	if ( gSystem->FindFile(ROOTFILES_DIR.Data(),File_Form) )
 	{
-        cout<<Form("Reading root file: %s/%s_%d.root",ROOTFILES_DIR.Data(),ROOTFILES_NAME.Data(),aRunNo)<<endl;
-        outlog<<Form("Reading root file: %s/%s_%d.root",ROOTFILES_DIR.Data(),ROOTFILES_NAME.Data(),aRunNo)<<endl;
 		aTree->Add(Form("%s/%s_%d.root",ROOTFILES_DIR.Data(),ROOTFILES_NAME.Data(),aRunNo));
 	}
 	else{  

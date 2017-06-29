@@ -39,6 +39,223 @@ char* gTgt;
 char* gCom;
 int getargs(int argc, char** argv);
 
+/*List the Statistical Errors{{{*/
+//all values are relative errors
+/*Common{{{*/
+const double SysErr_Nmc_Foil = 1./sqrt(5000000.);
+const double SysErr_Nmc_Cryo = 1./sqrt(20000000.);
+
+const double SysErr_HRS_Angle = 0.5*1e-3;//0.5mrad resolution
+const double SysErr_HRS_Mom = 0.0002;//0.02%
+const double SysErr_Beam_Energy = 0.0005;//0.05%
+//const double SysErr_Beam_Charge = 0.01;//calculate on the fly
+//const double SysErr_LiveTime = 0.01;//<calculate on the fly
+
+const double SysErr_Rho_H2 = 0.0008/3.3506; // need updated
+const double SysErr_Rho_He3 = 0.0008/0.66068; // need updated
+const double SysErr_Rho_He4 = 0.0008/0.6652; // need updated
+const double SysErr_Rho_C12 = 0.0008/0.8918; // delta_rho/rho
+const double SysErr_Rho_Ca40= 0.01/0.8990; // need updated
+const double SysErr_Rho_Ca48= 0.01/0.8190; // need updated
+
+const double SysErr_Boil_H2 = 0.05; //5%, need updated
+const double SysErr_Boil_He3 = 0.05; //5%, need updated
+const double SysErr_Boil_He4 = 0.05; //5%, need updated
+
+const double SysErr_Dummy_H2 = 0.01; //1%, need updated
+const double SysErr_Dummy_He3 = 0.01; //1%, need updated
+const double SysErr_Dummy_He4 = 0.01; //1%, need updated
+/*}}}*/
+
+/*Corrections{{{*/
+const double SysErr_RadC_H2 = 0.01; //1%
+const double SysErr_RadC_He3 = 0.01; //1%
+const double SysErr_RadC_He4 = 0.01; //1%
+const double SysErr_RadC_C12 = 0.01; //1%
+const double SysErr_RadC_Ca40 = 0.01; //1%
+const double SysErr_RadC_Ca48 = 0.01; //1%
+
+const double SysErr_CouC_H2 = 0.01; //1%
+const double SysErr_CouC_He3 = 0.01; //1%
+const double SysErr_CouC_He4 = 0.01; //1%
+const double SysErr_CouC_C12 = 0.01; //1%
+const double SysErr_CouC_Ca40 = 0.01; //1%
+const double SysErr_CouC_Ca48 = 0.01; //1%
+
+const double SysErr_AccC_H2 = 0.01; //1%
+const double SysErr_AccC_He3 = 0.01; //1%
+const double SysErr_AccC_He4 = 0.01; //1%
+const double SysErr_AccC_C12 = 0.01; //1%
+const double SysErr_AccC_Ca40 = 0.01; //1%
+const double SysErr_AccC_Ca48 = 0.01; //1%
+
+const double SysErr_BinC_H2 = 0.01; //1%
+const double SysErr_BinC_He3 = 0.01; //1%
+const double SysErr_BinC_He4 = 0.01; //1%
+const double SysErr_BinC_C12 = 0.01; //1%
+const double SysErr_BinC_Ca40 = 0.01; //1%
+const double SysErr_BinC_Ca48 = 0.01; //1%
+/*}}}*/
+
+/*Efficiencies{{{*/
+const double SysErr_Trig_Eff_H2 = 0.01; //1%
+const double SysErr_Trig_Eff_He3 = 0.01; //1%
+const double SysErr_Trig_Eff_He4 = 0.01; //1%
+const double SysErr_Trig_Eff_C12 = 0.01; //1%
+const double SysErr_Trig_Eff_Ca40 = 0.01; //1%
+const double SysErr_Trig_Eff_Ca48 = 0.01; //1%
+
+const double SysErr_Trac_Eff_H2 = 0.01; //1%
+const double SysErr_Trac_Eff_He3 = 0.01; //1%
+const double SysErr_Trac_Eff_He4 = 0.01; //1%
+const double SysErr_Trac_Eff_C12 = 0.01; //1%
+const double SysErr_Trac_Eff_Ca40 = 0.01; //1%
+const double SysErr_Trac_Eff_Ca48 = 0.01; //1%
+
+const double SysErr_Calo_Eff_H2 = 0.01; //1%
+const double SysErr_Calo_Eff_He3 = 0.01; //1%
+const double SysErr_Calo_Eff_He4 = 0.01; //1%
+const double SysErr_Calo_Eff_C12 = 0.01; //1%
+const double SysErr_Calo_Eff_Ca40 = 0.01; //1%
+const double SysErr_Calo_Eff_Ca48 = 0.01; //1%
+
+const double SysErr_Cher_Eff_H2 = 0.01; //1%
+const double SysErr_Cher_Eff_He3 = 0.01; //1%
+const double SysErr_Cher_Eff_He4 = 0.01; //1%
+const double SysErr_Cher_Eff_C12 = 0.01; //1%
+const double SysErr_Cher_Eff_Ca40 = 0.01; //1%
+const double SysErr_Cher_Eff_Ca48 = 0.01; //1%
+
+const double SysErr_PID_Eff_H2 = 0.01; //1%
+const double SysErr_PID_Eff_He3 = 0.01; //1%
+const double SysErr_PID_Eff_He4 = 0.01; //1%
+const double SysErr_PID_Eff_C12 = 0.01; //1%
+const double SysErr_PID_Eff_Ca40 = 0.01; //1%
+const double SysErr_PID_Eff_Ca48 = 0.01; //1%
+/*}}}*/
+/*}}}*/
+
+/*inline double gGet_Total_SysErr(const TString& aTarget_Name, const TString& aArm, const double aTheta){{{*/
+inline double gGet_Total_SysErr(const TString& aTarget_Name, const TString& aArm, const double aTheta){
+  double total_err = 0.0;
+ 
+ total_err += pow(SysErr_HRS_Angle/(aTheta*3.1415926/180.0),2); 
+ total_err += pow(SysErr_HRS_Mom,2); 
+ total_err += pow(SysErr_Beam_Energy,2); 
+
+ if(aTarget_Name=="H2"||aTarget_Name=="He3"||aTarget_Name=="He4")
+	 total_err += pow( SysErr_Nmc_Cryo,2); 
+ else
+	 total_err += pow( SysErr_Nmc_Foil,2); 
+
+ /*H2{{{*/
+ if(aTarget_Name=="H2"){
+	 //Target density related
+	 total_err += pow(SysErr_Boil_H2, 2); 
+	 total_err += pow(SysErr_Rho_H2, 2); 
+	 total_err += pow(SysErr_Dummy_H2, 2); 
+	 //corrections
+	 total_err += pow(SysErr_RadC_H2, 2); 
+	 total_err += pow(SysErr_CouC_H2, 2); 
+	 total_err += pow(SysErr_AccC_H2, 2); 
+	 total_err += pow(SysErr_BinC_H2, 2); 
+	 //efficiencies
+	 total_err += pow(SysErr_Trig_Eff_H2, 2); 
+	 total_err += pow(SysErr_Trac_Eff_H2, 2); 
+	 total_err += pow(SysErr_Calo_Eff_H2, 2); 
+	 total_err += pow(SysErr_Cher_Eff_H2, 2); 
+	 total_err += pow(SysErr_PID_Eff_H2, 2); 
+ }/*}}}*/
+ /*He3{{{*/
+ if(aTarget_Name=="He3"){
+	 //Target density related
+	 total_err += pow(SysErr_Boil_He3, 2); 
+	 total_err += pow(SysErr_Rho_He3, 2); 
+	 total_err += pow(SysErr_Dummy_He3, 2); 
+	 //corrections
+	 total_err += pow(SysErr_RadC_He3, 2); 
+	 total_err += pow(SysErr_CouC_He3, 2); 
+	 total_err += pow(SysErr_AccC_He3, 2); 
+	 total_err += pow(SysErr_BinC_He3, 2); 
+	 //efficiencies
+	 total_err += pow(SysErr_Trig_Eff_He3, 2); 
+	 total_err += pow(SysErr_Trac_Eff_He3, 2); 
+	 total_err += pow(SysErr_Calo_Eff_He3, 2); 
+	 total_err += pow(SysErr_Cher_Eff_He3, 2); 
+	 total_err += pow(SysErr_PID_Eff_He3, 2); 
+ }/*}}}*/
+ /*He4{{{*/
+ else if(aTarget_Name=="He4"){
+	 //Target density related
+	 total_err += pow(SysErr_Boil_He4, 2); 
+	 total_err += pow(SysErr_Rho_He4, 2); 
+	 total_err += pow(SysErr_Dummy_He4, 2); 
+	 //corrections
+	 total_err += pow(SysErr_RadC_He4, 2); 
+	 total_err += pow(SysErr_CouC_He4, 2); 
+	 total_err += pow(SysErr_AccC_He4, 2); 
+	 total_err += pow(SysErr_BinC_He4, 2); 
+	 //efficiencies
+	 total_err += pow(SysErr_Trig_Eff_He4, 2); 
+	 total_err += pow(SysErr_Trac_Eff_He4, 2); 
+	 total_err += pow(SysErr_Calo_Eff_He4, 2); 
+	 total_err += pow(SysErr_Cher_Eff_He4, 2); 
+	 total_err += pow(SysErr_PID_Eff_He4, 2); 
+ }/*}}}*/
+ /*C12{{{*/
+ else if(aTarget_Name=="C12"){
+	 //Target density related
+	 total_err += pow(SysErr_Rho_C12, 2); 
+	 //corrections
+	 total_err += pow(SysErr_RadC_C12, 2); 
+	 total_err += pow(SysErr_CouC_C12, 2); 
+	 total_err += pow(SysErr_AccC_C12, 2); 
+	 total_err += pow(SysErr_BinC_C12, 2); 
+	 //efficiencies
+	 total_err += pow(SysErr_Trig_Eff_C12, 2); 
+	 total_err += pow(SysErr_Trac_Eff_C12, 2); 
+	 total_err += pow(SysErr_Calo_Eff_C12, 2); 
+	 total_err += pow(SysErr_Cher_Eff_C12, 2); 
+	 total_err += pow(SysErr_PID_Eff_C12, 2); 
+ }/*}}}*/
+ /*Ca40{{{*/
+ else if(aTarget_Name=="Ca40"){
+	 //Target density related
+	 total_err += pow(SysErr_Rho_Ca40, 2); 
+	 //corrections
+	 total_err += pow(SysErr_RadC_Ca40, 2); 
+	 total_err += pow(SysErr_CouC_Ca40, 2); 
+	 total_err += pow(SysErr_AccC_Ca40, 2); 
+	 total_err += pow(SysErr_BinC_Ca40, 2); 
+	 //efficiencies
+	 total_err += pow(SysErr_Trig_Eff_Ca40, 2); 
+	 total_err += pow(SysErr_Trac_Eff_Ca40, 2); 
+	 total_err += pow(SysErr_Calo_Eff_Ca40, 2); 
+	 total_err += pow(SysErr_Cher_Eff_Ca40, 2); 
+	 total_err += pow(SysErr_PID_Eff_Ca40, 2); 
+ }/*}}}*/
+ /*Ca48{{{*/
+ else if(aTarget_Name=="Ca48"){
+	 //Target density related
+	 total_err += pow(SysErr_Rho_Ca48, 2); 
+	 //corrections
+	 total_err += pow(SysErr_RadC_Ca48, 2); 
+	 total_err += pow(SysErr_CouC_Ca48, 2); 
+	 total_err += pow(SysErr_AccC_Ca48, 2); 
+	 total_err += pow(SysErr_BinC_Ca48, 2); 
+	 //efficiencies
+	 total_err += pow(SysErr_Trig_Eff_Ca48, 2); 
+	 total_err += pow(SysErr_Trac_Eff_Ca48, 2); 
+	 total_err += pow(SysErr_Calo_Eff_Ca48, 2); 
+	 total_err += pow(SysErr_Cher_Eff_Ca48, 2); 
+	 total_err += pow(SysErr_PID_Eff_Ca48, 2); 
+ } /*}}}*/
+
+ return sqrt(total_err);//return a relative total systematic error
+ //return 0.0;//return a relative total systematic error
+} 
+/*}}}*/
+
 /*Get_Target_Name{{{*/
 TString gGet_Target_Name(const TString& aName){
 	TString aTarget_Name="MM";
@@ -184,7 +401,7 @@ gStyle->SetTitleFillColor(-1);
 	double Theta = 21.00;
 	TString Kin = "3.1";
 
-	Double_t p,nu,Q2,xbj,angle,Ei,Ep,tmp,Livetime,Ntg,Ni,Nf_EX,Nf_AL,Nf_SAMC,Nf_SAMC_Gen,BinCor,XS_MC;
+	Double_t p,nu,Q2,xbj,angle,Ei,Ep,tmp,Livetime,LT_Sys_Err,Ntg, Ntg_Sys_Err,Ni,Ni_Sys_Err,Nf_EX,Nf_AL,Nf_SAMC,Nf_SAMC_Gen,BinCor,XS_MC;
 	Double_t XS,XS_Stat_Err,XS_Sys_Err,Yield_MC,Yield_EX,Yield_AL,Y_MC_Sys_Err,Y_EX_Sys_Err,Y_AL_Sys_Err,Y_MC_Stat_Err,Y_EX_Stat_Err,Y_AL_Stat_Err;
 	TString comment;
 	Double_t Min=1e50, Max = -1.0;
@@ -199,6 +416,8 @@ gStyle->SetTitleFillColor(-1);
 	Double_t pY_R1[200],pY_R2[200],pY_R_Err1[200],pY_R_Err2[200];
 	Double_t pY_R3[200],pY_R4[200],pY_R_Err3[200],pY_R_Err4[200];
 	/*}}}*/
+	
+	TARGET_MASS_A = gGet_Target_Mass_A(Target.Data());
 
 	/*First{{{*/
 	TString infile1 = aFileName1;
@@ -235,18 +454,20 @@ gStyle->SetTitleFillColor(-1);
 	Get_XS* xs1 = new Get_XS();
 	xs1->Load_Table(Target.Data(),Kin_Name1.Data());
 
+	double Sys_Err1 = gGet_Total_SysErr(Target.Data(), Arm1.Data(),Theta);
 	comment.ReadLine(run_1);
-	while ( run_1>>XS>>XS_Stat_Err>>XS_Sys_Err>>XS_MC>>xbj>>angle>>Ep>>nu>>Q2>>BinCor>>Livetime>>Ntg>>Ni>>Nf_EX>>Nf_AL>>Nf_SAMC>>Nf_SAMC_Gen>>Yield_EX>>Y_EX_Stat_Err>>Y_EX_Sys_Err>>Yield_MC>>Y_MC_Stat_Err>>Y_MC_Sys_Err>>Yield_AL>>Y_AL_Stat_Err>>Y_AL_Sys_Err )
-	{
-		//	if(XS_Stat_Err<0.0){
-		//		Y_EX_Stat_Err = Yield_EX * sqrt(1./Nf_EX+1./Ni);
-		//		XS_Stat_Err = XS * sqrt( pow(Y_EX_Stat_Err/Yield_EX,2)+pow(Y_MC_Stat_Err/Yield_MC,2));
-		//	}
-		//		XS*=1e33; XS_Stat_Err*=1e33;  XS_Sys_Err *= 1e33; //From cm^2/MeV/sr to nb/MeV/sr
-		//		Yield_EX*=1e33; Y_EX_Stat_Err*=1e33; Y_EX_Sys_Err*=1e33;
-		if ( angle<180 &&xbj>0.5  && XS>0.0 && sqrt(pow(XS_Sys_Err,2)+pow(XS_Stat_Err,2))/XS <0.2)
+	//while ( run_1>>XS>>XS_Stat_Err>>XS_Sys_Err>>XS_MC>>xbj>>angle>>Ep>>nu>>Q2>>BinCor>>Livetime>>LT_Sys_Err>>Ntg>>Ntg_Sys_Err>>Ni>>Ni_Sys_Err>>Nf_EX>>Nf_AL>>Nf_SAMC>>Nf_SAMC_Gen>>Yield_EX>>Y_EX_Stat_Err>>Y_EX_Sys_Err>>Yield_MC>>Y_MC_Stat_Err>>Y_MC_Sys_Err>>Yield_AL>>Y_AL_Stat_Err>>Y_AL_Sys_Err ){
+	while ( !(run_1.eof())){
+		run_1>>XS>>XS_Stat_Err>>XS_Sys_Err>>XS_MC>>xbj>>angle>>Ep>>nu>>Q2>>BinCor>>Livetime>>LT_Sys_Err>>Ntg>>Ntg_Sys_Err>>Ni>>Ni_Sys_Err>>Nf_EX>>Nf_AL>>Nf_SAMC>>Nf_SAMC_Gen>>Yield_EX>>Y_EX_Stat_Err>>Y_EX_Sys_Err>>Yield_MC>>Y_MC_Stat_Err>>Y_MC_Sys_Err>>Yield_AL>>Y_AL_Stat_Err>>Y_AL_Sys_Err;
+			if ( angle<180 &&xbj>0.5  && XS>0.0 && sqrt(pow(XS_Sys_Err,2)+pow(XS_Stat_Err,2))/XS <1.0)
 		{
-			pXS1[Count1] = XS;      pXS_Err1[Count1] = XS_Stat_Err;
+			pXS1[Count1] = XS;      
+			pXS_Err1[Count1] = XS * sqrt( pow(XS_Stat_Err/XS,2) 
+					                     +pow(LT_Sys_Err/Livetime,2)
+										 +pow(Ni_Sys_Err/Ni,2)
+										 +pow(Sys_Err1,2)
+					                     );
+
 			pXbj1[Count1] = xbj;    pXbj_Err1[Count1] = 0.0;
 
 			pYield_MC1[Count1]=Yield_MC; 
@@ -261,7 +482,7 @@ gStyle->SetTitleFillColor(-1);
 			pXS_MC1[Count1] = xs1->gGet_XS_Born(E0,Ep,Theta);
 			//pXS_MC1[Count1] = xs1->gGet_XS_Born_ByKin(E0,Ep/1000.0,Theta);
 
-			//cerr << Form("   --Xbj = %f, XS_EX = %e, XS_MC=%e ", xbj, XS, pXS_MC1[Count1] ) <<endl;
+			cerr << Form("   --Xbj = %f, XS_EX = %e, XS_MC=%e ", xbj, XS, pXS_MC1[Count1] ) <<endl;
 			if(Min_Yield>=Yield_MC&&Yield_MC>=1e3)
 				Min_Yield = Yield_MC;
 			if(Max_Yield<=Yield_MC)
@@ -336,9 +557,11 @@ gStyle->SetTitleFillColor(-1);
 		xs2->Load_Table(Target.Data(),Kin_Name2.Data());
 		//xs2->Load_Table_ByKin(Target.Data(),Kin_Name2.Data());
 
+		double Sys_Err2 = gGet_Total_SysErr(Target.Data(), Arm2.Data(),Theta);
 		comment.ReadLine(run_2);
-		while ( run_2>>XS>>XS_Stat_Err>>XS_Sys_Err>>XS_MC>>xbj>>angle>>Ep>>nu>>Q2>>BinCor>>Livetime>>Ntg>>Ni>>Nf_EX>>Nf_AL>>Nf_SAMC>>Nf_SAMC_Gen>>Yield_EX>>Y_EX_Stat_Err>>Y_EX_Sys_Err>>Yield_MC>>Y_MC_Stat_Err>>Y_MC_Sys_Err>>Yield_AL>>Y_AL_Stat_Err>>Y_AL_Sys_Err )
-		{
+//		while ( run_2>>XS>>XS_Stat_Err>>XS_Sys_Err>>XS_MC>>xbj>>angle>>Ep>>nu>>Q2>>BinCor>>Livetime>>LT_Sys_Err>>Ntg>>Ntg_Sys_Err>>Ni>>Ni_Sys_Err>>Nf_EX>>Nf_AL>>Nf_SAMC>>Nf_SAMC_Gen>>Yield_EX>>Y_EX_Stat_Err>>Y_EX_Sys_Err>>Yield_MC>>Y_MC_Stat_Err>>Y_MC_Sys_Err>>Yield_AL>>Y_AL_Stat_Err>>Y_AL_Sys_Err ){
+		while ( !(run_2.eof())){
+			run_2>>XS>>XS_Stat_Err>>XS_Sys_Err>>XS_MC>>xbj>>angle>>Ep>>nu>>Q2>>BinCor>>Livetime>>LT_Sys_Err>>Ntg>>Ntg_Sys_Err>>Ni>>Ni_Sys_Err>>Nf_EX>>Nf_AL>>Nf_SAMC>>Nf_SAMC_Gen>>Yield_EX>>Y_EX_Stat_Err>>Y_EX_Sys_Err>>Yield_MC>>Y_MC_Stat_Err>>Y_MC_Sys_Err>>Yield_AL>>Y_AL_Stat_Err>>Y_AL_Sys_Err;
 
 			//		if(XS_Stat_Err<0.0){
 			//		  Y_EX_Stat_Err = Yield_EX * sqrt(1./Nf_EX+1./Ni);
@@ -346,9 +569,15 @@ gStyle->SetTitleFillColor(-1);
 			//		}
 			//			XS*=1e33; XS_Stat_Err*=1e33;  XS_Sys_Err *= 1e33; //From cm^2/MeV/sr to nb/MeV/sr
 			//            Yield_EX*=1e33; Y_EX_Stat_Err*=1e33; Y_EX_Sys_Err*=1e33;
-			if ( angle<180 &&xbj>0.5  && XS>0.0 && sqrt(pow(XS_Sys_Err,2)+pow(XS_Stat_Err,2))/XS <0.2)
+			if ( angle<180 &&xbj>0.5  && XS>1e-30 && sqrt(pow(XS_Sys_Err,2)+pow(XS_Stat_Err,2))/XS <1.0)
 			{
-				pXS2[Count2] = XS;      pXS_Err2[Count2] = XS_Stat_Err;
+				pXS2[Count2] = XS;  
+				pXS_Err2[Count2] = XS * sqrt( pow(XS_Stat_Err/XS,2) 
+						+pow(LT_Sys_Err/Livetime,2)
+										 +pow(Ni_Sys_Err/Ni,2)
+										 +pow(Sys_Err2,2)
+					                     );
+
 				pXbj2[Count2] = xbj;    pXbj_Err2[Count2] = 0.0;
 				pYield_MC2[Count2]=Yield_MC; 
 				pYield_EX2[Count2]=Yield_EX;
@@ -361,7 +590,7 @@ gStyle->SetTitleFillColor(-1);
 
 				pXS_MC2[Count2] = xs2->gGet_XS_Born(E0,Ep,Theta);
 				//pXS_MC2[Count2] = xs2->gGet_XS_Born_ByKin(E0,Ep/1000.0,Theta);
-			//	cerr << Form("   --Xbj = %f, XS_EX = %e, XS_MC=%e ", xbj, XS, pXS_MC2[Count2] ) <<endl;
+				cerr << Form("   --Xbj = %f, XS_EX = %e, XS_MC=%e ", xbj, XS, pXS_MC2[Count2] ) <<endl;
 
 				if(Min_Yield>=Yield_MC&&Yield_MC>1e3)
 					Min_Yield = Yield_MC;
@@ -445,12 +674,19 @@ gStyle->SetTitleFillColor(-1);
 		xs3->Load_Table(Target.Data(),Kin_Name3.Data());
 		//xs3->Load_Table_ByKin(Target.Data(),Kin_Name3.Data());
 
+		double Sys_Err3 = gGet_Total_SysErr(Target.Data(), Arm3.Data(),Theta);
 		comment.ReadLine(run_3);
-		while ( run_3>>XS>>XS_Stat_Err>>XS_Sys_Err>>XS_MC>>xbj>>angle>>Ep>>nu>>Q2>>BinCor>>Livetime>>Ntg>>Ni>>Nf_EX>>Nf_AL>>Nf_SAMC>>Nf_SAMC_Gen>>Yield_EX>>Y_EX_Stat_Err>>Y_EX_Sys_Err>>Yield_MC>>Y_MC_Stat_Err>>Y_MC_Sys_Err>>Yield_AL>>Y_AL_Stat_Err>>Y_AL_Sys_Err )
-		{
-			if ( angle<180 &&xbj>0.5  && XS>0.0 && sqrt(pow(XS_Sys_Err,2)+pow(XS_Stat_Err,2))/XS <0.2)
+		while ( !(run_3.eof())){
+		run_3>>XS>>XS_Stat_Err>>XS_Sys_Err>>XS_MC>>xbj>>angle>>Ep>>nu>>Q2>>BinCor>>Livetime>>LT_Sys_Err>>Ntg>>Ntg_Sys_Err>>Ni>>Ni_Sys_Err>>Nf_EX>>Nf_AL>>Nf_SAMC>>Nf_SAMC_Gen>>Yield_EX>>Y_EX_Stat_Err>>Y_EX_Sys_Err>>Yield_MC>>Y_MC_Stat_Err>>Y_MC_Sys_Err>>Yield_AL>>Y_AL_Stat_Err>>Y_AL_Sys_Err;
+			if ( angle<180 &&xbj>0.5  && XS>0.0 && sqrt(pow(XS_Sys_Err,2)+pow(XS_Stat_Err,2))/XS <1.0)
 			{
-				pXS3[Count3] = XS;      pXS_Err3[Count3] = XS_Stat_Err;
+				pXS3[Count3] = XS;    
+				pXS_Err2[Count2] = XS * sqrt( pow(XS_Stat_Err/XS,2) 
+						+pow(LT_Sys_Err/Livetime,2)
+						+pow(Ni_Sys_Err/Ni,2)
+						+pow(Sys_Err3,2)
+						);
+
 				pXbj3[Count3] = xbj;    pXbj_Err3[Count3] = 0.0;
 
 				pYield_MC3[Count3]=Yield_MC; 
@@ -465,7 +701,7 @@ gStyle->SetTitleFillColor(-1);
 				pXS_MC3[Count3] = xs3->gGet_XS_Born(E0,Ep,Theta);
 				//pXS_MC3[Count3] = xs3->gGet_XS_Born_ByKin(E0,Ep/1000.0,Theta);
 
-			//	cerr << Form("   --Xbj = %f, XS_EX = %e, XS_MC=%e ", xbj, XS, pXS_MC3[Count3] ) <<endl;
+				cerr << Form("   --Xbj = %f, XS_EX = %e, XS_MC=%e ", xbj, XS, pXS_MC3[Count3] ) <<endl;
 				if(Min_Yield>=Yield_MC&&Yield_MC>=1e3)
 					Min_Yield = Yield_MC;
 				if(Max_Yield<=Yield_MC)
@@ -541,19 +777,29 @@ gStyle->SetTitleFillColor(-1);
 		Get_XS* xs4 = new Get_XS();
 		xs4->Load_Table(Target.Data(),Kin_Name4.Data());
 		//xs4->Load_Table_ByKin(Target.Data(),Kin_Name4.Data());
+		
+		double Sys_Err4 = gGet_Total_SysErr(Target.Data(), Arm4.Data(),Theta);
 		comment.ReadLine(run_4);
-		while ( run_4>>XS>>XS_Stat_Err>>XS_Sys_Err>>XS_MC>>xbj>>angle>>Ep>>nu>>Q2>>BinCor>>Livetime>>Ntg>>Ni>>Nf_EX>>Nf_AL>>Nf_SAMC>>Nf_SAMC_Gen>>Yield_EX>>Y_EX_Stat_Err>>Y_EX_Sys_Err>>Yield_MC>>Y_MC_Stat_Err>>Y_MC_Sys_Err>>Yield_AL>>Y_AL_Stat_Err>>Y_AL_Sys_Err )
-		{
+	//	while ( run_4>>XS>>XS_Stat_Err>>XS_Sys_Err>>XS_MC>>xbj>>angle>>Ep>>nu>>Q2>>BinCor>>Livetime>>LT_Sys_Err>>Ntg>>Ntg_Sys_Err>>Ni>>Ni_Sys_Err>>Nf_EX>>Nf_AL>>Nf_SAMC>>Nf_SAMC_Gen>>Yield_EX>>Y_EX_Stat_Err>>Y_EX_Sys_Err>>Yield_MC>>Y_MC_Stat_Err>>Y_MC_Sys_Err>>Yield_AL>>Y_AL_Stat_Err>>Y_AL_Sys_Err ){
+		while ( !(run_4.eof())){
+			run_4>>XS>>XS_Stat_Err>>XS_Sys_Err>>XS_MC>>xbj>>angle>>Ep>>nu>>Q2>>BinCor>>Livetime>>LT_Sys_Err>>Ntg>>Ntg_Sys_Err>>Ni>>Ni_Sys_Err>>Nf_EX>>Nf_AL>>Nf_SAMC>>Nf_SAMC_Gen>>Yield_EX>>Y_EX_Stat_Err>>Y_EX_Sys_Err>>Yield_MC>>Y_MC_Stat_Err>>Y_MC_Sys_Err>>Yield_AL>>Y_AL_Stat_Err>>Y_AL_Sys_Err;
 
+	
 			//		if(XS_Stat_Err<0.0){
 			//		  Y_EX_Stat_Err = Yield_EX * sqrt(1./Nf_EX+1./Ni);
 			//		  XS_Stat_Err = XS * sqrt( pow(Y_EX_Stat_Err/Yield_EX,2)+pow(Y_MC_Stat_Err/Yield_MC,2));
 			//		}
 			//			XS*=1e33; XS_Stat_Err*=1e33;  XS_Sys_Err *= 1e33; //From cm^2/MeV/sr to nb/MeV/sr
 			//            Yield_EX*=1e33; Y_EX_Stat_Err*=1e33; Y_EX_Sys_Err*=1e33;
-			if ( angle<180 &&xbj>0.5  && XS>0.0 && sqrt(pow(XS_Sys_Err,2)+pow(XS_Stat_Err,2))/XS <0.2)
+			if ( angle<180 &&xbj>0.5  && XS>0.0 && sqrt(pow(XS_Sys_Err,2)+pow(XS_Stat_Err,2))/XS <1.0)
 			{
-				pXS4[Count4] = XS;      pXS_Err4[Count4] = XS_Stat_Err;
+				pXS4[Count4] = XS; 
+				pXS_Err4[Count4] = XS * sqrt( pow(XS_Stat_Err/XS,2) 
+						+pow(LT_Sys_Err/Livetime,2)
+						+pow(Ni_Sys_Err/Ni,2)
+						+pow(Sys_Err4,2)
+						);
+
 				pXbj4[Count4] = xbj;    pXbj_Err4[Count4] = 0.0;
 				pYield_MC4[Count4]=Yield_MC; 
 				pYield_EX4[Count4]=Yield_EX;
@@ -566,7 +812,7 @@ gStyle->SetTitleFillColor(-1);
 
 				pXS_MC4[Count4] = xs4->gGet_XS_Born(E0,Ep,Theta);
 				//pXS_MC4[Count4] = xs4->gGet_XS_Born_ByKin(E0,Ep/1000.0,Theta);
-			//	cerr << Form("   --Xbj = %f, XS_EX = %e, XS_MC=%e ", xbj, XS, pXS_MC4[Count4] ) <<endl;
+				cerr << Form("   --Xbj = %f, XS_EX = %e, XS_MC=%e ", xbj, XS, pXS_MC4[Count4] ) <<endl;
 
 				if(Min_Yield>=Yield_MC&&Yield_MC>1e3)
 					Min_Yield = Yield_MC;
@@ -625,6 +871,7 @@ gStyle->SetTitleFillColor(-1);
 
 	TCanvas *c1 = new TCanvas("c1","c1",1200,800);
 	//TH2F* xs = new TH2F("xs","",1000,Xbj_Min,Xbj_Max,1000,Min/2.,Max*2.0);
+
 	TH2F* xs = new TH2F("xs","",1000,Min_X,Max_X,1000,Min/1.1,Max*1.1);
 	xs->SetStats(kFALSE);
 	xs->SetXTitle("x_{bj}");
@@ -638,6 +885,7 @@ gStyle->SetTitleFillColor(-1);
 	xs->Draw(); 
 	//gPad->SetLogy(1);
 	gPad->SetLogy(1);
+	gPad->SetGrid();
 
 	TGraphErrors *pl_x1 = new TGraphErrors(Count1,pXbj1,pXS1,pXbj_Err1,pXS_Err1);
 	pl_x1-> SetMarkerColor(2);
@@ -678,6 +926,7 @@ gStyle->SetTitleFillColor(-1);
 
 	/*Yield{{{*/
 	TCanvas *c2 = new TCanvas("c2","c2",1200,800);
+
 	//TH2F* y = new TH2F("y","",1000,Xbj_Min,Xbj_Max,1000,Min_Yield/2.,Max_Yield*2.0);
 	TH2F* y = new TH2F("y","",1000,Min_X,Max_X,1000,Min_Yield/1.1,Max_Yield*1.1);
 	y->SetStats(kFALSE);
@@ -692,6 +941,7 @@ gStyle->SetTitleFillColor(-1);
 	y->Draw(); 
 	//gPad->SetLogy(1);
 	gPad->SetLogy(1);
+	gPad->SetGrid();
 
 	TGraphErrors *pl_y1 = new TGraphErrors(Count1,pXbj1,pYield_EX1,pXbj_Err1,pYield_EX_Err1);
 	pl_y1-> SetMarkerColor(2);
@@ -755,6 +1005,7 @@ gStyle->SetTitleFillColor(-1);
 	r->GetYaxis()->SetTitleFont(32);
 	r->GetYaxis()->SetTitleSize(0.04);
 	r->Draw(); 
+	gPad->SetGrid();
 
 	TGraphErrors *pl_r1 = new TGraphErrors(Count1,pXbj1,pY_R1,pXbj_Err1,pY_R_Err1);
 	TGraphErrors *pl_r3 = new TGraphErrors(Count3,pXbj3,pY_R3,pXbj_Err3,pY_R_Err3);
@@ -1012,6 +1263,7 @@ gStyle->SetTitleFillColor(-1);
 
 	/*Yield  Ratio Zoom In{{{*/
 	TCanvas *c33 = new TCanvas("c33","c33",1200,800);
+
 	TH2F* rr = new TH2F("rr","",1000,Min_X,Max_X,1000,0.6, 1.3);//Zoom in plot
 	rr->SetStats(kFALSE);
 	rr->SetXTitle("E_{p}");
@@ -1023,8 +1275,9 @@ gStyle->SetTitleFillColor(-1);
 	rr->GetYaxis()->SetTitleFont(32);
 	rr->GetYaxis()->SetTitleSize(0.04);
 	rr->Draw(); 
-
+	
 	gPad->SetLogy(0);
+	gPad->SetGrid();
 
 	TMultiGraph *mg33 = new TMultiGraph();
 	TLegend *l33 = new TLegend(0.65,0.59,0.90, 0.94,Form("%s Target",Target.Data()));
@@ -1057,7 +1310,6 @@ gStyle->SetTitleFillColor(-1);
 	/*}}}*/
 }
 /*}}}*/
-
 
 int main(int argc, char** argv){
 

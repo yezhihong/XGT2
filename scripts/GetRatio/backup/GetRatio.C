@@ -1,5 +1,5 @@
-#include "/work/halla/e08014/disk1/yez/Xbj_Cross_Section/SRC/XGT2_Main.h"
-#include "/work/halla/e08014/disk1/yez/Xbj_Cross_Section/SRC/XGT2_XEMC.h"
+#include "/Users/yez/work/xgt2/Xbj_Cross_Section/SRC/XGT2_Main.h"
+#include "/Users/yez/work/xgt2/Xbj_Cross_Section/SRC/XGT2_XEMC.h"
 #include "TLegend.h"
 #include "TLine.h"
 #include "TGraphAsymmErrors.h"
@@ -122,7 +122,7 @@ int main(int argc, char** argv)
     Com0 = argv[3];
     Com = argv[4];
 
-    OutFile_Dir = Form("./new_both/%s_%s",Com0.Data(), Com.Data());
+    OutFile_Dir = Form("./both/%s_%s",Com0.Data(), Com.Data());
     if(!gSystem->OpenDirectory(OutFile_Dir.Data()))
         gSystem->mkdir(OutFile_Dir);	
 
