@@ -137,9 +137,10 @@ inline XGT2_VAR* gCal_Ne(const vector<Int_t>& aRunNoChain,const TString& aArm,Do
 /*}}}*/
 
 /*inline gCheck_Current(TTree* aTree, const TString& aCuts){{{*/
-inline void gCheck_Current(const vector<Int_t>& aRunNoChain){
+inline Double_t gCheck_Current(const vector<Int_t>& aRunNoChain){
   double aCurrent_Left,aCurrent_Right,rms;
   
+  Double_t aI_avg = 0.0;
   for ( unsigned int i=0; i<aRunNoChain.size(); i++ )
     {
       Int_t aRunNo=aRunNoChain[i];
@@ -150,8 +151,13 @@ inline void gCheck_Current(const vector<Int_t>& aRunNoChain){
 
       outlog<<Form("      For Run = %d, Current_Left = %6.2f, Current_Right = %6.2f",aRunNo, aCurrent_Left, aCurrent_Right)<<endl;
       cerr<<Form("      For Run = %d, Current_Left = %6.2f, Current_Right = %6.2f",aRunNo, aCurrent_Left, aCurrent_Right)<<endl;
+
+      aI_avg += aCurrent_Right;//The left arm BCM has issues
+
       delete aTree;
     }
+  aI_avg /= aRunNoChain.size();
+  return aI_avg;
 }
 /*}}}*/
 

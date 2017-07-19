@@ -9,7 +9,7 @@ inline TString gGet_XGT2_Cut(const Int_t& aRunNo,const TString& aArm,const TStri
 	Double_t aX_Fp=0,aY_Fp=0,aTheta_Fp=0,aPhi_Fp=0;      // Focal Plane Cuts
 	Double_t aDp_Tg=0,aY_Tg=0,aTheta_Tg=0,aPhi_Tg=0,aRctPt_Z=0;     // Target Plane Cuts
 	Double_t aCalo_Cuts=0,aCalo_2nd=0,aCer_Cuts=0; //PID Cuts 
-	Double_t aZ_Offset = 0.0, aY_Offset = 0.0, aPhi_Offset = 0.0;
+	Double_t aZ_Offset = 0.0, aY_Offset = 0.0;
 	Double_t gMom, gX_Fp, gY_Fp, gTh_Fp, gPh_Fp, gY_Tg, gTh_Tg, gPh_Tg, gDp_Tg,gRctPt_Z;
 	TString gKin,gTgt;
 
@@ -26,7 +26,6 @@ inline TString gGet_XGT2_Cut(const Int_t& aRunNo,const TString& aArm,const TStri
 		aCalo_2nd = 100.0;   // PRL2 Cuts
 		aCer_Cuts = 50.0;    // Cer Cuts
         aY_Offset = 0.0;
-        aPhi_Offset = 0.002; //An offset added to Phi_tg only,Z.Ye 08/07/2014
 		
 		/*Z_Offset{{{*/ 
 		//A commen offset in Z for Cryo-Targets
@@ -137,15 +136,17 @@ inline TString gGet_XGT2_Cut(const Int_t& aRunNo,const TString& aArm,const TStri
 			//Target Plane Cuts
 			TString aEX_Dp= Form("%s.gold.dp",aArm.Data());
 			TString aEX_Th= Form("%s.gold.th",aArm.Data());
-			TString aEX_Ph= Form("(%s.gold.ph-%f)",aArm.Data(),aPhi_Offset);
+			TString aEX_Ph= Form("(%s.gold.ph-%f)",aArm.Data(),Phi_Offset_L);
 			TString aEX_Y = Form("%s.gold.y",aArm.Data());
+			TString aEX_VZ = Form("RctPt%s.z",aArm.Data());
 			if(aIsExtTgt){
 				aEX_Dp= Form("ExTgt%s.dp",aArm.Data());
 				aEX_Th= Form("ExTgt%s.th",aArm.Data());
-				aEX_Ph= Form("(ExTgt%s.ph-%f)",aArm.Data(),aPhi_Offset);
+				aEX_Ph= Form("(ExTgt%s.ph-%f)",aArm.Data(),Phi_Offset_L);
 				aEX_Y = Form("ExTgt%s.y",aArm.Data());
 			}
-			Acc_Cut_Tg = Form("abs(%s)<=%6.5f && abs(%s-%6.5f)<=%6.5f && abs(%s)<=%6.5f && abs(%s)<=%6.5f", aEX_Dp.Data(),aDp_Tg, aEX_Y.Data(),aY_Offset,aY_Tg, aEX_Th.Data(),aTheta_Tg,aEX_Ph.Data(),aPhi_Tg);
+			//Acc_Cut_Tg = Form("abs(%s)<=%6.5f && abs(%s-%6.5f)<=%6.5f && abs(%s)<=%6.5f && abs(%s)<=%6.5f", aEX_Dp.Data(),aDp_Tg, aEX_Y.Data(),aY_Offset,aY_Tg, aEX_Th.Data(),aTheta_Tg,aEX_Ph.Data(),aPhi_Tg);
+			Acc_Cut_Tg = Form("abs(%s)<=%6.5f && abs(%s-%6.5f)<=%6.5f && abs(%s)<=%6.5f && abs(%s)<=%6.5f", aEX_Dp.Data(),aDp_Tg, aEX_VZ.Data(),aZ_Offset,aRctPt_Z, aEX_Th.Data(),aTheta_Tg,aEX_Ph.Data(),aPhi_Tg);
 	}
         /*If("L")}}}*/
     
@@ -156,7 +157,6 @@ inline TString gGet_XGT2_Cut(const Int_t& aRunNo,const TString& aArm,const TStri
 		aCalo_2nd = 200.0;   // PRL2 Cuts
 		aCer_Cuts = 50.0;    // Cer Cuts
         aY_Offset = 0.0;
-        aPhi_Offset = -0.002; //An offset added to Phi_tg only,Z.Ye 08/07/2014
 		
 		/*Z_Offset{{{*/ 
 		//A commen offset in Z for Cryo-Targets
@@ -266,17 +266,19 @@ inline TString gGet_XGT2_Cut(const Int_t& aRunNo,const TString& aArm,const TStri
 			//Target Plane Cuts
 			TString aEX_Dp= Form("%s.gold.dp",aArm.Data());
 			TString aEX_Th= Form("%s.gold.th",aArm.Data());
-			TString aEX_Ph= Form("(%s.gold.ph-%f)",aArm.Data(),aPhi_Offset);
+			TString aEX_Ph= Form("(%s.gold.ph-%f)",aArm.Data(),Phi_Offset_R);
 			TString aEX_Y = Form("%s.gold.y",aArm.Data());
+			TString aEX_VZ = Form("RctPt%s.z",aArm.Data());
 			if(aIsExtTgt){
 				aEX_Dp= Form("ExTgt%s.dp",aArm.Data());
 				aEX_Th= Form("ExTgt%s.th",aArm.Data());
-				aEX_Ph= Form("(ExTgt%s.ph-%f)",aArm.Data(),aPhi_Offset);
+				aEX_Ph= Form("(ExTgt%s.ph-%f)",aArm.Data(),Phi_Offset_R);
 				aEX_Y = Form("ExTgt%s.y",aArm.Data());
 			}
 			//Apply Delta Correction in the data -- Z. Ye 02/18/2013
 			aEX_Dp = gGet_Delta_Correct(aArm.Data(), aIsExtTgt);
-			Acc_Cut_Tg = Form("abs(%s)<=%6.5f && abs(%s-%6.5f)<=%6.5f && abs(%s)<=%6.5f && abs(%s)<=%6.5f", aEX_Dp.Data(),aDp_Tg, aEX_Y.Data(),aY_Offset,aY_Tg, aEX_Th.Data(),aTheta_Tg,aEX_Ph.Data(),aPhi_Tg);
+			//Acc_Cut_Tg = Form("abs(%s)<=%6.5f && abs(%s-%6.5f)<=%6.5f && abs(%s)<=%6.5f && abs(%s)<=%6.5f", aEX_Dp.Data(),aDp_Tg, aEX_Y.Data(),aY_Offset,aY_Tg, aEX_Th.Data(),aTheta_Tg,aEX_Ph.Data(),aPhi_Tg);
+			Acc_Cut_Tg = Form("abs(%s)<=%6.5f && abs(%s-%6.5f)<=%6.5f && abs(%s)<=%6.5f && abs(%s)<=%6.5f", aEX_Dp.Data(),aDp_Tg, aEX_VZ.Data(),aZ_Offset,aRctPt_Z, aEX_Th.Data(),aTheta_Tg,aEX_Ph.Data(),aPhi_Tg);
 		}
         /*If("R")}}}*/
 

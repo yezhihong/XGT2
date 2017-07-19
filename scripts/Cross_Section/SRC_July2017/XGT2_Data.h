@@ -3,10 +3,6 @@ inline void gCheck_E0(const vector<Int_t>& aRunNoChain,const TString& aArm,const
 inline void gCheck_Angle(const vector<Int_t>& aRunNoChain,const TString& aArm,const TString& aT_Tree_Name, double* aAngleChain);
 inline void gCheck_P0(const vector<Int_t>& aRunNoChain,const TString& aArm,const TString& aE_Tree_Name,double* aP0Chain);
 
-const double Phi_Offset_L = 0.000;
-const double Phi_Offset_R =-0.000;
-
-
 /*Cuts on the edge of Ep{{{*/
 // Cut_L_Min Cut_L_Max Cut_R_Min Cut_R_Max
 const double E0 = 3.356;
@@ -243,7 +239,7 @@ XGT2_VAR* gGet_Nf_EX(const vector<Int_t>& aRunNoChain,const TString& aArm, const
 				aEX_Dp =Form("%s.gold.dp",aArm.Data());
                 //Apply Delta Correction in the data -- Z. Ye 02/18/2013
 				if(aArm=="R")
-	             aEX_Dp = gGet_Delta_Correct(aArm,  aIsExtTgt);
+                    aEX_Dp = gGet_Delta_Correct(aArm,  aIsExtTgt);
 
 				aEX_Th = Form("%s.gold.th",aArm.Data());
 				if(aArm=="L")

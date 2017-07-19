@@ -98,6 +98,9 @@ Double_t Target_Length_Default = 0.20; // Default length for x>2 cryo-targets ar
 const Double_t GCPMT_For_1Photon=100;
 /*}}}*/
 
+const double Phi_Offset_L = 0.002;
+const double Phi_Offset_R =-0.002;
+
 /*class XGT2_Logger{{{*/
 class XGT2_Logger
 {

@@ -1,6 +1,6 @@
-#include "XGT2_XEMC.h"
+//#include "XGT2_XEMC.h"
 /*XGT2_VAR* gGet_XS_SAMC_SUM(TChain* aTree){{{*/
-XGT2_VAR* gGet_XS_SAMC_SUM(TChain* aTree,const Double_t aBin,const Double_t aBinCut, const Double_t aAccCut[9], const Double_t aVZ_Cut[2], const TString &aArm, const TString &aTarget, const TString &aKin, const Double_t aP0, const Double_t aAngle, const TString& aBin_Variable, double *aBinCor, Get_XS* aXS)
+XGT2_VAR* gGet_XS_SAMC_SUM(TChain* aTree,const Double_t aBin,const Double_t aBinCut, const Double_t aAccCut[9], const Double_t aVZ_Cut[2], const TString &aArm, const TString &aTarget, const TString &aKin, const Double_t aP0, const Double_t aAngle, const TString& aBin_Variable, double *aBinCor, const Double_t aI_avg, Get_XS* aXS)
 {
 	/* Bin Cuts:
 	   |Dp_tg -aBin| < aCut;
@@ -49,31 +49,64 @@ w[i] = aCS_Center / aCS[i];
 	Double_t kTheta = 0.0, aCS = 0.0, aCS_Center = 0.0, aSum = 0.0, aSum_Center=0.0;
 	Int_t aCount = 0;
 	
-	/*Target Density{{{*/
-	const double aVZ_Max = 0.1020, aVZ_Min = -0.1020;
-	const double aStep = (aVZ_Max-aVZ_Min)/51.;//0.004
-	double aVZ[52], aRho[52], aRho1[52],aRho2[52],aRho3[52];
-	for(int i=0;i<52;i++){
-		aVZ[i] = 0.0; aRho[i] = 1.0; aRho2[i] = 1.0; aRho3[i] = 1.0;
-	}
-	double aRho_Sum = 0;
-	TString aDummy="X";
+	/*Old Target Density{{{*/
+   /* const double aVZ_Max = 0.1020, aVZ_Min = -0.1020;*/
+	//const double aStep = (aVZ_Max-aVZ_Min)/51.;//0.004
+	//double aVZ[52], aRho[52], aRho1[52],aRho2[52],aRho3[52];
+	//for(int i=0;i<52;i++){
+		//aVZ[i] = 0.0; aRho[i] = 1.0; aRho2[i] = 1.0; aRho3[i] = 1.0;
+	//}
+	//double aRho_Sum = 0;
+	//TString aDummy="X";
 
-	if(aTarget=="H2"||aTarget=="He3"||aTarget=="He4"){
-		TString aDensity_Profile = Form("/work/halla/e08014/disk1/yez/Ep_Cross_Section/Target/%s.rho",aTarget.Data());
-		cerr<<Form("\t Reading Density Profile for %s from %s",aTarget.Data(), aDensity_Profile.Data())<<endl;
-		ifstream density(aDensity_Profile.Data()); 
-		density >> aDummy >> aDummy >> aDummy >> aDummy >> aDummy;
-		for(int i=0;i<52;i++){
-			density >> aVZ[i] >> aRho[i] >> aRho1[i] >> aRho2[i] >> aRho3[i];
-			aRho_Sum += aRho3[i];
-		}
-		density.close();
-		aRho_Sum /=52;
-	}
-	else
-		aRho_Sum = 1.0;
+	//if(aTarget=="H2"||aTarget=="He3"||aTarget=="He4"){
+		////TString aDensity_Profile = Form("/work/halla/e08014/disk1/yez/Xbj_Cross_Section/Target/%s_Profile.rho",aTarget.Data());
+		////cerr<<Form("\t Reading Density Profile for %s from %s",aTarget.Data(), aDensity_Profile.Data())<<endl;
+		////ifstream density(aDensity_Profile.Data()); 
+		////density >> aDummy >> aDummy >> aDummy >> aDummy >> aDummy;
+		////for(int i=0;i<52;i++){
+			////density >> aVZ[i] >> aRho[i] >> aRho1[i] >> aRho2[i] >> aRho3[i];
+			////aRho_Sum += aRho3[i];
+		////}
+		////density.close();
+		//aRho_Sum /=52;
+	//}
+	//else
+		/*aRho_Sum = 1.0;*/
 	/*}}}*/
+    
+    /*Target Density{{{*/
+    //const Int_t aBin_Rho = 52;
+    //const double aVZ_Max = 0.1020, aVZ_Min = -0.1020;
+    //const double aStep = (aVZ_Max-aVZ_Min)/51.;//0.004
+
+    const Int_t aBin_Rho = 200;
+    const double aVZ_Max = 0.095, aVZ_Min = -0.095;
+    const double aStep = (aVZ_Max-aVZ_Min)/(aBin_Rho-1);//0.001
+
+    double aVZ[aBin_Rho], aRho[aBin_Rho], aRho1[aBin_Rho],aRho2[aBin_Rho],aRho3[aBin_Rho];
+    for(int i=0;i<aBin_Rho;i++){
+        aVZ[i] = 0.0; aRho[i] = 1.0; aRho2[i] = 1.0; aRho3[i] = 1.0;
+    }
+    double aRho_Sum = 0;
+    TString aDummy="X";
+
+    if(aTarget=="H2"||aTarget=="He3"||aTarget=="He4"){
+        TString aDensity_Profile = Form("/work/halla/e08014/disk1/yez/Xbj_Cross_Section/Target/%s_new.rho",aTarget.Data());
+        cerr<<Form("\t Reading Density Profile for %s from %s",aTarget.Data(), aDensity_Profile.Data())<<endl;
+        ifstream density(aDensity_Profile.Data()); 
+        density >> aDummy >> aDummy >> aDummy >> aDummy >> aDummy;
+        Double_t aY0, aY0_Err, aBF, aBF_Err;
+        for(int i=0;i<aBin_Rho;i++){
+            density >> aVZ[i] >> aY0 >> aY0_Err >> aBF >> aBF_Err;
+            aVZ[i] /= 100.; //cm to m
+            aRho3[i] = aY0 * (1+aBF * aI_avg);
+            aRho_Sum += aRho3[i];
+        }
+        density.close();
+        aRho_Sum /=aBin_Rho;
+    }
+    /*}}}*/
     
 	/*Ep Bining{{{*/
 	int aVZ_Bin = 0; double aWeight = 0.0;
@@ -154,8 +187,11 @@ w[i] = aCS_Center / aCS[i];
 					//fabs(Xbj - aBin)< aBinCut &&
 					aIsPassed==1 ){
 
-				aVZ_Bin = (reactz_rec-aVZ_Min)/aStep;
-				aWeight = aRho3[aVZ_Bin]/aRho_Sum; 
+                if(aTarget=="H2"||aTarget=="He3"||aTarget=="He4"){
+                    aVZ_Bin = (reactz_rec-aVZ_Min)/aStep;
+                    aWeight = aRho3[aVZ_Bin]/aRho_Sum; 
+                }else
+                    aWeight = 1.0;
 
 				aSinSQ = pow(sin(Angle_new/2.0),2); //Define Sin(Theta/2.)^2
 				aEp_Bin = E_s/(1.0+4.0*E_s*aSinSQ/(2.0*TARGET_MASS_A*aBin)); //use xbj = Q2/2Mp/(Ei-Ep),Q2 = 4Ei*Ep*Sin_SQ 
